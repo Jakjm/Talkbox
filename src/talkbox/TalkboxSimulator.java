@@ -1,6 +1,5 @@
 package talkbox;
 import java.awt.GridLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
@@ -21,11 +20,10 @@ public class TalkboxSimulator {
 		public static final int COLS = 4;
 		public TalkboxPanel() {
 			GridLayout layout = new GridLayout(4,4);
-			
-			
 			for(int row = 0;row < ROWS;++row) {
 				for(int col = 0;col < COLS;++col) {
-					JButton button = new JButton("Text");
+					String buttonText = String.format("Button %d",1 + row*4 +col);
+					JButton button = new JButton(buttonText);
 					button.setEnabled(true);
 					this.add(button);
 				}

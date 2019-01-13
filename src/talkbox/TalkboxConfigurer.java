@@ -19,12 +19,6 @@ public class TalkboxConfigurer {
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 	}
-	public void showMenu() {
-		panel.layout.show(panel,BasePanel.MENU);
-	}
-	public void showSetup() {
-		panel.layout.show(panel,BasePanel.SETUP);
-	}
 	public class MenuPanel extends JPanel implements ActionListener{
 		JButton setUpButtons;
 		JButton recordAudio;
@@ -39,7 +33,7 @@ public class TalkboxConfigurer {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == setUpButtons) {
-				showSetup();
+				panel.showSetup();
 			}
 		}
 	}
@@ -54,11 +48,17 @@ public class TalkboxConfigurer {
 			this.setLayout(layout);
 			menu = new MenuPanel();
 			this.add(MENU,menu);
-			setup = new SetUpPanel();
+			setup = new SetUpPanel(this);
 			this.add(SETUP,setup);
 			layout.show(this,MENU);
 			this.revalidate();
 			this.repaint();
+		}
+		public void showSetup() {
+			layout.show(this,SETUP);
+		}
+		public void showMainMenu() {
+			layout.show(this,MENU);
 		}
 	}
 	public static void main(String [] args) {

@@ -1,15 +1,24 @@
 package configurer;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import talkbox.TalkboxConfigurer.BasePanel;
+
 import javax.swing.JLabel;
 import javax.swing.JFrame;
-public class SetUpPanel extends JPanel{
+public class SetUpPanel extends JPanel implements ActionListener{
 	public static final int ROWS = 4;
 	public static final int COLS = 4;
 	public JPanel buttonPanel;
-	public SetUpPanel() {
+	public JButton backButton;
+	private BasePanel panel;
+	public SetUpPanel(BasePanel panel) {
+		this.panel = panel;
 		this.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(ROWS,COLS));
@@ -24,10 +33,17 @@ public class SetUpPanel extends JPanel{
 		topPanel.setLayout(new GridLayout(1,2));
 		JLabel setupLabel = new JLabel("Button Setup");
 		topPanel.add(setupLabel);
-		JButton backButton = new JButton("Back to Main Menu");
+		backButton = new JButton("Back to Main Menu");
+		backButton.addActionListener(this);
 		topPanel.add(backButton);
 		this.add(topPanel,BorderLayout.NORTH);
 		this.add(buttonPanel,BorderLayout.CENTER);
+	}
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if(event.getSource() == backButton) {
+			panel.showMainMenu();
+		}
 	}
 	public class SetUpButton extends JButton{
 		public SetUpButton() {
@@ -37,4 +53,5 @@ public class SetUpPanel extends JPanel{
 	public class SetUpFrame extends JFrame{
 		
 	}
+	
 }
