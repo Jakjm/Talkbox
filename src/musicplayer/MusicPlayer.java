@@ -1,7 +1,11 @@
 package musicplayer;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,6 +17,10 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 /**
  * Class for streaming music within a Java program.
  * Works for .wav formats only.
@@ -93,7 +101,7 @@ public class MusicPlayer{
 	/**
 	 * Skips the given time in minutes and seconds within the track.
 	 * @param minutes - the minutes within the track.
-	 * @param seconds
+	 * @param seconds - the seconds within the track.
 	 */
 	public void skip(int minutes,int seconds) {
 		long byteSkip = (long)((seconds + minutes * 60) * format.getFrameRate() * format.getFrameSize());
@@ -114,8 +122,18 @@ public class MusicPlayer{
 	 */
 	public void skip(String time) {
 		int colonPosition = time.indexOf(':');
-		int mins = Integer.parseInt(time.substring(0,colonPosition));
-		int seconds = Integer.parseInt(time.substring(colonPosition+1,time.length()));
+		if(colonPosition == -1) {
+			throw new IllegalArgumentException("Time formatted improperly.");
+		}
+		int mins = 0;
+		int seconds = 0;
+		try {
+	    mins = Integer.parseInt(time.substring(0,colonPosition));
+		seconds = Integer.parseInt(time.substring(colonPosition+1,time.length()));
+		}
+		catch(NumberFormatException e) {
+			e.printStackTrace();
+		}
 		skip(mins,seconds);
 	}
 	/**
