@@ -26,7 +26,6 @@ public class MusicRecorder {
 			targetDataline = AudioSystem.getTargetDataLine(null);
 			targetDataline.open();
 			this.bufferSize = targetDataline.getBufferSize();
-			this.targetDataline = (TargetDataLine) AudioSystem.getLine(new DataLine.Info(TargetDataLine.class, format));
 			
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
