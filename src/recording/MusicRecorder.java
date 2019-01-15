@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,6 +22,9 @@ public class MusicRecorder {
 	TargetDataLine targetDataline;
 	int bufferSize;
 	File currentFile;
+	/**
+	 * Constructor for MusicRecorder
+	 */
 	public MusicRecorder() {
 		try {
 			targetDataline = AudioSystem.getTargetDataLine(null);
@@ -31,14 +35,22 @@ public class MusicRecorder {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Starts recording and writes to specified file. 
+	 * @param file - the target file in .wav format
+	 */
 	public void record(File file) {
 		this.currentFile = file;
 		targetDataline.start();
 	}
-	public void stop() {
+	/**
+	 * Stop sound recording. 
+	 * @throws FileNotFoundException if File does not exist
+	 */
+	public void stop() throws FileNotFoundException {
 		targetDataline.stop();
 		if(currentFile == null) {
-			throw new RuntimeException("File not valid");
+			throw new FileNotFoundException("File not valid");
 		}
 		try {
 			AudioSystem.write(new AudioInputStream(targetDataline),AudioFileFormat.Type.WAVE,currentFile);
