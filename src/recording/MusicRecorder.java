@@ -49,6 +49,7 @@ public class MusicRecorder {
 	 */
 	public void stop() throws FileNotFoundException {
 		targetDataline.stop();
+		targetDataline.close();
 		if(currentFile == null) {
 			throw new FileNotFoundException("File not valid");
 		}
