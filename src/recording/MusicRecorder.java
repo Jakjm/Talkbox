@@ -1,10 +1,6 @@
 package recording;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -14,15 +10,16 @@ import javax.sound.sampled.TargetDataLine;
 
 public class MusicRecorder {
 	AudioFormat format;
-	TargetDataLine targetDataline;
-	File currentFile;
+	volatile TargetDataLine targetDataLine;
+	volatile File currentFile;
+	private Thread writeThread;
 	/**
 	 * Constructor for MusicRecorder
 	 */
 	public MusicRecorder() {
 		try {
-			targetDataline = AudioSystem.getTargetDataLine(null);
-			targetDataline.open();
+			targetDataLine = AudioSystem.getTargetDataLine(null);
+			targetDataLine.open();
 			
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
@@ -34,20 +31,36 @@ public class MusicRecorder {
 	 */
 	public void record(File file) {
 		this.currentFile = file;
-		targetDataline.start();
-		// write audio stream to file
-		try {
-			AudioSystem.write(new AudioInputStream(targetDataline),AudioFileFormat.Type.WAVE,currentFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		targetDataLine.start();
+		writeThread = new Thread(new Runnable() {
+			public void run() {
+				try{
+					AudioSystem.write(new AudioInputStream(targetDataLine),AudioFileFormat.Type.WAVE,currentFile);
+				}
+				catch (Exception e){
+					
+				}
+			}
+		});
+		writeThread.start();
 	}
 	/**
 	 * Stop sound recording. 
 	 */
 	public void stop() {
 		// close and stop data line
-		targetDataline.stop();
-		targetDataline.close();
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				targetDataLine.stop();
+				targetDataLine.drain();
+				targetDataLine.close();
+			}
+		});
+		thread.start();
+		try {
+			writeThread.join(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
