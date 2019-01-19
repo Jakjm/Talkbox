@@ -19,7 +19,6 @@ public class FileIO {
 	/**
 	 * Verifies if file is in .wav format
 	 * @param file - The file instance to be checked
-	 * TODO Rohan: remove the +1 and also check that it is in audio format, not just that it has a .wav extension.
 	 */
 	public static boolean checkFileFormat(File file)  {
 		String path = file.getPath();
