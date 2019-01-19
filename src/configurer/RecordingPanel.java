@@ -54,6 +54,7 @@ public class RecordingPanel extends JPanel implements ActionListener{
 		stopRecording = new JButton("Stop Recording");
 		stopRecording.addActionListener(this);
 		this.add(stopRecording);
+		stopRecording.setEnabled(false);
 	}
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -61,8 +62,9 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			recordingButton.setEnabled(false);
 			stopRecording.setEnabled(true);
 			mainMenu.setEnabled(false);
+			File testFile = new File(pathField.getText());
+			if(testFile.is)
 			recorder.record(new File(pathField.getText()));
-			System.out.println("recording");
 		}
 		else if(event.getSource() == mainMenu) {
 			parent.showMainMenu();
@@ -72,7 +74,6 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			recordingButton.setEnabled(true);
 			stopRecording.setEnabled(false);
 			recorder.stop();
-			System.out.println("stop");
 		}
 	}
 }
