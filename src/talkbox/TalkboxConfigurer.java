@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import configurer.RecordingPanel;
 import configurer.SetUpPanel;
 
 import javax.swing.JButton;
@@ -26,6 +27,7 @@ public class TalkboxConfigurer {
 		public MenuPanel() {
 			this.setLayout(new GridLayout(2,2));
 			recordAudio = new JButton("Record Audio");
+			recordAudio.addActionListener(this);
 			this.add(recordAudio);
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
@@ -36,22 +38,36 @@ public class TalkboxConfigurer {
 			if(event.getSource() == setUpButtons) {
 				panel.showSetup();
 			}
+			else if(event.getSource() == recordAudio) {
+				panel.showRecording();
+			}
 		}
 	}
 	public class BasePanel extends JPanel{
 		CardLayout layout;
 		public static final String MENU = "MENU";
 		public static final String SETUP = "SETUP";
+		public static final String RECORD = "RECORD";
 		public MenuPanel menu;
 		public SetUpPanel setup;
+		public RecordingPanel record;
 		public BasePanel() {
 			layout = new CardLayout();
 			this.setLayout(layout);
+			//Adding menu to the base
 			menu = new MenuPanel();
 			this.add(MENU,menu);
+			
+			//Adding recording panel to the base
+			record = new RecordingPanel(this);
+			this.add(RECORD,record);
+			
+			//Adding setup panel to the base
 			setup = new SetUpPanel(this);
 			this.add(SETUP,setup);
 			layout.show(this,MENU);
+			
+			
 			this.revalidate();
 			this.repaint();
 		}
@@ -60,6 +76,9 @@ public class TalkboxConfigurer {
 		}
 		public void showMainMenu() {
 			layout.show(this,MENU);
+		}
+		public void showRecording() {
+			layout.show(this,RECORD);
 		}
 	}
 	public static void main(String [] args) {
