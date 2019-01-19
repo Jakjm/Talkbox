@@ -23,8 +23,7 @@ public class FileIO {
 	public static boolean checkFileFormat(File file)  {
 		String path = file.getPath();
 		String ext = path.substring(path.lastIndexOf(".") + 1);
-		boolean isWav = ext.equals(".wav");
-		return isWav;
+		return ext.equals(".wav");
 	}
 	/**
 	 * Puts file into folder specified by path.
