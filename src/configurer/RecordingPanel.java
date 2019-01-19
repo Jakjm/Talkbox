@@ -62,8 +62,6 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			recordingButton.setEnabled(false);
 			stopRecording.setEnabled(true);
 			mainMenu.setEnabled(false);
-			File testFile = new File(pathField.getText());
-			if(testFile.is)
 			recorder.record(new File(pathField.getText()));
 		}
 		else if(event.getSource() == mainMenu) {
