@@ -176,6 +176,9 @@ public class MusicPlayer{
 		}
 		
 	}
+	public boolean isPlaying() {
+		return this.state == MusicPlayer.PLAYING;
+	}
 	/**
 	 * Task for the MusicPlayer's thread that is used to load data during
 	 * playback and facilitate looping/stop and start.

@@ -2,6 +2,9 @@ package talkbox;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import simulator.SimulatorButton;
+
 import javax.swing.JButton;
 public class TalkboxSimulator {
 	TalkboxFrame frame;
@@ -16,16 +19,20 @@ public class TalkboxSimulator {
 		new TalkboxSimulator();
 	}
 	public class TalkboxPanel extends JPanel{
-		public static final int ROWS = 4;
-		public static final int COLS = 4;
+		public static final int ROWS = 1;
+		public static final int COLS = 5;
+		public final String [] tracks = new String [] {"exp.wav","arceus.wav","deoxys.wav","rayquaza.wav","crescelia.wav"};
 		public TalkboxPanel() {
-			GridLayout layout = new GridLayout(4,4);
+			char buttonLetter = 'A';
+			GridLayout layout = new GridLayout(ROWS,COLS);
 			for(int row = 0;row < ROWS;++row) {
 				for(int col = 0;col < COLS;++col) {
-					String buttonText = String.format("Button %d",1 + row*4 +col);
-					JButton button = new JButton(buttonText);
+					String buttonText = String.format("Button %c",buttonLetter);
+					JButton button = new SimulatorButton("/testSounds/" + tracks[col]);
+					button.setText(buttonText);
 					button.setEnabled(true);
 					this.add(button);
+					buttonLetter++;
 				}
 			}
 			this.setLayout(layout);
