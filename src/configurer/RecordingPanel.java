@@ -62,7 +62,7 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			recordingButton.setEnabled(false);
 			stopRecording.setEnabled(true);
 			mainMenu.setEnabled(false);
-			recorder.record(new File(pathField.getText()));
+			recorder.record();
 		}
 		else if(event.getSource() == mainMenu) {
 			parent.showMainMenu();
@@ -71,7 +71,7 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			mainMenu.setEnabled(true);
 			recordingButton.setEnabled(true);
 			stopRecording.setEnabled(false);
-			recorder.stop();
+			MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),new File(pathField.getText()));
 		}
 	}
 }

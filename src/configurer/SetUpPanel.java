@@ -12,8 +12,8 @@ import talkbox.TalkboxConfigurer.BasePanel;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
 public class SetUpPanel extends JPanel implements ActionListener{
-	public static final int ROWS = 4;
-	public static final int COLS = 4;
+	public static final int ROWS = 1;
+	public static final int COLS = 5;
 	public JPanel buttonPanel;
 	public JButton backButton;
 	private BasePanel panel;
