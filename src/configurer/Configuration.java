@@ -43,14 +43,14 @@ public class Configuration implements TalkBoxConfiguration {
 
 	/**
 	 * Serialize the current Configuration instance. File is placed in the default
-	 * directory in the "config" folder.
+	 * directory in the "serialized_config" folder.
 	 */
 	public void serializeConfig() {
 		ConfigSerialization.serialize(defaultDir.concat("\\serialized_config\\config.tbc"), this);
 	}
 
 	/**
-	 * Create specified amount of button configuration directoried in the default
+	 * Create specified amount of button configuration directories in the default
 	 * directory.
 	 */
 	private void createButtonConfigsDirs() {
