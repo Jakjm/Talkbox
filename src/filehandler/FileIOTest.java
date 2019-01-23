@@ -44,10 +44,6 @@ class FileIOTest extends FileIO {
 		dest = "C:\\Users\\Rohan\\unknown";
 		FileIO.moveFile(orig, dest);
 		assertFalse(new File(dest.concat("\\recording500.wav")).exists());
-		// attempt to move to file: places in parent instead
-		dest = "C:\\Users\\Rohan\\Documents\\recording200.wav";
-		FileIO.moveFile(orig, dest);
-		assertTrue(new File(dest.concat("C:\\Users\\Rohan\\Documents\\recording500.wav")).exists());
 	}
 	@Test
 	void testCheckImageFile() {
@@ -57,5 +53,10 @@ class FileIOTest extends FileIO {
 		assertTrue(FileIO.checkImageFile(orig));
 		orig = "C:\\Users\\Rohan\\Documents\\beard.docx";
 		assertFalse(FileIO.checkImageFile(orig));
+	}
+	@Test
+	void testWriteToText() {
+		String orig = "C:\\Users\\Rohan\\Documents\\create.txt";
+		FileIO.createTextFile(orig, "hi");
 	}
 }
