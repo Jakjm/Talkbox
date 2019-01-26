@@ -24,14 +24,27 @@ public class TalkboxConfigurer {
 	public class MenuPanel extends JPanel implements ActionListener{
 		JButton setUpButtons;
 		JButton recordAudio;
+		JButton createNew;
+		JButton editOld;
 		public MenuPanel() {
 			this.setLayout(new GridLayout(2,2));
+			//Recording Button
 			recordAudio = new JButton("Record Audio");
 			recordAudio.addActionListener(this);
 			this.add(recordAudio);
+			//Set up button
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
 			this.add(setUpButtons);
+			//Create new config button
+			createNew = new JButton("Create new configuration directory");
+			createNew.addActionListener(this);
+			this.add(createNew);
+			
+			//initButtons();
+		}
+		private void initButtons() {
+			setUpButtons.setEnabled(false);
 		}
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -40,6 +53,9 @@ public class TalkboxConfigurer {
 			}
 			else if(event.getSource() == recordAudio) {
 				panel.showRecording();
+			}
+			else if(event.getSource() == createNew) {
+				
 			}
 		}
 	}

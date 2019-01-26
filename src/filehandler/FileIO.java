@@ -58,7 +58,7 @@ public class FileIO {
 			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
 			isWave = fileFormat.getType().equals(AudioFileFormat.Type.WAVE);
 		} catch (IOException | UnsupportedAudioFileException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return isWave;
 	}

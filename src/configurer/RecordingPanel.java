@@ -17,7 +17,6 @@ public class RecordingPanel extends JPanel implements ActionListener{
 	JButton recordingButton;
 	JButton mainMenu;
 	JButton stopRecording;
-	JTextField pathField;
 	BasePanel parent;
 	public RecordingPanel(BasePanel parent) {
 		this.parent = parent;
@@ -34,18 +33,6 @@ public class RecordingPanel extends JPanel implements ActionListener{
 		mainMenu.addActionListener(this);
 		topPanel.add(mainMenu);
 		this.add(topPanel);
-		
-		JPanel pathPanel = new JPanel();
-		pathPanel.setBackground(Color.red);
-		pathPanel.setLayout(new GridLayout(1,2));
-		pathPanel.add(new JLabel("Recording Save Path:"));
-		
-		pathField = new JTextField();
-		pathField.setText(System.getProperty("user.home")+"/recording22.wav");
-		pathPanel.add(pathField);
-		this.add(pathPanel);
-		
-		
 		
 		recordingButton = new JButton("Record");
 		recordingButton.addActionListener(this);
@@ -71,7 +58,7 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			mainMenu.setEnabled(true);
 			recordingButton.setEnabled(true);
 			stopRecording.setEnabled(false);
-			MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),new File(pathField.getText()));
+			//MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),new File(pathField.getText()));
 		}
 	}
 }
