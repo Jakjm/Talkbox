@@ -101,7 +101,6 @@ public class MusicRecorder {
 			bytesRead = line.read(data,0,data.length);
 			stream.write(data,0,bytesRead);
 			line.drain();
-			System.out.println("stopped");
 		}
 	}
 }

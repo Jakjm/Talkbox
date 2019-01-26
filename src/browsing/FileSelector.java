@@ -170,6 +170,9 @@ public class FileSelector extends JFrame implements ActionListener{
 	    //Sets the directory label to the current directory we are in.
 	    directoryLabel.setText("Current Directory: " + currentFile.getPath() + fileSep);
 	}
+	public void setSelectionListener(SelectionListener listener) {
+		this.listener = listener;
+	}
 	/**
 	 * Removes all of the components from the inner panel - which is just where we put 
 	 * all of our fileButtons.

@@ -72,8 +72,9 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		}
 	}
 	public class SetUpButton extends JButton{
-		public SetUpButton() {
-			
+		private ButtonConfiguration config;
+		public SetUpButton(ButtonConfiguration config) {
+			this.config = config;
 		}
 	}
 	/**

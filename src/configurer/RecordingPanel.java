@@ -4,20 +4,28 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import recording.MusicRecorder;
 import talkbox.TalkboxConfigurer.BasePanel;
 
+import javax.sound.sampled.AudioFormat;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+
+import browsing.FileSelector;
+import browsing.SelectionListener;
 public class RecordingPanel extends JPanel implements ActionListener{
 	MusicRecorder recorder = new MusicRecorder();
 	JButton recordingButton;
 	JButton mainMenu;
 	JButton stopRecording;
+	BasicField nameField;
 	BasePanel parent;
+	FileSelector fileSelector;
 	public RecordingPanel(BasePanel parent) {
 		this.parent = parent;
 		this.setLayout(new GridLayout(5,1));
@@ -34,6 +42,10 @@ public class RecordingPanel extends JPanel implements ActionListener{
 		topPanel.add(mainMenu);
 		this.add(topPanel);
 		
+		nameField = new BasicField("Filename of recording:");
+		nameField.setText("rec.wav");
+		this.add(nameField);
+		
 		recordingButton = new JButton("Record");
 		recordingButton.addActionListener(this);
 		this.add(recordingButton);
@@ -42,7 +54,10 @@ public class RecordingPanel extends JPanel implements ActionListener{
 		stopRecording.addActionListener(this);
 		this.add(stopRecording);
 		stopRecording.setEnabled(false);
+		
+		fileSelector = new FileSelector(null,FileSelector.DIRECTORY);
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == recordingButton) {
@@ -58,7 +73,26 @@ public class RecordingPanel extends JPanel implements ActionListener{
 			mainMenu.setEnabled(true);
 			recordingButton.setEnabled(true);
 			stopRecording.setEnabled(false);
-			//MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),new File(pathField.getText()));
+			fileSelector.setSelectionListener(new SaveFileSelectionListener(recorder.stop(),recorder.getFormat()));
+			JOptionPane.showMessageDialog(null,"Please select the directory to save your recording in.");
+			fileSelector.setVisible(true);
+			
+		}
+
+	}
+	public class SaveFileSelectionListener implements SelectionListener{
+		ByteArrayOutputStream stream;
+		AudioFormat format;
+		public SaveFileSelectionListener(ByteArrayOutputStream stream,AudioFormat format) {
+			this.stream = stream;
+			this.format = format;
+		}
+		@Override
+		public void onFileSelected(File file) {
+			File newFile = new File(file.getPath() + System.getProperty("file.separator") + nameField.getText());
+			MusicRecorder.writeToFile(stream,format,newFile);
 		}
 	}
+
+	
 }

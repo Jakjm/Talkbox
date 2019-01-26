@@ -45,7 +45,7 @@ public class BasicField extends JPanel{
 	public void clear(){
 		inputField.setText("");
 	}
-	public void setValue(String text){
+	public void setText(String text){
 		inputField.setText(text);
 	}
 	/**
@@ -69,14 +69,14 @@ public class BasicField extends JPanel{
 	 * Returns the value in the text field.
 	 * @return the value in the textField.
 	 */
-	public String getValue(){
+	public String getText(){
 		return inputField.getText();
 	}
 	public int parseIntValue(){
-		return Integer.parseInt(getValue());
+		return Integer.parseInt(getText().trim());
 	}
 	public float parseFloatValue(){
-		return Float.parseFloat(getValue());
+		return Float.parseFloat(getText().trim());
 	}
 	
 }
