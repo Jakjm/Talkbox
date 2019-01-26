@@ -24,6 +24,7 @@ import browsing.FileSelector;
 import browsing.SelectionListener;
 import emojiPanel.EmojiSearchPane.EmojiSearchFrame;
 import filehandler.FileIO;
+import musicplayer.MusicPlayer;
 import talkbox.TalkboxConfigurer.BasePanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -44,7 +45,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		for(int row = 0;row < ROWS;row++) {
 			for(int col = 0;col < COLS;col++) {
 				String buttonString = String.format("Button %d",1+4*row+col);
-				JButton button = new JButton(buttonString);
+				SetUpButton button = new SetUpButton(new ButtonConfiguration(buttonString));
 				button.addActionListener(this);
 				buttonPanel.add(button);
 			}
@@ -68,13 +69,25 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		}
 		else {
 			setUpFrame.setVisible(true);
+			setUpFrame.openSetupFrame((SetUpButton)event.getSource(),((SetUpButton)event.getSource()).getConfiguration());
 			setUpFrame.colorFrame.setVisible(false);
 		}
 	}
 	public class SetUpButton extends JButton{
 		private ButtonConfiguration config;
 		public SetUpButton(ButtonConfiguration config) {
+			setConfiguration(config);
+		}
+		public ButtonConfiguration getConfiguration() {
+			return config;
+		}
+		public void setConfiguration(ButtonConfiguration config) {
 			this.config = config;
+			adaptToConfig();
+		}
+		public void adaptToConfig() {
+			this.setBackground(config.buttonColor);
+			this.setText(config.buttonText);
 		}
 	}
 	/**
@@ -87,13 +100,15 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		private BasicField nameField;
 		private JButton emojiButton;
 		private JButton selectSound;
+		private JButton playSound;
 		private JLabel currentPath;
 		private JButton setColor;
 		private JButton confirmSetup;
 		private JPanel buttonsPanel;
-		
+		//Panel for color of button
 		private JPanel currentColorPanel;
-		private SetUpButton currentButton;
+		//Music player for playing back sound
+		private MusicPlayer musicPlayer;
 		//Selector frames
 		private ColorFrame colorFrame;
 		private FileSelector fileSelector;
@@ -101,6 +116,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		//Current color, audio file
 		private Color currentColor;
 		private File currentAudioFile;
+		private SetUpButton currentButton;
 		private final Color DEFAULT_COLOR =  UIManager.getColor("Button.background");
 		public SetUpFrame() {
 			//Frame initial values
@@ -122,15 +138,35 @@ public class SetUpPanel extends JPanel implements ActionListener{
 			ConfigPanel config = new ConfigPanel();
 			this.setContentPane(config);
 		}
-		/**TODO.... make this**/
-		public void openSetupFrame() {
-			
+		public void hideSetupFrame() {
+			this.setVisible(false);
+		}
+		/**
+		 * Updates the setup frame based on the button that has just been opened.
+		 * @param button
+		 * @param config
+		 */
+		public void openSetupFrame(SetUpButton button,ButtonConfiguration config) {
+			this.currentButton = button;
+			this.currentColor = config.buttonColor;
+			this.currentColorPanel.setBackground(this.currentColor);
+			this.currentAudioFile = config.soundFile;
+			if(this.currentAudioFile != null) {
+				currentPath.setText("Sound Path:"+this.currentAudioFile.getPath());
+				musicPlayer = new MusicPlayer(this.currentAudioFile);
+			}
+			else {
+				currentPath.setText("Sound Path:(none)");
+				musicPlayer = null;
+			}
+			nameField.setText(config.buttonText);
 		}
 		public class OpenListener implements SelectionListener {
 			public void onFileSelected(File file) {
 				if(FileIO.checkFileFormat(file)) {
 					currentAudioFile = file;
 					currentPath.setText("Sound Path: " + currentAudioFile.getPath());
+					musicPlayer = new MusicPlayer(currentAudioFile);
 				}
 				else {
 					JOptionPane.showMessageDialog(null,"Audio File must be of .wav format");
@@ -185,10 +221,18 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				buttonsPanel = new JPanel();
 				buttonsPanel.setLayout(new GridLayout(4,1));
 				
+				JPanel soundButtons = new JPanel();
+				soundButtons.setLayout(new GridLayout(1,2));
 				//Adding a sound selection button and a label displaying the current selection
 				selectSound = new JButton("Select Sound");
 				selectSound.addActionListener(this);
-				buttonsPanel.add(selectSound);
+				soundButtons.add(selectSound);
+				//Adding a play sound button
+				playSound = new JButton("Play Sound");
+				playSound.addActionListener(this);
+				soundButtons.add(playSound);
+				buttonsPanel.add(soundButtons);
+				
 				
 				currentPath = new JLabel("Sound Path:(none)");
 				buttonsPanel.add(currentPath);
@@ -206,6 +250,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				this.add(buttonsPanel,BorderLayout.CENTER);
 				
 				confirmSetup = new JButton("Confirm Setup");
+				confirmSetup.addActionListener(this);
 				this.add(confirmSetup,BorderLayout.SOUTH);
 				
 			}
@@ -227,6 +272,14 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				else if(event.getSource() == selectSound) {
 					fileSelector.setVisible(true);
 				}
+				else if(event.getSource() == playSound) {
+					if(musicPlayer != null)musicPlayer.play();
+				}
+				else if(event.getSource() == confirmSetup) {
+					ButtonConfiguration config = new ButtonConfiguration(nameField.getText(),currentColor,currentAudioFile);
+					currentButton.setConfiguration(config);
+					hideSetupFrame();
+				}
 			}
 		}
 		public class ColorFrame extends JFrame implements ActionListener{
@@ -245,6 +298,8 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				this.add(new ColorButton(Color.pink,this));
 				this.add(new ColorButton(Color.green,this));
 				this.add(new ColorButton(Color.cyan,this));
+				this.add(new ColorButton(Color.white,this));
+				this.add(new ColorButton(ButtonConfiguration.DEFAULT_COLOR,this));
 			}
 			public class ColorButton extends JButton{
 				private Color thisColor;

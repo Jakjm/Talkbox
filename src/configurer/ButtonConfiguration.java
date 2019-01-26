@@ -3,13 +3,16 @@ package configurer;
 import java.awt.Color;
 import java.io.File;
 
+import javax.swing.UIManager;
+
 public class ButtonConfiguration {
-	private String buttonText;
-	private Color buttonColor;
-	private File soundFile;
+	public String buttonText;
+	public Color buttonColor;
+	public File soundFile;
+	public static final Color DEFAULT_COLOR =  UIManager.getColor("Button.background");
 	public ButtonConfiguration(String buttonText,Color color,File soundFile) {
 		if(color == null) {
-			buttonColor = Color.blue;
+			buttonColor = DEFAULT_COLOR;
 		}
 		else {
 			buttonColor = color;
