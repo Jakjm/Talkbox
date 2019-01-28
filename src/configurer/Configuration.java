@@ -23,7 +23,7 @@ import talkbox.TalkBoxConfiguration;
 public class Configuration implements TalkBoxConfiguration {
 	private static final long serialVersionUID = -8081539415877004914L;
 	// by default the directory to store the audio library is the Desktop
-	private static String defaultDir = System.getProperty("user.home").concat("\\Desktop\\TalkboxData");
+	private static String defaultDir = System.getProperty("user.home").concat(FileIO.SEP + "Desktop" + FileIO.SEP + "TalkboxData");
 	// number of virtual buttons supported
 	private int activeButtons;
 	// number of physical audio buttons supported
@@ -38,7 +38,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public static void createConfigDirectory() {
 		new File(defaultDir).mkdirs();
-		new File(defaultDir.concat("\\serialized_config")).mkdir();
+		new File(defaultDir.concat(FileIO.SEP + "serialized_config")).mkdir();
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 * directory in the "serialized_config" folder.
 	 */
 	public void serializeConfig() {
-		ConfigSerialization.serialize(defaultDir.concat("\\serialized_config\\config.tbc"), this);
+		ConfigSerialization.serialize(defaultDir.concat(FileIO.SEP + "serialized_config"+ FileIO.SEP + "config.tbc"), this);
 	}
 
 	/**
@@ -66,13 +66,13 @@ public class Configuration implements TalkBoxConfiguration {
 	 * @param i The button number.
 	 */
 	public void addButtonConfig(int i) {
-		String dir = defaultDir.concat("\\config_").concat(String.valueOf(i));
+		String dir = defaultDir.concat(FileIO.SEP + "config_").concat(String.valueOf(i));
 		new File(dir).mkdir();
 		// write button.txt
-		FileIO.createTextFile(dir.concat("\\button.txt"), String.valueOf(i));
+		FileIO.createTextFile(dir.concat(FileIO.SEP + "button.txt"), String.valueOf(i));
 		// add sound and image folders
-		new File(dir.concat("\\sound")).mkdir();
-		new File(dir.concat("\\image")).mkdir();
+		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
+		new File(dir.concat(FileIO.SEP + "image")).mkdir();
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public void addImageFile(int button, File image) {
 		// if image file is verified, add it to the config file
-		String destination = defaultDir + "\\config_" + button + "\\image";
+		String destination = defaultDir + FileIO.SEP + "config_" + button + FileIO.SEP + "image";
 		if (button < this.activeButtons && FileIO.checkImageFile(image)) {
 			FileIO.moveFile(image, destination);
 		}
@@ -146,7 +146,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public void addAudioFile(int button, File audio) {
 		// if audio file is verified, add it to the config file
-		String destination = defaultDir + "\\config_" + button + "\\sound";
+		String destination = defaultDir + FileIO.SEP + "config_" + button + FileIO.SEP + "sound";
 		if (button < this.activeButtons && FileIO.checkFileFormat(audio)) {
 			FileIO.moveFile(audio, destination);
 		}
@@ -228,7 +228,7 @@ public class Configuration implements TalkBoxConfiguration {
 		};
 		// get WAVE files for each button
 		for (int i = 0; i < this.activeButtons; i++) {
-			soundFolder = new File(defaultDir + ("\\config_") + i);
+			soundFolder = new File(defaultDir + (FileIO.SEP + "config_") + i);
 			for (int j = 0; j < this.audioSets; j++) {
 				audioFileNames[i][j] = soundFolder.list(filter)[j];
 			}

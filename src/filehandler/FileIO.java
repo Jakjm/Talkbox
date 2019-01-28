@@ -26,6 +26,7 @@ public class FileIO {
 	 */
 	public static final String WAVFORMAT = ".wav";
 	public static final String WAVEFORMAT = ".wave";
+	public static final String SEP = System.getProperty("file.separator");
 
 	/**
 	 * Verifies if file format is WAVE by checking its path.
