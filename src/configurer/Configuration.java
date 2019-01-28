@@ -2,6 +2,7 @@ package configurer;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -25,20 +26,26 @@ public class Configuration implements TalkBoxConfiguration {
 	// by default the directory to store the audio library is the Desktop
 	private static String defaultDir = System.getProperty("user.home").concat(FileIO.SEP + "Desktop" + FileIO.SEP + "TalkboxData");
 	// number of virtual buttons supported
-	private int activeButtons;
+	private int activeButtons = 6;
 	// number of physical audio buttons supported
 	private int totalButtons;
 	// number of audio files
 	private int audioSets;
+	// array of buttonconfigs
+	private ButtonConfiguration[] buttonConfigs;
 
 	/**
-	 * Change the directory folder.
+	 * Constructor for configuration instance. Creates the directory folder with button configuration
+	 * folders. The default number of buttons is six.
 	 * 
-	 * @param defaultDir
 	 */
-	public static void createConfigDirectory() {
+	public Configuration() {
+		this.buttonConfigs = new ButtonConfiguration[this.activeButtons];
+		// create the directories for the buttons and the serialized config
 		new File(defaultDir).mkdirs();
 		new File(defaultDir.concat(FileIO.SEP + "serialized_config")).mkdir();
+		// create all button directories
+		this.createButtonConfigsDirs();
 	}
 
 	/**
@@ -53,7 +60,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 * Create specified amount of button configuration directories in the default
 	 * directory.
 	 */
-	private void createButtonConfigsDirs() {
+	public void createButtonConfigsDirs() {
 		// make empty directories for active buttons
 		for (int i = 0; i < this.activeButtons; i++) {
 			addButtonConfig(i);
@@ -66,32 +73,39 @@ public class Configuration implements TalkBoxConfiguration {
 	 * @param i The button number.
 	 */
 	public void addButtonConfig(int i) {
-		String dir = defaultDir.concat(FileIO.SEP + "config_").concat(String.valueOf(i));
+		String dir = defaultDir.concat(FileIO.SEP + "button_config_").concat(String.valueOf(i));
 		new File(dir).mkdir();
-		// write button.txt
-		FileIO.createTextFile(dir.concat(FileIO.SEP + "button.txt"), String.valueOf(i));
 		// add sound and image folders
 		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
+		// create new button configuration: this creates the text file with the associated sound, color, and image
+		ButtonConfiguration b = new ButtonConfiguration("Button " + i);
+		// add button config to the array
+		this.buttonConfigs[i] = b;
+		// write the text file
+		b.writeTo();
 	}
 
 	/**
-	 * Set the default directory path. Format: .\\directory\\TalkboxData
+	 * Set the default directory path.
 	 * 
-	 * @param defaultDir String path to TalkBoxData folder
+	 * @param dir The path to the TalkBoxData folder
 	 */
-	public static void setDefaultDir(String defaultDir) {
-		Configuration.defaultDir = defaultDir;
+	public void setDefaultDir(File dir) {
+		defaultDir = dir.getPath();
 	}
 
 	/**
-	 * Set the number of active buttons.
+	 * Set the number of active buttons. If new active
+	 * buttons are needed, adds the remaining number of active button config folders.
 	 * 
 	 * @param activeButtons
 	 */
-	public void setActiveButtons(int activeButtons) {
-		this.activeButtons = activeButtons;
-		this.createButtonConfigsDirs();
+	public void setActiveButtons(int buttons) {
+		for (int i = this.activeButtons; i < buttons; i++) {
+			this.addButtonConfig(i);
+		}
+		this.activeButtons = buttons;
 	}
 
 	/**
@@ -161,6 +175,12 @@ public class Configuration implements TalkBoxConfiguration {
 	public void addAudioFile(int button, String audioPath) {
 		File audio = new File(audioPath);
 		addAudioFile(button, audio);
+	}
+	/**
+	 * Returns the button configuration objects.
+	 */
+	public ButtonConfiguration[] getButtonConfigs() {
+		return this.buttonConfigs;
 	}
 
 	/**

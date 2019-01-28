@@ -37,15 +37,17 @@ public class SetUpPanel extends JPanel implements ActionListener{
 	private BasePanel panel;
 	
 	public SetUpFrame setUpFrame;
-	public SetUpPanel(BasePanel panel) {
+	public SetUpPanel(BasePanel panel, Configuration c) {
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
+		// load button configs from configuration instance
+		ButtonConfiguration[] configs = c.getButtonConfigs();
 		buttonPanel.setLayout(new GridLayout(ROWS,COLS));
 		for(int row = 0;row < ROWS;row++) {
+			SetUpButton button = new SetUpButton(configs[row]);
 			for(int col = 0;col < COLS;col++) {
 				String buttonString = String.format("Button %d",1+4*row+col);
-				SetUpButton button = new SetUpButton(new ButtonConfiguration(buttonString));
 				button.addActionListener(this);
 				buttonPanel.add(button);
 			}

@@ -1,7 +1,10 @@
 package filehandler;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -116,20 +119,35 @@ public class FileIO {
 	/**
 	 * Create and write to text file.
 	 * 
-	 * @param path    The path to the text file (.\\directory\\filename.txt).
+	 * @param toWrite The file to write to.
 	 * @param content The string to write.
 	 */
-	public static void createTextFile(String path, String content) {
+	public static void createTextFile(File toWrite, String content) {
 		BufferedWriter bf;
 		try {
-			bf = new BufferedWriter(new FileWriter(new File(path)));
+			bf = new BufferedWriter(new FileWriter(toWrite));
 			bf.write(content);
 			bf.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Reads text file and returns an array of each word.
+	 * @return The array of the words.
+	 */
+	public static String[] readTextFile(File toRead) {
+		String[] data = new String[3];
+		try (BufferedReader br = new BufferedReader(new FileReader(toRead))) {
+			String line = br.readLine();
+			data = line.split("\t");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return data;
+		
+	}
 	/**
 	 * Verifies if file format is an image. Intended to accept PNG and JPEG files.
 	 * 

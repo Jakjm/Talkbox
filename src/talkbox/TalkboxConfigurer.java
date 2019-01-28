@@ -6,15 +6,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import browsing.FileSelector;
+import configurer.Configuration;
 import configurer.RecordingPanel;
 import configurer.SetUpPanel;
+import configurer.RecordingPanel.SaveFileSelectionListener;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 public class TalkboxConfigurer {
 	ConfigurerFrame frame;
 	BasePanel panel;
+	// for every TalkBoxConfigurer we create a new config directory
+	// the user can then select to chose their own config directory
+	// or modify the current one
+	Configuration config = new Configuration();
 	public TalkboxConfigurer() {
 		frame = new ConfigurerFrame();
 		panel = new BasePanel();
@@ -36,11 +45,11 @@ public class TalkboxConfigurer {
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
 			this.add(setUpButtons);
-			//Create new config button
-			createNew = new JButton("Create new configuration directory");
+			// we may not need this:
+//			createNew = new JButton("Create new configuration directory");
+			createNew = new JButton("Select existing configuration directory");
 			createNew.addActionListener(this);
 			this.add(createNew);
-			
 			//initButtons();
 		}
 		private void initButtons() {
@@ -55,7 +64,15 @@ public class TalkboxConfigurer {
 				panel.showRecording();
 			}
 			else if(event.getSource() == createNew) {
-				
+				JFileChooser dirChoose = new JFileChooser();
+				dirChoose.setDialogTitle("Add configuration directory");
+				dirChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if (dirChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+					// TODO: configure method that configures buttons from directory
+					// and adds button configs to the "Setup buttons" panel
+					JOptionPane.showMessageDialog(this, "Configuration set.");
+					config.setDefaultDir(dirChoose.getSelectedFile());
+				}
 			}
 		}
 	}
@@ -79,7 +96,7 @@ public class TalkboxConfigurer {
 			this.add(RECORD,record);
 			
 			//Adding setup panel to the base
-			setup = new SetUpPanel(this);
+			setup = new SetUpPanel(this, config);
 			this.add(SETUP,setup);
 			layout.show(this,MENU);
 			
