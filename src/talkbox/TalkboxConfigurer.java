@@ -1,4 +1,5 @@
 package talkbox;
+
 import java.awt.CardLayout;
 
 import java.awt.GridLayout;
@@ -9,74 +10,92 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import browsing.FileSelector;
+import configurer.ConfigSerialization;
 import configurer.Configuration;
 import configurer.RecordingPanel;
 import configurer.SetUpPanel;
 import configurer.RecordingPanel.SaveFileSelectionListener;
+import filehandler.FileIO;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+
 public class TalkboxConfigurer {
 	ConfigurerFrame frame;
 	BasePanel panel;
-	// for every TalkBoxConfigurer we create a new config directory
-	// the user can then select to chose their own config directory
-	// or modify the current one
-	Configuration config = new Configuration();
+	JFileChooser dirChoose;
+	// temporarily create new configuration
+	Configuration config = Configuration.getConfiguration();
+
 	public TalkboxConfigurer() {
 		frame = new ConfigurerFrame();
 		panel = new BasePanel();
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 	}
-	public class MenuPanel extends JPanel implements ActionListener{
+
+	public class MenuPanel extends JPanel implements ActionListener {
 		JButton setUpButtons;
 		JButton recordAudio;
 		JButton createNew;
 		JButton editOld;
+		JButton selectExisting;
+
 		public MenuPanel() {
-			this.setLayout(new GridLayout(2,2));
-			//Recording Button
+			this.setLayout(new GridLayout(2, 2));
+			// Recording Button
 			recordAudio = new JButton("Record Audio");
 			recordAudio.addActionListener(this);
 			this.add(recordAudio);
-			//Set up button
+			// Set up button
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
 			this.add(setUpButtons);
-			// we may not need this:
-//			createNew = new JButton("Create new configuration directory");
-			createNew = new JButton("Select existing configuration directory");
+			// Create new config directory
+			createNew = new JButton("Create new configuration directory");
 			createNew.addActionListener(this);
 			this.add(createNew);
-			//initButtons();
+			// Select existing config directory
+			selectExisting = new JButton("Select existing configuration directory");
+			selectExisting.addActionListener(this);
+			this.add(selectExisting);
 		}
+
 		private void initButtons() {
 			setUpButtons.setEnabled(false);
 		}
+
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if(event.getSource() == setUpButtons) {
+			if (event.getSource() == setUpButtons) {
 				panel.showSetup();
-			}
-			else if(event.getSource() == recordAudio) {
+			} else if (event.getSource() == recordAudio) {
 				panel.showRecording();
 			}
-			else if(event.getSource() == createNew) {
-				JFileChooser dirChoose = new JFileChooser();
+			// set pre-existing configration
+			else if (event.getSource() == selectExisting) {
+				// prompt user for config directory
+				dirChoose = new JFileChooser();
 				dirChoose.setDialogTitle("Add configuration directory");
 				dirChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				if (dirChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-					// TODO: configure method that configures buttons from directory
-					// and adds button configs to the "Setup buttons" panel
+					// deseralize the config object
+					String pathToObj = dirChoose.getSelectedFile().getPath() + FileIO.SEP + "serialized_config"
+							+ FileIO.SEP + "config.tbc";
+					config = ConfigSerialization.deserialize(pathToObj);
+					// TODO Jordan button panel changes according to config object
 					JOptionPane.showMessageDialog(this, "Configuration set.");
-					config.setDefaultDir(dirChoose.getSelectedFile());
 				}
+			}
+			// create new config directory
+			else if (event.getSource() == createNew) {
+				config = Configuration.getConfiguration();
+				// TODO Jordan button panel gets reset
 			}
 		}
 	}
-	public class BasePanel extends JPanel{
+
+	public class BasePanel extends JPanel {
 		CardLayout layout;
 		public static final String MENU = "MENU";
 		public static final String SETUP = "SETUP";
@@ -84,45 +103,52 @@ public class TalkboxConfigurer {
 		public MenuPanel menu;
 		public SetUpPanel setup;
 		public RecordingPanel record;
+
 		public BasePanel() {
 			layout = new CardLayout();
 			this.setLayout(layout);
-			//Adding menu to the base
+			// Adding menu to the base
 			menu = new MenuPanel();
-			this.add(MENU,menu);
-			
-			//Adding recording panel to the base
+			this.add(MENU, menu);
+
+			// Adding recording panel to the base
 			record = new RecordingPanel(this);
-			this.add(RECORD,record);
-			
-			//Adding setup panel to the base
+			this.add(RECORD, record);
+
+			// Adding setup panel to the base; send it
+			// reference of current configurance
 			setup = new SetUpPanel(this, config);
-			this.add(SETUP,setup);
-			layout.show(this,MENU);
-			
-			
+			this.add(SETUP, setup);
+			layout.show(this, MENU);
+
 			this.revalidate();
 			this.repaint();
 		}
+
 		public void showSetup() {
-			layout.show(this,SETUP);
+			layout.show(this, SETUP);
 		}
+
 		public void showMainMenu() {
-			layout.show(this,MENU);
+			layout.show(this, MENU);
 		}
+
 		public void showRecording() {
-			layout.show(this,RECORD);
+			layout.show(this, RECORD);
 		}
 	}
-	public static void main(String [] args) {
+
+	public static void main(String[] args) {
 		new TalkboxConfigurer();
 	}
-	public class ConfigurerFrame extends JFrame{
+
+	public class ConfigurerFrame extends JFrame {
 		public static final int FRAME_X = 1000;
 		public static final int FRAME_Y = 700;
+
 		public ConfigurerFrame() {
 			super("TalkBox Configurer");
-			this.setSize(FRAME_X,FRAME_Y);
+			this.setSize(FRAME_X, FRAME_Y);
 			this.setLocation(20, 20);
 			this.setResizable(false);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

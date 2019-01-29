@@ -39,13 +39,33 @@ public class Configuration implements TalkBoxConfiguration {
 	 * folders. The default number of buttons is six.
 	 * 
 	 */
-	public Configuration() {
+	private Configuration() {
 		this.buttonConfigs = new ButtonConfiguration[this.activeButtons];
 		// create the directories for the buttons and the serialized config
 		new File(defaultDir).mkdirs();
 		new File(defaultDir.concat(FileIO.SEP + "serialized_config")).mkdir();
 		// create all button directories
 		this.createButtonConfigsDirs();
+	}
+	
+	/**
+	 * Static factory method that returns Configuration instance. If a configuration
+	 * directory exists, creates a new directory with a higher number as the suffix to
+	 * prevent overwriting configuration.
+	 */
+	public static Configuration getConfiguration() {
+		if (new File(defaultDir).exists()) {
+			if (defaultDir.charAt(defaultDir.length() - 1) == ')') {
+				String copyNumber = defaultDir.substring(defaultDir.indexOf(('(')) + 1, defaultDir.length() - 1);
+				defaultDir = defaultDir.substring(0, defaultDir.indexOf(('(')));
+				System.out.println(copyNumber);
+				defaultDir += "(" + (Integer.parseInt(copyNumber) + 1) + ")";
+			}
+			else {
+				defaultDir += "(" + 1 + ")";
+			}
+		}
+		return new Configuration();
 	}
 
 	/**
@@ -79,11 +99,11 @@ public class Configuration implements TalkBoxConfiguration {
 		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
 		// create new button configuration: this creates the text file with the associated sound, color, and image
-		ButtonConfiguration b = new ButtonConfiguration("Button " + i);
+		ButtonConfiguration b = new ButtonConfiguration("Button " + i, null, null, new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
 		// write the text file
-		b.writeTo();
+		b.writeButtonTxt();
 	}
 
 	/**
@@ -91,8 +111,8 @@ public class Configuration implements TalkBoxConfiguration {
 	 * 
 	 * @param dir The path to the TalkBoxData folder
 	 */
-	public void setDefaultDir(File dir) {
-		defaultDir = dir.getPath();
+	public void setDefaultDir(String dir) {
+		defaultDir = dir;
 	}
 
 	/**

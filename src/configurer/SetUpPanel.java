@@ -41,13 +41,10 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
-		// load button configs from configuration instance
-		ButtonConfiguration[] configs = c.getButtonConfigs();
 		buttonPanel.setLayout(new GridLayout(ROWS,COLS));
 		for(int row = 0;row < ROWS;row++) {
-			SetUpButton button = new SetUpButton(configs[row]);
 			for(int col = 0;col < COLS;col++) {
-				String buttonString = String.format("Button %d",1+4*row+col);
+				SetUpButton button = new SetUpButton(c.getButtonConfigs()[4*row+col]);
 				button.addActionListener(this);
 				buttonPanel.add(button);
 			}
@@ -278,7 +275,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 					if(musicPlayer != null)musicPlayer.play();
 				}
 				else if(event.getSource() == confirmSetup) {
-					ButtonConfiguration config = new ButtonConfiguration(nameField.getText(),currentColor,currentAudioFile);
+					ButtonConfiguration config = new ButtonConfiguration(nameField.getText(),currentColor,currentAudioFile, currentButton.getConfiguration().returnDir());
 					currentButton.setConfiguration(config);
 					hideSetupFrame();
 				}
