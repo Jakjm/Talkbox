@@ -36,31 +36,8 @@ public class ButtonConfiguration {
 		this.writeButtonTxt();
 	}
 	/**
-	 * Adds button text.
-	 * 
-	 * @param buttonText
-	 */
-	public void addButtonText(String buttonText) {
-		this.buttonText = buttonText;
-		this.writeButtonTxt();
-	}
-
-	/**
-	 * Adds the sound file.
-	 */
-	public void addSoundFile(File sound) {
-		this.soundFile = sound;
-		this.writeButtonTxt();
-	}
-
-	/**
-	 * TODO Jordan change color given RGB
-	 */
-	public void addColor() {
-		
-	}
-	/**
 	 * @return The directory to this button configuration.
+	 * TODO rename to getDirectory
 	 */
 	public File returnDir() {
 		return this.buttonDir;
@@ -73,13 +50,15 @@ public class ButtonConfiguration {
 	 * 
 	 */
 	public void writeButtonTxt() {
-		// create string path to button.txt
+		// create string path to button.txt    
 		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
+		/**TODO this should be using new lines, not tabs **/
 		String data = this.buttonText + "\t";
 		data += this.buttonColor.getRGB() + "\t";
 		// if the sound file is not null copy it to the sound directory
 		if (this.soundFile != null) {
-			FileIO.moveFile(soundFile, this.buttonDir + FileIO.SEP + "sound");
+			/**TODO this is incorrect**/
+			FileIO.copyFile(soundFile, this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 			data += 1;
 		} else {
 			data += 0;
@@ -96,6 +75,7 @@ public class ButtonConfiguration {
 	 * @return a ButtonConfiguration with the given configuration.
 	 */
 	public static ButtonConfiguration readButtonTxt(File buttonDir) {
+		//Don't do this
 		String[] input = FileIO.readTextFile(new File(buttonDir + FileIO.SEP + "button.txt"));
 		// receive name of the button, the color, and whether it has a sound file or not
 		File sound = null;

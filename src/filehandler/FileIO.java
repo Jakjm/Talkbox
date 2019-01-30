@@ -51,7 +51,7 @@ public class FileIO {
 
 	/**
 	 * Verifies if a file format is WAVE by checking its format.
-	 * 
+	 * TODO rename check wave format or something similar
 	 * @param file - the file to be verified
 	 * @return true iff the file format is WAVE.
 	 */
@@ -68,24 +68,21 @@ public class FileIO {
 	}
 
 	/**
-	 * Moves file specified by directory into a path. If path is to a file, the
-	 * parent directory is taken.
-	 * 
+	 * Copies the file specified to the path. 
 	 * @param File - The target file to be moved.
-	 * @param dir  - The path of destination folder.
+	 * @param dest - the string path destination
 	 */
-	public static void moveFile(File file, String dir) {
+	public static void copyFile(File file, String dest) {
 		String filePath = file.getPath();
-		moveFile(filePath, dir);
+		copyFile(filePath,dest);
 	}
 
 	/**
 	 * Moves file specified by directory into a path.
-	 * 
 	 * @param origin      - The path of the target file.
-	 * @param destination - The path of destination folder.
+	 * @param destination - The path of the destination file.
 	 */
-	public static void moveFile(String origin, String destination) {
+	public static void copyFile(String origin, String destination) {
 		try {
 			// construct paths
 			Path origPath = Paths.get(origin);
@@ -135,6 +132,7 @@ public class FileIO {
 	
 	/**
 	 * Reads text file and returns an array of each word.
+	 * TODO fix this
 	 * @return The array of the words.
 	 */
 	public static String[] readTextFile(File toRead) {

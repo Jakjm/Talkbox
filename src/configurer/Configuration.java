@@ -23,8 +23,6 @@ import talkbox.TalkBoxConfiguration;
  */
 public class Configuration implements TalkBoxConfiguration {
 	private static final long serialVersionUID = -8081539415877004914L;
-	// by default the directory to store the audio library is the Desktop
-	private static String defaultDir = System.getProperty("user.home").concat(FileIO.SEP + "Desktop" + FileIO.SEP + "TalkboxData");
 	// number of virtual buttons supported
 	private int activeButtons = 6;
 	// number of physical audio buttons supported
@@ -32,40 +30,23 @@ public class Configuration implements TalkBoxConfiguration {
 	// number of audio files
 	private int audioSets;
 	// array of buttonconfigs
-	private ButtonConfiguration[] buttonConfigs;
+	public ButtonConfiguration[] buttonConfigs;
+	private String talkboxPath;
 
 	/**
 	 * Constructor for configuration instance. Creates the directory folder with button configuration
 	 * folders. The default number of buttons is six.
-	 * 
+	 * @pathname the directory in which the talkboxData directory is being made in
 	 */
-	private Configuration() {
+	public Configuration(String pathname) {
+		pathname += FileIO.SEP + "talkboxData";
+		this.talkboxPath = pathname;
 		this.buttonConfigs = new ButtonConfiguration[this.activeButtons];
 		// create the directories for the buttons and the serialized config
-		new File(defaultDir).mkdirs();
-		new File(defaultDir.concat(FileIO.SEP + "serialized_config")).mkdir();
+		new File(pathname).mkdirs();
+		new File(pathname.concat(FileIO.SEP + "serialized_config")).mkdir();
 		// create all button directories
 		this.createButtonConfigsDirs();
-	}
-	
-	/**
-	 * Static factory method that returns Configuration instance. If a configuration
-	 * directory exists, creates a new directory with a higher number as the suffix to
-	 * prevent overwriting configuration.
-	 */
-	public static Configuration getConfiguration() {
-		if (new File(defaultDir).exists()) {
-			if (defaultDir.charAt(defaultDir.length() - 1) == ')') {
-				String copyNumber = defaultDir.substring(defaultDir.indexOf(('(')) + 1, defaultDir.length() - 1);
-				defaultDir = defaultDir.substring(0, defaultDir.indexOf(('(')));
-				System.out.println(copyNumber);
-				defaultDir += "(" + (Integer.parseInt(copyNumber) + 1) + ")";
-			}
-			else {
-				defaultDir += "(" + 1 + ")";
-			}
-		}
-		return new Configuration();
 	}
 
 	/**
@@ -73,7 +54,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 * directory in the "serialized_config" folder.
 	 */
 	public void serializeConfig() {
-		ConfigSerialization.serialize(defaultDir.concat(FileIO.SEP + "serialized_config"+ FileIO.SEP + "config.tbc"), this);
+		ConfigSerialization.serialize(talkboxPath.concat(FileIO.SEP + "serialized_config"+ FileIO.SEP + "config.tbc"), this);
 	}
 
 	/**
@@ -93,7 +74,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 * @param i The button number.
 	 */
 	public void addButtonConfig(int i) {
-		String dir = defaultDir.concat(FileIO.SEP + "button_config_").concat(String.valueOf(i));
+		String dir = talkboxPath.concat(FileIO.SEP + "button_config_").concat(String.valueOf(i));
 		new File(dir).mkdir();
 		// add sound and image folders
 		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
@@ -104,15 +85,6 @@ public class Configuration implements TalkBoxConfiguration {
 		this.buttonConfigs[i] = b;
 		// write the text file
 		b.writeButtonTxt();
-	}
-
-	/**
-	 * Set the default directory path.
-	 * 
-	 * @param dir The path to the TalkBoxData folder
-	 */
-	public void setDefaultDir(String dir) {
-		defaultDir = dir;
 	}
 
 	/**
@@ -154,47 +126,10 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public void addImageFile(int button, File image) {
 		// if image file is verified, add it to the config file
-		String destination = defaultDir + FileIO.SEP + "config_" + button + FileIO.SEP + "image";
+		String destination = talkboxPath + FileIO.SEP + "config_" + button + FileIO.SEP + "image";
 		if (button < this.activeButtons && FileIO.checkImageFile(image)) {
-			FileIO.moveFile(image, destination);
+			FileIO.copyFile(image, destination);
 		}
-	}
-
-	/**
-	 * Adds image file to specified button.
-	 * 
-	 * @param button The button number.
-	 * @param path   The path to the image file.
-	 */
-	public void addImageFile(int button, String path) {
-		// convert path to file
-		File imageFile = new File(path);
-		this.addImageFile(button, imageFile);
-	}
-
-	/**
-	 * Adds audio file to specified button.
-	 * 
-	 * @param button The button number.
-	 * @param file   The sound file.
-	 */
-	public void addAudioFile(int button, File audio) {
-		// if audio file is verified, add it to the config file
-		String destination = defaultDir + FileIO.SEP + "config_" + button + FileIO.SEP + "sound";
-		if (button < this.activeButtons && FileIO.checkFileFormat(audio)) {
-			FileIO.moveFile(audio, destination);
-		}
-	}
-
-	/**
-	 * Adds audio file to specified button.
-	 * 
-	 * @param button    The button number.
-	 * @param audioPath The string path to the audiopath.
-	 */
-	public void addAudioFile(int button, String audioPath) {
-		File audio = new File(audioPath);
-		addAudioFile(button, audio);
 	}
 	/**
 	 * Returns the button configuration objects.
@@ -244,7 +179,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	@Override
 	public Path getRelativePathToAudioFiles() {
-		return Paths.get(defaultDir);
+		return Paths.get(talkboxPath);
 	}
 
 	/**
@@ -268,7 +203,7 @@ public class Configuration implements TalkBoxConfiguration {
 		};
 		// get WAVE files for each button
 		for (int i = 0; i < this.activeButtons; i++) {
-			soundFolder = new File(defaultDir + (FileIO.SEP + "config_") + i);
+			soundFolder = new File(talkboxPath + (FileIO.SEP + "config_") + i);
 			for (int j = 0; j < this.audioSets; j++) {
 				audioFileNames[i][j] = soundFolder.list(filter)[j];
 			}

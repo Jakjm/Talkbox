@@ -5,11 +5,14 @@ import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import browsing.FileSelector;
+import browsing.SelectionListener;
 import configurer.ConfigSerialization;
 import configurer.Configuration;
 import configurer.RecordingPanel;
@@ -24,8 +27,8 @@ public class TalkboxConfigurer {
 	ConfigurerFrame frame;
 	BasePanel panel;
 	JFileChooser dirChoose;
-	// temporarily create new configuration
-	Configuration config = Configuration.getConfiguration();
+	// temporarily create new configuration 
+	Configuration config;
 
 	public TalkboxConfigurer() {
 		frame = new ConfigurerFrame();
@@ -40,7 +43,7 @@ public class TalkboxConfigurer {
 		JButton createNew;
 		JButton editOld;
 		JButton selectExisting;
-
+		FileSelector selector;
 		public MenuPanel() {
 			this.setLayout(new GridLayout(2, 2));
 			// Recording Button
@@ -59,8 +62,9 @@ public class TalkboxConfigurer {
 			selectExisting = new JButton("Select existing configuration directory");
 			selectExisting.addActionListener(this);
 			this.add(selectExisting);
+			
+			selector = new FileSelector(null,FileSelector.DIRECTORY);
 		}
-
 		private void initButtons() {
 			setUpButtons.setEnabled(false);
 		}
@@ -74,23 +78,21 @@ public class TalkboxConfigurer {
 			}
 			// set pre-existing configration
 			else if (event.getSource() == selectExisting) {
-				// prompt user for config directory
-				dirChoose = new JFileChooser();
-				dirChoose.setDialogTitle("Add configuration directory");
-				dirChoose.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				if (dirChoose.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-					// deseralize the config object
-					String pathToObj = dirChoose.getSelectedFile().getPath() + FileIO.SEP + "serialized_config"
-							+ FileIO.SEP + "config.tbc";
-					config = ConfigSerialization.deserialize(pathToObj);
-					// TODO Jordan button panel changes according to config object
-					JOptionPane.showMessageDialog(this, "Configuration set.");
-				}
+				selector.setVisible(true);
+				selector.setSelectionListener(new SelectionListener() {
+					public void onFileSelected(File file) {
+						// TODO Auto-generated method stub
+					}
+				});
 			}
 			// create new config directory
 			else if (event.getSource() == createNew) {
-				config = Configuration.getConfiguration();
-				// TODO Jordan button panel gets reset
+				selector.setVisible(true);
+				selector.setSelectionListener(new SelectionListener() {
+					public void onFileSelected(File file) {
+						config = new Configuration(file.getPath());
+					}
+				});
 			}
 		}
 	}
@@ -117,7 +119,7 @@ public class TalkboxConfigurer {
 
 			// Adding setup panel to the base; send it
 			// reference of current configurance
-			setup = new SetUpPanel(this, config);
+			setup = new SetUpPanel(this);
 			this.add(SETUP, setup);
 			layout.show(this, MENU);
 

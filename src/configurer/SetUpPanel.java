@@ -37,14 +37,19 @@ public class SetUpPanel extends JPanel implements ActionListener{
 	private BasePanel panel;
 	
 	public SetUpFrame setUpFrame;
-	public SetUpPanel(BasePanel panel, Configuration c) {
+	public SetUpButton [] buttons;
+	public SetUpPanel(BasePanel panel) {
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(ROWS,COLS));
+		
+		//Initializing button array
+		buttons = new SetUpButton[COLS];
 		for(int row = 0;row < ROWS;row++) {
 			for(int col = 0;col < COLS;col++) {
-				SetUpButton button = new SetUpButton(c.getButtonConfigs()[4*row+col]);
+				SetUpButton button = new SetUpButton();
+				buttons[col] = button;
 				button.addActionListener(this);
 				buttonPanel.add(button);
 			}
@@ -61,6 +66,11 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		
 		setUpFrame = new SetUpFrame();
 	}
+	public void setConfiguration(Configuration config) {
+		for(int i = 0;i < buttons.length;i++) {
+			buttons[i].setConfiguration(config.buttonConfigs[i]);
+		}
+	}
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == backButton) {
@@ -74,8 +84,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 	}
 	public class SetUpButton extends JButton{
 		private ButtonConfiguration config;
-		public SetUpButton(ButtonConfiguration config) {
-			setConfiguration(config);
+		public SetUpButton() {
 		}
 		public ButtonConfiguration getConfiguration() {
 			return config;
@@ -281,6 +290,10 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				}
 			}
 		}
+		/**
+		 * Color frame for adding color to the button being configured.
+		 * @author jordan
+		 */
 		public class ColorFrame extends JFrame implements ActionListener{
 			public ColorFrame() {
 				super("Select Color");
@@ -300,6 +313,10 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				this.add(new ColorButton(Color.white,this));
 				this.add(new ColorButton(ButtonConfiguration.DEFAULT_COLOR,this));
 			}
+			/**
+			 * Color button for selecting a particular color from the color frame.
+			 * @author jordan
+			 */
 			public class ColorButton extends JButton{
 				private Color thisColor;
 				public ColorButton(Color color,ActionListener listener) {

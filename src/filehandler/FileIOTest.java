@@ -27,22 +27,22 @@ class FileIOTest extends FileIO {
 		// file move
 		String orig = "C:\\Users\\Rohan\\Desktop\\Aus\\recording300.wav";
 		String dest = "C:\\Users\\Rohan\\Documents";
-		FileIO.moveFile(orig, dest);
+		FileIO.copyFile(orig, dest);
 		assertTrue(new File(dest.concat("\\recording300.wav")).exists());
 		// txt file move
 		orig = "C:\\Users\\Rohan\\Documents\\daysof heaven.txt";
 		dest = "C:\\Users\\Rohan\\Desktop\\Aus";
-		FileIO.moveFile(orig, dest);
+		FileIO.copyFile(orig, dest);
 		assertTrue(new File(dest.concat("\\daysof heaven.txt")).exists());
 		// file does not exist: should not move anything
 		orig = "C:\\Users\\Rohan\\Unknown dir\\daysof heaven.txt";
 		dest = "C:\\Users\\Rohan\\Downloads";
-		FileIO.moveFile(orig, dest);
+		FileIO.copyFile(orig, dest);
 		assertFalse(new File(dest.concat("\\daysof heaven.txt")).exists());
 		// dest does not exist: should not move anything
 		orig = "C:\\Users\\Rohan\\Desktop\\Aus\\recording500.wav";
 		dest = "C:\\Users\\Rohan\\unknown";
-		FileIO.moveFile(orig, dest);
+		FileIO.copyFile(orig, dest);
 		assertFalse(new File(dest.concat("\\recording500.wav")).exists());
 	}
 	@Test
