@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import fonts.FontUtils;
 /**
  * Search pane for emojis within the app.
  * @author jordan
@@ -19,12 +21,12 @@ import javax.swing.JScrollPane;
 public class EmojiSearchPane extends JPanel implements KeyListener{
 	private static final long serialVersionUID = 1L;
 	private JPanel emojiPanel;
-	private static final int EMOJIS_PER_LINE = 4;
+	private static final int EMOJIS_PER_LINE = 5;
 	private static final int MINIMUM_SEARCH_QUERY = 2;
 	private EmojiTextField searchField;
 	private Emoji [] emojiList;
 	private ActionListener buttonListener;
-	private static final Font BUTTON_FONT = new Font(Font.SERIF,Font.PLAIN,16);
+	private final static Font emojiFont = FontUtils.getNotoFont(20);
 	public static void main(String [] args) {
 		EmojiSearchFrame frame = new EmojiSearchFrame(null);
 		frame.setVisible(true);
@@ -71,7 +73,7 @@ public class EmojiSearchPane extends JPanel implements KeyListener{
 		for(Emoji currentEmoji : searchList) {
 				JButton emojiButton = new JButton(currentEmoji.emoji());
 				emojiButton.addActionListener(buttonListener);
-				emojiButton.setFont(BUTTON_FONT);
+				emojiButton.setFont(emojiFont);
 				emojiPanel.add(emojiButton);
 		}
 		emojiPanel.repaint();
