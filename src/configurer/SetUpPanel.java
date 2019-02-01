@@ -8,9 +8,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -83,6 +81,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		}
 	}
 	public class SetUpButton extends JButton{
+		private static final String style = ""; 
 		private ButtonConfiguration config;
 		public SetUpButton() {
 		}
@@ -95,7 +94,9 @@ public class SetUpPanel extends JPanel implements ActionListener{
 		}
 		public void adaptToConfig() {
 			this.setBackground(config.buttonColor);
-			this.setText(config.buttonText);
+			//Adjusting the text to use html that way the body linewraps
+			String adjustedText = String.format("<html><body>%s</body></html>",config.buttonText);
+			this.setText(adjustedText);
 		}
 	}
 	/**

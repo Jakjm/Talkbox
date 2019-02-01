@@ -17,7 +17,9 @@ public class SimulatorButton extends JButton implements ActionListener{
 	}
 	public void setupWithConfiguration(ButtonConfiguration config) {
 		this.config = config;
-		this.setText(config.buttonText);
+		//Adjusting the text to use html that way the body linewraps
+		String adjustedText = String.format("<html><body>%s</body></html>",config.buttonText);
+		this.setText(adjustedText);
 		this.setBackground(config.buttonColor);
 		if(config.soundFile != null) {
 			player = new MusicPlayer(config.soundFile);
