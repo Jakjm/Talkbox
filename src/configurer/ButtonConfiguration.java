@@ -37,7 +37,6 @@ public class ButtonConfiguration {
 	}
 	/**
 	 * @return The directory to this button configuration.
-	 * TODO rename to getDirectory
 	 */
 	public File returnDir() {
 		return this.buttonDir;
@@ -52,12 +51,10 @@ public class ButtonConfiguration {
 	public void writeButtonTxt() {
 		// create string path to button.txt    
 		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
-		/**TODO this should be using new lines, not tabs **/
 		String data = this.buttonText + "\t";
 		data += this.buttonColor.getRGB() + "\t";
 		// if the sound file is not null copy it to the sound directory
 		if (this.soundFile != null) {
-			/**TODO this is incorrect**/
 			FileIO.copyFile(soundFile, this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 			data += 1;
 		} else {

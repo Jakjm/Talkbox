@@ -2,7 +2,7 @@ package browsing;
 /**
  * Basic GUI class for File selection.
  * @author jakjm
- * @version June 28th 2018
+ * @version January 31st 2019
  */
 import javax.swing.BoxLayout;
 import javax.swing.JButton;

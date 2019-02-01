@@ -1,15 +1,14 @@
 package emojiPanel;
 
 /**
- * Class for organizing a group of emojis.
+ * Class for grouping an emoji with its description
  * @author jordan
- *
  */
 public class Emoji {
 	private String emoji;
 	private String description;
-	public Emoji(String emojis,String description) {
-		this.emoji = emojis;
+	public Emoji(String emoji,String description) {
+		this.emoji = emoji;
 		this.description = description;
 	}
 	public String emoji() {

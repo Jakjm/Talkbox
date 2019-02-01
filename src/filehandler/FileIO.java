@@ -88,7 +88,7 @@ public class FileIO {
 			Path origPath = Paths.get(origin);
 			Path destPath = Paths.get(destination);
 			// copy file into destination
-			Files.copy(origPath, destPath.resolve(origPath.getFileName()), REPLACE_EXISTING);
+			Files.copy(origPath,destPath,REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
 			e.printStackTrace();
 		}

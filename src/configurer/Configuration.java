@@ -2,12 +2,9 @@ package configurer;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import filehandler.FileIO;
-
 import talkbox.TalkBoxConfiguration;
 
 /**
@@ -26,14 +23,15 @@ public class Configuration implements TalkBoxConfiguration {
 	// number of virtual buttons supported
 	private int activeButtons = 6;
 	// number of physical audio buttons supported
-	private int totalButtons;
+	private int totalButtons = activeButtons;
 	// number of audio files
-	private int audioSets;
+	private transient int audioSets;
 	// array of buttonconfigs
-	public ButtonConfiguration[] buttonConfigs;
-	private String talkboxPath;
+	public transient ButtonConfiguration[] buttonConfigs;
+	private transient String talkboxPath;
 
 	/**
+	 * <b> This constructor is only used for creating a new configuration </b>
 	 * Constructor for configuration instance. Creates the directory folder with button configuration
 	 * folders. The default number of buttons is six.
 	 * @pathname the directory in which the talkboxData directory is being made in
@@ -47,8 +45,35 @@ public class Configuration implements TalkBoxConfiguration {
 		new File(pathname.concat(FileIO.SEP + "serialized_config")).mkdir();
 		// create all button directories
 		this.createButtonConfigsDirs();
+		serializeConfig();
 	}
-
+	/**
+	 * <b> This method is for fully reading a configuration from a file </b>
+	 * @param file - the file of the talkboxData directory
+	 * @return the configuration complete with the button configurations, etc
+	 */
+	public static Configuration readConfiguration(File file) {
+		try {
+			//Reading the serialized object
+			String serializedObject = file.getPath() + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc";
+			Configuration config = ConfigSerialization.deserialize(serializedObject);
+			
+			//Reading the button configurations
+			config.buttonConfigs = new ButtonConfiguration[config.totalButtons];
+			String buttonPath = file.getPath() + FileIO.SEP + "button_config_";
+			for(int i = 0;i < config.totalButtons;i++) {
+				File buttonFile = new File(buttonPath + i);
+				config.buttonConfigs[i] = ButtonConfiguration.readButtonTxt(buttonFile);
+			}
+			//Returning the configuration
+			return config;
+		}
+		//If there are any errors with the reading, return null.
+		catch(Exception e) {
+			System.out.println("Unable to read configuration - please try again");
+			return null;
+		}
+	}
 	/**
 	 * Serialize the current Configuration instance. File is placed in the default
 	 * directory in the "serialized_config" folder.
