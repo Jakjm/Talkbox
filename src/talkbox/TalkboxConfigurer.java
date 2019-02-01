@@ -7,21 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import browsing.FileSelector;
 import browsing.SelectionListener;
-import configurer.ConfigSerialization;
 import configurer.Configuration;
 import configurer.RecordingPanel;
 import configurer.SetUpPanel;
-import configurer.RecordingPanel.SaveFileSelectionListener;
-import filehandler.FileIO;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
 
 /**
  * Main class for the Talkbox Configuration App
@@ -102,6 +97,7 @@ public class TalkboxConfigurer {
 									"Failed to read a talkbox configuration from \n the selected directory."
 									+ " Please ensure it is \n a correct talkboxData directory");
 						}
+						selector.setVisible(false);
 					}
 				});
 			}
@@ -113,7 +109,7 @@ public class TalkboxConfigurer {
 						config = new Configuration(file.getPath());
 						panel.configureSetup();
 						setUpButtons.setEnabled(true);
-						
+						selector.setVisible(false);
 					}
 				});
 			}

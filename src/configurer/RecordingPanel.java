@@ -91,6 +91,7 @@ public class RecordingPanel extends JPanel implements ActionListener{
 		public void onFileSelected(File file) {
 			File newFile = new File(file.getPath() + System.getProperty("file.separator") + nameField.getText());
 			MusicRecorder.writeToFile(stream,format,newFile);
+			fileSelector.setVisible(false);
 		}
 	}
 

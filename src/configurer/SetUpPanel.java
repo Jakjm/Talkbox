@@ -179,6 +179,7 @@ public class SetUpPanel extends JPanel implements ActionListener{
 				else {
 					JOptionPane.showMessageDialog(null,"Audio File must be of .wav format");
 				}
+				fileSelector.setVisible(false);
 			}
 		}
 		public class EmojiListener implements ActionListener{

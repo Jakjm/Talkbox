@@ -210,7 +210,6 @@ public class FileSelector extends JFrame implements ActionListener{
 	public void select(File thisFile){
 		this.currentFile = thisFile;
 		if(this.listener != null)this.listener.onFileSelected(thisFile);
-		this.setVisible(false);
 	}
 	
 	
