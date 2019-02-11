@@ -220,10 +220,17 @@ public class MusicPlayer{
 			}
 		}
 	}
-	
+	/**
+	 * Position within the track
+	 * @return
+	 */
 	public long framePosition() {
 		return position % ais.getFrameLength();
 	}
+	/**
+	 * Position within the track as a string
+	 * @return
+	 */
 	public String currentTrackPosition() {
 		return framesToTime(framePosition());
 	}
@@ -237,6 +244,10 @@ public class MusicPlayer{
 		int minutes = (int)(length / 60);
 		int seconds = (int) (length % 60);
 		return String.format("%d:%02d",minutes,seconds);
+	}
+	
+	public long frameLength() {
+		return ais.getFrameLength();
 	}
 	/**
 	 * @return the length of the track being played.
