@@ -32,8 +32,9 @@ public class Configuration implements TalkBoxConfiguration {
 
 	/**
 	 * <b> This constructor is only used for creating a new configuration </b>
-	 * Constructor for configuration instance. Creates the directory folder with button configuration
-	 * folders. The default number of buttons is six.
+	 * Constructor for configuration instance. Creates the directory folder with
+	 * button configuration folders. The default number of buttons is six.
+	 * 
 	 * @pathname the directory in which the talkboxData directory is being made in
 	 */
 	public Configuration(String pathname) {
@@ -47,39 +48,43 @@ public class Configuration implements TalkBoxConfiguration {
 		this.createButtonConfigsDirs();
 		serializeConfig();
 	}
+
 	/**
-	 * <b> This method is for fully reading a configuration from a file </b>
+	 * <b> This method is for fully reading a configuration from a file. </b>
+	 * 
 	 * @param file - the file of the talkboxData directory
 	 * @return the configuration complete with the button configurations, etc
 	 */
 	public static Configuration readConfiguration(File file) {
 		try {
-			//Reading the serialized object
+			// Reading the serialized object
 			String serializedObject = file.getPath() + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc";
 			Configuration config = ConfigSerialization.deserialize(serializedObject);
-			
-			//Reading the button configurations
+
+			// Reading the button configurations
 			config.buttonConfigs = new ButtonConfiguration[config.totalButtons];
 			String buttonPath = file.getPath() + FileIO.SEP + "button_config_";
-			for(int i = 0;i < config.totalButtons;i++) {
+			for (int i = 0; i < config.totalButtons; i++) {
 				File buttonFile = new File(buttonPath + i);
 				config.buttonConfigs[i] = ButtonConfiguration.readButtonTxt(buttonFile);
 			}
-			//Returning the configuration
+			// Returning the configuration
 			return config;
 		}
-		//If there are any errors with the reading, return null.
-		catch(Exception e) {
+		// If there are any errors with the reading, return null.
+		catch (Exception e) {
 			System.out.println("Unable to read configuration - please try again");
 			return null;
 		}
 	}
+
 	/**
 	 * Serialize the current Configuration instance. File is placed in the default
 	 * directory in the "serialized_config" folder.
 	 */
 	public void serializeConfig() {
-		ConfigSerialization.serialize(talkboxPath.concat(FileIO.SEP + "serialized_config"+ FileIO.SEP + "config.tbc"), this);
+		ConfigSerialization.serialize(talkboxPath.concat(FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc"),
+				this);
 	}
 
 	/**
@@ -104,7 +109,8 @@ public class Configuration implements TalkBoxConfiguration {
 		// add sound and image folders
 		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
-		// create new button configuration: this creates the text file with the associated sound, color, and image
+		// create new button configuration: this creates the text file with the
+		// associated sound, color, and image
 		ButtonConfiguration b = new ButtonConfiguration("Button " + i, null, null, new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
@@ -113,8 +119,8 @@ public class Configuration implements TalkBoxConfiguration {
 	}
 
 	/**
-	 * Set the number of active buttons. If new active
-	 * buttons are needed, adds the remaining number of active button config folders.
+	 * Set the number of active buttons. If new active buttons are needed, adds the
+	 * remaining number of active button config folders.
 	 * 
 	 * @param activeButtons
 	 */
@@ -156,6 +162,7 @@ public class Configuration implements TalkBoxConfiguration {
 			FileIO.copyFile(image, destination);
 		}
 	}
+
 	/**
 	 * Returns the button configuration objects.
 	 */

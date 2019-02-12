@@ -14,6 +14,7 @@ import javax.sound.sampled.TargetDataLine;
 
 /**
  * Rewritten Audio Recording Class
+ * 
  * @author jordan
  * @version January 20th 2019
  */
@@ -25,6 +26,7 @@ public class MusicRecorder {
 	private volatile int state = NOT_RECORDING;
 	private volatile ByteArrayOutputStream stream;
 	private Thread recordingThread;
+
 	/**
 	 * Constructor for MusicRecorder
 	 */
@@ -37,24 +39,29 @@ public class MusicRecorder {
 		}
 		format = line.getFormat();
 	}
+
 	/**
-	 * Starts recording and writes to specified file. 
+	 * Starts recording and writes to specified file.
+	 * 
 	 * @param file - the target file in .wav format
 	 */
 	public void record() {
-		if(this.state == RECORDING) {
+		if (this.state == RECORDING) {
 			return;
 		}
 		this.state = RECORDING;
 		recordingThread = new Thread(new ThreadTask());
 		recordingThread.start();
 	}
+
 	/**
-	 * Stop sound recording. 
-	 * @return ByteArrayOutputStream - the stream that the sound has been recorded to, or null if not recording.
+	 * Stop sound recording.
+	 * 
+	 * @return ByteArrayOutputStream - the stream that the sound has been recorded
+	 *         to, or null if not recording.
 	 */
 	public ByteArrayOutputStream stop() {
-		if(this.state == NOT_RECORDING) {
+		if (this.state == NOT_RECORDING) {
 			return null;
 		}
 		this.state = NOT_RECORDING;
@@ -65,41 +72,44 @@ public class MusicRecorder {
 		}
 		return stream;
 	}
-	public static void writeToFile(ByteArrayOutputStream stream,AudioFormat format,File file) {
+
+	public static void writeToFile(ByteArrayOutputStream stream, AudioFormat format, File file) {
 		try {
-			byte [] rawData = stream.toByteArray();
-			ByteArrayInputStream inStream  = new ByteArrayInputStream(rawData);
-			AudioInputStream ais = new AudioInputStream(inStream,format,rawData.length / format.getFrameSize());
-			AudioSystem.write(ais,AudioFileFormat.Type.WAVE,file);
-		}  catch (IOException e) {
+			byte[] rawData = stream.toByteArray();
+			ByteArrayInputStream inStream = new ByteArrayInputStream(rawData);
+			AudioInputStream ais = new AudioInputStream(inStream, format, rawData.length / format.getFrameSize());
+			AudioSystem.write(ais, AudioFileFormat.Type.WAVE, file);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * @return the AudioFormat of the TargetDataline for this recorder.
 	 */
 	public AudioFormat getFormat() {
 		return this.format;
 	}
+
 	/** Task that for recording **/
-	private class ThreadTask implements Runnable{
+	private class ThreadTask implements Runnable {
 		public void run() {
 			stream = new ByteArrayOutputStream();
-			byte [] data = new byte[line.getBufferSize() / 5];
+			byte[] data = new byte[line.getBufferSize() / 5];
 			int bytesRead;
 			line.start();
-			
-			//Flush the line to get rid of leftover data
+
+			// Flush the line to get rid of leftover data
 			line.flush();
-			//Recording sound into stream
-			while(state == RECORDING) {
-				bytesRead = line.read(data,0,data.length);
-				stream.write(data,0,bytesRead);
+			// Recording sound into stream
+			while (state == RECORDING) {
+				bytesRead = line.read(data, 0, data.length);
+				stream.write(data, 0, bytesRead);
 			}
-			//Flushing remaining data
+			// Flushing remaining data
 			line.stop();
-			bytesRead = line.read(data,0,data.length);
-			stream.write(data,0,bytesRead);
+			bytesRead = line.read(data, 0, data.length);
+			stream.write(data, 0, bytesRead);
 			line.drain();
 		}
 	}

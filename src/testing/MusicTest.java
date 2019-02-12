@@ -1,7 +1,9 @@
-package musicplayer;
+package testing;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import musicplayer.MusicPlayer;
 public class MusicTest {
 	/**
 	 * Testing the opening of a music player for errors.

@@ -22,7 +22,7 @@ public class ButtonConfiguration {
 	 * @param buttonText The text to be included.
 	 * @param color      The color of the button.
 	 * @param soundFile  The sound file associated with the button.
-	 * @param The directory of the button.
+	 * @param The        directory of the button.
 	 */
 	public ButtonConfiguration(String buttonText, Color color, File soundFile, File buttonDir) {
 		if (color == null) {
@@ -35,12 +35,14 @@ public class ButtonConfiguration {
 		this.buttonDir = buttonDir;
 		this.writeButtonTxt();
 	}
+
 	/**
 	 * @return The directory to this button configuration.
 	 */
 	public File returnDir() {
 		return this.buttonDir;
 	}
+
 	/**
 	 * Used for updating and setting the button configuration. The buttonDir is the
 	 * location of the button config directory. Writes the button text, color in
@@ -49,7 +51,7 @@ public class ButtonConfiguration {
 	 * 
 	 */
 	public void writeButtonTxt() {
-		// create string path to button.txt    
+		// create string path to button.txt
 		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
 		String data = this.buttonText + "\t";
 		data += this.buttonColor.getRGB() + "\t";
@@ -65,14 +67,13 @@ public class ButtonConfiguration {
 	}
 
 	/**
-	 * Reads the button data (color, text, and sound if it exists from the sound
-	 * file - if "sound.wav" exists) from a .txt file and returns a button configuration.
+	 * Reads the button data (color, text, and sound if it exists) from a 
+	 * .txt file and returns a button configuration.
 	 * 
 	 * @param buttonDir The location of the directory.
 	 * @return a ButtonConfiguration with the given configuration.
 	 */
 	public static ButtonConfiguration readButtonTxt(File buttonDir) {
-		//Don't do this
 		String[] input = FileIO.readTextFile(new File(buttonDir + FileIO.SEP + "button.txt"));
 		// receive name of the button, the color, and whether it has a sound file or not
 		File sound = null;

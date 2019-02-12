@@ -20,15 +20,16 @@ import configurer.SetUpPanel;
 
 /**
  * Main class for the Talkbox Configuration App
+ * 
  * @author jordan
  * @version January 31st 2019
  */
 public class TalkboxConfigurer {
-	/**The main frame for the app**/
+	/** The main frame for the app **/
 	ConfigurerFrame frame;
-	/**Base panel that selects between the other supporting panels**/
+	/** Base panel that selects between the other supporting panels **/
 	BasePanel panel;
-	/**The configuration that the configurer is currently setup with. **/
+	/** The configuration that the configurer is currently setup with. **/
 	Configuration config;
 
 	public TalkboxConfigurer() {
@@ -37,7 +38,7 @@ public class TalkboxConfigurer {
 		frame.setContentPane(panel);
 		frame.setVisible(true);
 	}
-    
+
 	public class MenuPanel extends JPanel implements ActionListener {
 		JButton setUpButtons;
 		JButton recordAudio;
@@ -45,6 +46,7 @@ public class TalkboxConfigurer {
 		JButton editOld;
 		JButton selectExisting;
 		FileSelector selector;
+
 		public MenuPanel() {
 			this.setLayout(new GridLayout(2, 2));
 			// Recording Button
@@ -55,7 +57,7 @@ public class TalkboxConfigurer {
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
 			this.add(setUpButtons);
-			//Set it disabled by default
+			// Set it disabled by default
 			setUpButtons.setEnabled(false);
 			// Create new config directory
 			createNew = new JButton("Create new configuration directory");
@@ -65,10 +67,10 @@ public class TalkboxConfigurer {
 			selectExisting = new JButton("Select existing configuration directory");
 			selectExisting.addActionListener(this);
 			this.add(selectExisting);
-		
-			
-			selector = new FileSelector(null,FileSelector.DIRECTORY);
+
+			selector = new FileSelector(null, FileSelector.DIRECTORY);
 		}
+
 		private void initButtons() {
 			setUpButtons.setEnabled(false);
 		}
@@ -86,16 +88,16 @@ public class TalkboxConfigurer {
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {
 						config = Configuration.readConfiguration(file);
-						//If the configuration was successfully opened
-						if(config != null) {
+						// If the configuration was successfully opened
+						if (config != null) {
 							panel.configureSetup();
 							setUpButtons.setEnabled(true);
 						}
-						//Otherwise
+						// Otherwise
 						else {
 							JOptionPane.showMessageDialog(null,
 									"Failed to read a talkbox configuration from \n the selected directory."
-									+ " Please ensure it is \n a correct talkboxData directory");
+											+ " Please ensure it is \n a correct talkboxData directory");
 						}
 						selector.setVisible(false);
 					}
@@ -145,9 +147,11 @@ public class TalkboxConfigurer {
 			this.revalidate();
 			this.repaint();
 		}
+
 		public void configureSetup() {
 			setup.setConfiguration(config);
 		}
+
 		public void showSetup() {
 			layout.show(this, SETUP);
 		}

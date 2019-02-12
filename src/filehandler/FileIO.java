@@ -3,7 +3,6 @@ package filehandler;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,12 +19,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class FileIO {
 	/**
-	 * Utilities for audio file handling.
+	 * Utilities for handling files. Common uses include checking audio file format,
+	 * reading/writing to text files, copying files, etc.
 	 * 
 	 * @author Alberto Mastrofrancesco
 	 * @author Jordan Malek
 	 * @author Rohan Talkad
-	 * @version 1.0
 	 */
 	public static final String WAVFORMAT = ".wav";
 	public static final String WAVEFORMAT = ".wave";
@@ -43,42 +42,45 @@ public class FileIO {
 		String ext = path.substring(path.lastIndexOf("."));
 		if (ext.equals(WAVEFORMAT) || ext.equals(WAVFORMAT)) {
 			File toCheck = new File(path);
-			isWave = checkFileFormat(toCheck);
+			isWave = checkWaveFormat(toCheck);
 		}
 		return isWave;
 
 	}
 
 	/**
-	 * Verifies if a file format is WAVE by checking its format.
-	 * TODO rename check wave format or something similar
+	 * Verifies if a file format is WAVE by checking its format. TODO rename check
+	 * wave format or something similar
+	 * 
 	 * @param file - the file to be verified
 	 * @return true iff the file format is WAVE.
 	 */
-	public static boolean checkFileFormat(File file) {
+	public static boolean checkWaveFormat(File file) {
 		boolean isWave = false;
 		try {
 			// return file format type from the audio input stream of the file
 			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
 			isWave = fileFormat.getType().equals(AudioFileFormat.Type.WAVE);
 		} catch (IOException | UnsupportedAudioFileException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return isWave;
 	}
 
 	/**
-	 * Copies the file specified to the path. 
+	 * Copies the file specified to the path.
+	 * 
 	 * @param File - The target file to be moved.
 	 * @param dest - the string path destination
 	 */
 	public static void copyFile(File file, String dest) {
 		String filePath = file.getPath();
-		copyFile(filePath,dest);
+		copyFile(filePath, dest);
 	}
 
 	/**
 	 * Moves file specified by directory into a path.
+	 * 
 	 * @param origin      - The path of the target file.
 	 * @param destination - The path of the destination file.
 	 */
@@ -88,7 +90,7 @@ public class FileIO {
 			Path origPath = Paths.get(origin);
 			Path destPath = Paths.get(destination);
 			// copy file into destination
-			Files.copy(origPath,destPath,REPLACE_EXISTING);
+			Files.copy(origPath, destPath, REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
 			e.printStackTrace();
 		}
@@ -129,23 +131,27 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Reads text file and returns an array of each word.
-	 * TODO fix this
+	 * Reads text file and returns an array of each line.
+	 * 
 	 * @return The array of the words.
 	 */
 	public static String[] readTextFile(File toRead) {
 		String[] data = new String[3];
+		String line;
 		try (BufferedReader br = new BufferedReader(new FileReader(toRead))) {
-			String line = br.readLine();
-			data = line.split("\t");
+			int i = 0;
+			while ((line = br.readLine()) != null) {
+				data[i++] = line;
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return data;
-		
+
 	}
+
 	/**
 	 * Verifies if file format is an image. Intended to accept PNG and JPEG files.
 	 * 
