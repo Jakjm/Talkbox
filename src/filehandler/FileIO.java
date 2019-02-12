@@ -33,7 +33,7 @@ public class FileIO {
 	/**
 	 * Verifies if file format is WAVE by checking its path.
 	 * 
-	 * @param path - The absolute path of the file in string form.
+	 * @param path The absolute path of the file.
 	 * @return true iff the file format is WAVE.
 	 */
 	public static boolean checkFileFormatByPath(String path) {
@@ -68,10 +68,10 @@ public class FileIO {
 	}
 
 	/**
-	 * Copies the file specified to the path.
+	 * Moves file specified by directory into a path.
 	 * 
-	 * @param File - The target file to be moved.
-	 * @param dest - the string path destination
+	 * @param file The path of the target file.
+	 * @param dest The path of the destination folder.
 	 */
 	public static void copyFile(File file, String dest) {
 		String filePath = file.getPath();
@@ -81,14 +81,14 @@ public class FileIO {
 	/**
 	 * Moves file specified by directory into a path.
 	 * 
-	 * @param origin      - The path of the target file.
-	 * @param destination - The path of the destination file.
+	 * @param file The path of the target file.
+	 * @param dest The path of the destination folder.
 	 */
-	public static void copyFile(String origin, String destination) {
+	public static void copyFile(String file, String dest) {
 		try {
 			// construct paths
-			Path origPath = Paths.get(origin);
-			Path destPath = Paths.get(destination);
+			Path origPath = Paths.get(file);
+			Path destPath = Paths.get(dest);
 			// copy file into destination
 			Files.copy(origPath, destPath, REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
@@ -97,9 +97,9 @@ public class FileIO {
 	}
 
 	/**
-	 * Verifies if file format is an image. Intended to accept PNG and JPEG files.
+	 * Verifies if the file format is PNG or JPG. 
 	 * 
-	 * @param path - The path image file.
+	 * @param path The path of the image file.
 	 * @return true if the file is an image.
 	 */
 	public static boolean checkImageFile(String path) {
@@ -116,7 +116,7 @@ public class FileIO {
 	}
 
 	/**
-	 * Create and write to text file.
+	 * Creates and writes content to a text file.
 	 * 
 	 * @param toWrite The file to write to.
 	 * @param content The string to write.
@@ -133,9 +133,9 @@ public class FileIO {
 	}
 
 	/**
-	 * Reads text file and returns an array of each line.
+	 * Reads the specified text file and returns an array of each line.
 	 * 
-	 * @return The array of the words.
+	 * @return The array of lines.
 	 */
 	public static String[] readTextFile(File toRead) {
 		String[] data = new String[3];
@@ -155,7 +155,7 @@ public class FileIO {
 	/**
 	 * Verifies if file format is an image. Intended to accept PNG and JPEG files.
 	 * 
-	 * @param path - The image file
+	 * @param file The image file.
 	 * @return true if the file is an image
 	 */
 	public static boolean checkImageFile(File file) {
