@@ -73,9 +73,10 @@ public class FileIO {
 	 * @param file The path of the target file.
 	 * @param dest The path of the destination folder.
 	 */
-	public static void copyFile(File file, String dest) {
-		String filePath = file.getPath();
-		copyFile(filePath, dest);
+	public static void copyFile(File file, File dest) {
+		String filePath = file.getAbsolutePath();
+		String destPath = dest.getAbsolutePath();
+		copyFile(filePath, destPath);
 	}
 
 	/**
@@ -84,36 +85,18 @@ public class FileIO {
 	 * @param file The path of the target file.
 	 * @param dest The path of the destination folder.
 	 */
-	public static void copyFile(String file, String dest) {
+	public static void copyFile(String filePath, String destPath) {
 		try {
-			// construct paths
-			Path origPath = Paths.get(file);
-			Path destPath = Paths.get(dest);
+			Path file = Paths.get(filePath);
+			Path dest = Paths.get(destPath);
 			// copy file into destination
-			Files.copy(origPath, destPath, REPLACE_EXISTING);
+			Files.copy(file,dest, REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Verifies if the file format is PNG or JPG. 
-	 * 
-	 * @param path The path of the image file.
-	 * @return true if the file is an image.
-	 */
-	public static boolean checkImageFile(String path) {
-		boolean isImg = false;
-		try {
-			// see if Image IO can read the image
-			File imgFile = new File(path);
-			// null check
-			isImg = ImageIO.read(imgFile) != null;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return isImg;
-	}
+	
 
 	/**
 	 * Creates and writes content to a text file.
@@ -152,13 +135,4 @@ public class FileIO {
 
 	}
 
-	/**
-	 * Verifies if file format is an image. Intended to accept PNG and JPEG files.
-	 * 
-	 * @param file The image file.
-	 * @return true if the file is an image
-	 */
-	public static boolean checkImageFile(File file) {
-		return checkImageFile(file.getPath());
-	}
 }

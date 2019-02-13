@@ -149,25 +149,20 @@ public class Configuration implements TalkBoxConfiguration {
 		this.audioSets = audioSets;
 	}
 
-	/**
-	 * Adds image file to specified button.
-	 * 
-	 * @param button The button number.
-	 * @param image  The image file.
-	 */
-	public void addImageFile(int button, File image) {
-		// if image file is verified, add it to the config file
-		String destination = talkboxPath + FileIO.SEP + "config_" + button + FileIO.SEP + "image";
-		if (button < this.activeButtons && FileIO.checkImageFile(image)) {
-			FileIO.copyFile(image, destination);
-		}
-	}
 
 	/**
 	 * Returns the button configuration objects.
 	 */
 	public ButtonConfiguration[] getButtonConfigs() {
 		return this.buttonConfigs;
+	}
+	
+	/**
+	 * Returns the path to the current Talkbox configuration directory.
+	 * @Return the absolute path to Talkboxdata
+	 */
+	public String getConfigDir() {
+		return this.talkboxPath;
 	}
 
 	/**
