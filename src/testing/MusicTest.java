@@ -1,6 +1,8 @@
 package testing;
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 
 import musicplayer.MusicPlayer;
@@ -31,7 +33,7 @@ public class MusicTest {
 	@Test
 	public void test2() {
 		try {
-			MusicPlayer player = new MusicPlayer("/testing/test.wav");
+			MusicPlayer player = new MusicPlayer(new File("src/testing/test.wav"));
 			//Ensure the player is not considered playing yet
 			if(player.isPlaying()) {
 				fail();
@@ -90,7 +92,7 @@ public class MusicTest {
 			MusicPlayer player = new MusicPlayer("/testing/test4.wav");
 			
 			//Skipping 1 minute and 58 seconds
-			player.skip(1,58);
+			player.skip("1:58");
 			if(player.framePosition() <= 0) {
 				fail();
 			}
@@ -137,7 +139,8 @@ public class MusicTest {
 	 */
 	@Test
 	public void test5() {
-		MusicPlayer player = new MusicPlayer("/testing/test4.wav");
+		
+		MusicPlayer player = new MusicPlayer(new File("src/testing/test4.wav"));
 		//Skipping through the song
 		player.skip(2,03);
 		if(!player.currentTrackPosition().equals("2:03")) {
