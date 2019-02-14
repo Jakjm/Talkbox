@@ -28,6 +28,7 @@ public class Configuration implements TalkBoxConfiguration {
 	private transient int audioSets;
 	// array of buttonconfigs
 	public transient ButtonConfiguration[] buttonConfigs;
+	// path to the talkbox directory
 	private transient String talkboxPath;
 
 	/**

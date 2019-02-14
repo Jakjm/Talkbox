@@ -14,15 +14,18 @@ import filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigSerializationTest {
-	public Configuration cf;
-	
-	//@Test
+	public static String HOME = System.getProperty("user.home") + FileIO.SEP;
+	public static String TESTING = HOME + "talkboxtest";
+	public static String RESOURCES = "src" + FileIO.SEP + "testing" + FileIO.SEP;
+
+	@Test
 	public void testSerialize() {
-		Configuration cf = new Configuration(Directories.TESTING);
-		/**TODO the next line should have as the file: Directories.TESTING + FileIO.SEP + "talkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc" 
-		 * or something very similar
-		 * **/
-		ConfigSerialization.serialize(Directories.TESTING, cf);
-		assertTrue(new File(Directories.TESTING + FileIO.SEP + "talkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc").exists());
+		Configuration cf = new Configuration(TESTING);
+		cf.setActiveButtons(3);
+		ConfigSerialization.serialize(TESTING + FileIO.SEP + "test.tbc", cf);
+		assertTrue(new File(TESTING + FileIO.SEP + "test.tbc").exists());
+		// deserialize
+		Configuration p = ConfigSerialization.deserialize(TESTING + FileIO.SEP + "test.tbc");
+		assertTrue(p.getNumberOfAudioButtons() == 3);
 	}
 }

@@ -62,7 +62,6 @@ public class FileIO {
 			AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(file);
 			isWave = fileFormat.getType().equals(AudioFileFormat.Type.WAVE);
 		} catch (IOException | UnsupportedAudioFileException e) {
-			// e.printStackTrace();
 		}
 		return isWave;
 	}
@@ -92,7 +91,6 @@ public class FileIO {
 			// copy file into destination
 			Files.copy(file,dest, REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -111,7 +109,6 @@ public class FileIO {
 			bf.write(content);
 			bf.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -129,10 +126,25 @@ public class FileIO {
 				data[i++] = line;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return data;
 
+	}
+	
+	/**
+	 * Deletes the specified folder.
+	 * @param folder the Folder to delete
+	 */
+	public static void deleteFolder(File folder) {
+		for (File x : folder.listFiles()) {
+			if (x.isFile()) {
+				x.delete();
+			}
+			else {
+				deleteFolder(x);
+			}
+		}
+		folder.delete();
 	}
 
 }

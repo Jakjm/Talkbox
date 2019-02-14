@@ -2,17 +2,27 @@ package testing;
 
 import java.io.File;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import filehandler.FileIO;
 
 @RunWith(Suite.class)
-@SuiteClasses({ConfigSerializationTest.class, FileIOTest.class, MusicTest.class})
+@SuiteClasses({ ConfigSerializationTest.class, FileIOTest.class, ConfigurationTest.class })
 public class AllTests {
-	@BeforeAll
-	void createTestDir() {
-		new File(Directories.HOME + "talkboxtest").mkdirs();
+	public static String HOME = System.getProperty("user.home") + FileIO.SEP;
+	public static String TESTING = HOME + "talkboxtest";
+
+	@BeforeClass
+	public static void createTestDir() {
+		new File(HOME + "talkboxtest").mkdirs();
+	}
+
+	@AfterClass
+	public static void tearDown() {
+		FileIO.deleteFolder(new File(TESTING));
 	}
 }
