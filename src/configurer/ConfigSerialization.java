@@ -20,7 +20,7 @@ public class ConfigSerialization {
 	 * Serialization configuration instance to an object file and places it in
 	 * specified directory.
 	 * 
-	 * @param Path The directory in string form.
+	 * @param path - the absolute path to serialized object file.
 	 * @param cf   The configuration instance.
 	 */
 	public static void serialize(String path, Configuration cf) {

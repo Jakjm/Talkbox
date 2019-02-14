@@ -11,7 +11,7 @@ public class MusicTest {
 	@Test
 	public void test1() {
 		try {
-			MusicPlayer player = new MusicPlayer("test.wav");
+			MusicPlayer player = new MusicPlayer("/testing/test.wav");
 			//If the player is considered playing before starting, fail.
 			if(player.isPlaying()) {
 				fail();
@@ -31,7 +31,7 @@ public class MusicTest {
 	@Test
 	public void test2() {
 		try {
-			MusicPlayer player = new MusicPlayer("test.wav");
+			MusicPlayer player = new MusicPlayer("/testing/test.wav");
 			//Ensure the player is not considered playing yet
 			if(player.isPlaying()) {
 				fail();
@@ -62,7 +62,7 @@ public class MusicTest {
 	@Test
 	public void test3() {
 		try {
-			MusicPlayer player = new MusicPlayer("test2.wav");
+			MusicPlayer player = new MusicPlayer("/testing/test2.wav");
 			player.setMode(MusicPlayer.LOOP);
 			player.play();
 			//Have the track loop for 4 seconds
@@ -87,7 +87,7 @@ public class MusicTest {
 	@Test
 	public void test4() {
 		try {
-			MusicPlayer player = new MusicPlayer("test4.wav");
+			MusicPlayer player = new MusicPlayer("/testing/test4.wav");
 			
 			//Skipping 1 minute and 58 seconds
 			player.skip(1,58);
@@ -137,7 +137,7 @@ public class MusicTest {
 	 */
 	@Test
 	public void test5() {
-		MusicPlayer player = new MusicPlayer("test4.wav");
+		MusicPlayer player = new MusicPlayer("/testing/test4.wav");
 		//Skipping through the song
 		player.skip(2,03);
 		if(!player.currentTrackPosition().equals("2:03")) {

@@ -47,9 +47,11 @@ public class FileIOTest {
 		assertTrue((new File(dest + FileIO.SEP + "test.wav")).exists());
 		// copy by file
 		new File(Directories.TESTING + "copytwo").mkdirs();
-		FileIO.copyFile(new File(Directories.TESTING + "test.wav"), new File(Directories.TESTING + "copyTwo" + FileIO.SEP + "test.wav"));
-		assertTrue(new File(Directories.TESTING + "copyTwo" + FileIO.SEP + "test.wav").exists());
-		// file does not exist: should not move anything
+		FileIO.copyFile(new File(Directories.TESTING + "test.wav"), new File(Directories.TESTING + "copytwo" + FileIO.SEP + "test.wav"));
+		assertTrue(new File(Directories.TESTING + "copytwo" + FileIO.SEP + "test.wav").exists());
+		// file does not exist: should not move anything 
+		
+		//TODO prevent the IO exception being thrown
 		FileIO.copyFile(Directories.TESTING + "FGGGAG", dest + FileIO.SEP + "FGGGAG");
 		assertFalse(new File(dest.concat(FileIO.SEP + "FGGGAG")).exists());
 		// dest does not exist: should not move anything
