@@ -1,20 +1,21 @@
 package testing;
 
+import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 
 import filehandler.FileIO;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class FileIOTest {
-	private static String RESOURCE = "src" + FileIO.SEP + "testing " + FileIO.SEP;
+public class FileIOTest {
+	private static String RESOURCE = "src" + FileIO.SEP + "testing" + FileIO.SEP;
 	private static File[] FILES = new File[] { new File(RESOURCE + "test.wav"), new File(RESOURCE + "notwave.m4a"),
 			new File(RESOURCE + "image.png"), new File(RESOURCE + "harbin.jpg") };
 				
@@ -29,7 +30,7 @@ class FileIOTest {
 		
 	}
 	@Test
-	void testWaveFormat() {
+	public void testWaveFormat() {
 		// testing wave file
 		assertTrue(FileIO.checkWaveFormat(FILES[0]));
 		assertTrue(FileIO.checkFileFormatByPath(Directories.TESTING + "test.wav"));
@@ -39,7 +40,7 @@ class FileIOTest {
 	}
 
 	@Test
-	void testCopyFile() {
+	public void testCopyFile() {
 		// copy by directory
 		String dest = Directories.TESTING + "copy";
 		FileIO.copyFile(Directories.TESTING + "test.wav", dest + FileIO.SEP + "test.wav");
@@ -58,15 +59,15 @@ class FileIOTest {
 	}
 
 	@Test
-	void testWriteToText() {
+	public void testWriteToText() {
 		File textPath = new File(Directories.TESTING + "create.txt");
 		FileIO.createTextFile(textPath, "testing123");
 		String[] f = FileIO.readTextFile(textPath);
 		assertTrue(f[0].equals("testing123"));
 	}
 	
-	@AfterClass
-	public void tearDown() {
+	@AfterEach
+	public static void tearDown() {
 		new File(Directories.TESTING + FileIO.SEP + "copy").delete();
 		new File(Directories.TESTING + FileIO.SEP + "copytwo").delete();
 	}

@@ -4,31 +4,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import configurer.ConfigSerialization;
 import configurer.Configuration;
 import filehandler.FileIO;
 
-class ConfigSerializationTest {
-	public Configuration config;
-	
-	@BeforeClass
-	public void setUp() throws Exception {
-		config = new Configuration(Directories.TESTING);
-	}
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class ConfigSerializationTest {
+	public Configuration cf;
 	
 	@Test
-	void testSerialize() {
-		ConfigSerialization.serialize(Directories.TESTING, config);
-		assertTrue(new File(Directories.TESTING + FileIO.SEP + "config.tbc").exists());
-	}
-	@AfterClass
-	void tearDown() throws Exception {
-		new File(config.getConfigDir()).delete();
+	public void testSerialize() {
+		Configuration cf = new Configuration(Directories.TESTING);
+		ConfigSerialization.serialize(Directories.TESTING, cf);
+		assertTrue(new File(Directories.TESTING + FileIO.SEP + "talkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc").exists());
 	}
 }
