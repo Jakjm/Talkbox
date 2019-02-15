@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -89,12 +88,10 @@ public class FileIO {
 			Path file = Paths.get(filePath);
 			Path dest = Paths.get(destPath);
 			// copy file into destination
-			Files.copy(file,dest, REPLACE_EXISTING);
+			Files.copy(file, dest, REPLACE_EXISTING);
 		} catch (InvalidPathException | IOException e) {
 		}
 	}
-
-	
 
 	/**
 	 * Creates and writes content to a text file.
@@ -130,17 +127,17 @@ public class FileIO {
 		return data;
 
 	}
-	
+
 	/**
 	 * Deletes the specified folder.
+	 * 
 	 * @param folder the Folder to delete
 	 */
 	public static void deleteFolder(File folder) {
 		for (File x : folder.listFiles()) {
 			if (x.isFile()) {
 				x.delete();
-			}
-			else {
+			} else {
 				deleteFolder(x);
 			}
 		}

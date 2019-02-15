@@ -1,8 +1,8 @@
 package configurer;
 
 import java.awt.Color;
-import java.io.BufferedInputStream;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.UIManager;
 
@@ -53,11 +53,10 @@ public class ButtonConfiguration {
 	public void writeButtonTxt() {
 		// create string path to button.txt
 		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
-		String data = this.buttonText + "\t";
-		data += this.buttonColor.getRGB() + "\t";
+		String data = this.buttonText + '\n' + this.buttonColor.getRGB() + '\n';
 		// if the sound file is not null copy it to the sound directory
 		if (this.soundFile != null) {
-			FileIO.copyFile(soundFile,new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
+			FileIO.copyFile(soundFile, new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
 			data += 1;
 		} else {
 			data += 0;
@@ -67,8 +66,8 @@ public class ButtonConfiguration {
 	}
 
 	/**
-	 * Reads the button data (color, text, and sound if it exists) from a 
-	 * .txt file and returns a button configuration.
+	 * Reads the button data (color, text, and sound if it exists) from a .txt file
+	 * and returns a button configuration.
 	 * 
 	 * @param buttonDir The location of the directory.
 	 * @return a ButtonConfiguration with the given configuration.

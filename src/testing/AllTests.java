@@ -10,6 +10,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import filehandler.FileIO;
 
+/**
+ * Tests for FileIO, ConfigSerialization, and Configuration.
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({ ConfigSerializationTest.class, FileIOTest.class, ConfigurationTest.class })
 public class AllTests {

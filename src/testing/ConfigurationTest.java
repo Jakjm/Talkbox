@@ -24,21 +24,40 @@ public class ConfigurationTest {
 	public static void setUp() {
 		cf = new Configuration(TESTING);
 	}
+
 	@Test
-	public void testButtons()
-	{
+	public void testButtons() {
 		// default number is 6
 		assertTrue(cf.getNumberOfAudioButtons() == 6);
 		File tbDir = new File(cf.getConfigDir());
-		for (int i = 1; i < 7; i++) {
+		// see if button configuration folders are set
+		for (int i = 1; i < 6; i++) {
 			File x = tbDir.listFiles()[i];
-			if (!x.getName().equals("button_config_" + (i-1))) {
+			if (!x.getName().equals("button_config_" + i)) {
 				fail();
 			}
-			assertTrue(x.listFiles()[0].getName().equals("serialized_config"));
-			if (! (x.listFiles()[0].getName()).equals("button.txt")) {
+			if (!(x.listFiles()[0].getName()).equals("button.txt")) {
 				fail();
 			}
 		}
+		assertTrue(tbDir.listFiles()[6].getName().equals("serialized_config"));
+		// add a new audio set
+		cf.addAudioSet();
+	}
+
+	@Test
+	public void testGetters() {
+		assertTrue(cf.getTotalNumberOfButtons() == 12);
+		assertEquals(cf.getConfigDir(), TESTING + FileIO.SEP + "talkboxData");
+		// test the ability to read from a .tbc configuration file
+		Configuration p;
+		new File(TESTING + FileIO.SEP + "copyOfTBDir").mkdir();
+		p = Configuration.readConfiguration(new File(TESTING + FileIO.SEP + "talkboxData"));
+		assertTrue(p.getNumberOfAudioSets() == cf.getNumberOfAudioSets());
+		assertTrue(p.getNumberOfAudioSets() == 2);
+		assertTrue(p.getNumberOfAudioButtons() == cf.getNumberOfAudioButtons());
+		assertTrue(p.getNumberOfAudioButtons() == 12);
+		p.addAudioSet();
+		assertTrue(p.getNumberOfAudioButtons() == 18);
 	}
 }
