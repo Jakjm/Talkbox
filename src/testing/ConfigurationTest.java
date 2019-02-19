@@ -25,16 +25,20 @@ public class ConfigurationTest {
 		cf = new Configuration(TESTING);
 	}
 
+	/*
+	 * TODO: this isn't going to work - there are more files in the configuration directory. 
+	 */
 	@Test
 	public void testButtons() {
 		// default number is 6
 		assertTrue(cf.getNumberOfAudioButtons() == 6);
 		File tbDir = new File(cf.getConfigDir());
 		// see if button configuration folders are set
-		for (int i = 1; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
+			
 			File x = tbDir.listFiles()[i];
 			if (!x.getName().equals("button_config_" + i)) {
-				fail();
+				fail("Button name" + x.getName());
 			}
 			if (!(x.listFiles()[0].getName()).equals("button.txt")) {
 				fail();

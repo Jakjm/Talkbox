@@ -19,7 +19,7 @@ public class SimulatorButton extends JButton implements ActionListener {
 	public SimulatorButton() {
 	}
 
-	public void setupWithConfiguration(ButtonConfiguration config) {
+	public void setConfiguration(ButtonConfiguration config) {
 		this.config = config;
 		// Adjusting the text to use html that way the body linewraps
 		String adjustedText = String.format("<html><body>%s</body></html>", config.buttonText);

@@ -29,16 +29,46 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
+/**
+ * Setup panel for the Talkbox Configurer app
+ * @author jordan
+ * @version February 18th 2019
+ */
 public class SetUpPanel extends JPanel implements ActionListener {
+	/**The number of rows of buttons**/
 	public static final int ROWS = 1;
+	/**The number of columns of buttons**/
 	public static final int COLS = 6;
-	public JPanel buttonPanel;
-	public JButton backButton;
+	
+	private JPanel buttonPanel;
+	
+	private SetUpButton[] buttons;
+	/**The frame for setting up the button configurations**/
+	private SetUpFrame setUpFrame;
+	
+	/**The base panel for returning to the main menu **/
 	private BasePanel panel;
+	
+	/**The button for going back to main menu**/
+	private JButton backButton;
+	/** The button for moving to 6 higher buttons**/
+	public JButton upButton;
+	/** The button for moving to 6 lower buttons**/
+	private JButton downButton;
+	/** The button for adding additional rows of buttons**/
+	private JButton addButtons;
+	/** The button for removing buttons**/
+	private JButton removeButtons;
+	/**Label for which button row we're currently on**/
+	private JLabel rowLabel;
+	
+	/** The TalkboxConfiguration that the app is currently setup with**/
+	private Configuration config; 
 
-	public SetUpFrame setUpFrame;
-	public SetUpButton[] buttons;
-
+	/** The current row of button configurations**/
+	private int currentRow = 1;
+	/** The number of rows of button configurations**/
+	private int numRows;
 	public SetUpPanel(BasePanel panel) {
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
@@ -55,34 +85,147 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				buttonPanel.add(button);
 			}
 		}
+		
+		//Creating the top panel
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 2));
+		
 		JLabel setupLabel = new JLabel("Button Setup");
 		topPanel.add(setupLabel);
+		
+		//Creating the back to main menu button
 		backButton = new JButton("Back to Main Menu");
 		backButton.addActionListener(this);
 		topPanel.add(backButton);
+		
+		//Creating the bottom panel
+		JPanel bottomPanel = new JPanel();
+		bottomPanel.setLayout(new GridLayout(1,5));
+		
+		
+		//Add rows button
+		addButtons = new JButton("Add Row of Buttons");
+		addButtons.addActionListener(this);
+		bottomPanel.add(addButtons);
+				
+		//Delete rows button
+		removeButtons = new JButton("Remove Current Row");
+		removeButtons.addActionListener(this);
+		bottomPanel.add(removeButtons);
+		
+		//Down button
+		downButton = new JButton("▼");
+		downButton.addActionListener(this);
+		bottomPanel.add(downButton);
+		
+		
+		//Creating the up button
+		upButton = new JButton("▲");
+		upButton.addActionListener(this);
+		bottomPanel.add(upButton);
+		
+		//Row label
+		rowLabel = new JLabel();
+		bottomPanel.add(rowLabel);
+		
+		//Adding items to the setup panel
 		this.add(topPanel, BorderLayout.NORTH);
 		this.add(buttonPanel, BorderLayout.CENTER);
+		this.add(bottomPanel, BorderLayout.SOUTH);
 
 		setUpFrame = new SetUpFrame();
 	}
-
-	public void setConfiguration(Configuration config) {
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i].setConfiguration(config.buttonConfigs[i]);
+	/**
+	 * Updating the text of the current row label
+	 */
+	public void updateRowLabel() {
+		rowLabel.setText(String.format(" Row: %d / %d",this.currentRow,this.numRows));
+	}
+	
+	/**
+	 * Switches to the given configuration row
+	 * @param row - the row to switch to.
+	 * @throws IllegalArgumentException if the row is outside the range [1,this.numRows]
+	 */
+	public void switchRow(int row) {
+		if(row < 1 || row > this.numRows) {
+			throw new IllegalArgumentException(String.format("Illegal row %d / %d",row,this.numRows));
+		}
+		this.currentRow = row;
+		/*
+		 * Loading the configurations at the given row.
+		 */
+		int configIndex = (row - 1) * COLS;
+		for(int buttonIndex = 0; buttonIndex < COLS;buttonIndex++) {
+			buttons[buttonIndex].setConfiguration(config.buttonConfigs[configIndex]);
+			++configIndex;
+		}
+		updateRowLabel();
+		
+		/*
+		 * Updating which buttons are enabled.
+		 */
+		if(this.currentRow == 1) {
+			this.upButton.setEnabled(false);
+			this.removeButtons.setEnabled(false);
+		}
+		else {
+			this.upButton.setEnabled(true);
+			this.removeButtons.setEnabled(true);
+		}
+		
+		if(this.currentRow == this.numRows) {
+			this.downButton.setEnabled(false);
+		}
+		else {
+			this.downButton.setEnabled(true);
 		}
 	}
-
+	/**
+	 * Setting the SetUpPanel to be editing the given TalkboxConfiguration
+	 * @param config - the configuration to set up with.
+	 */
+	public void setConfiguration(Configuration config) {
+		this.config = config;
+		//Setting the number of rows
+		this.numRows = config.buttonConfigs.length / COLS;
+		//Switching to row 1.
+		switchRow(1);
+	}
+	/**
+	 * ActionListener method for the buttons
+	 * Handles the events of the SetUpPanel buttons being pressed
+	 */
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		//If the button pressed was the back button...
 		if (event.getSource() == backButton) {
 			panel.showMainMenu();
-		} else {
+		}
+		//Otherwise if it was one of the setup buttons
+		else if(event.getSource() instanceof SetUpButton){
 			setUpFrame.setVisible(true);
 			setUpFrame.openSetupFrame((SetUpButton) event.getSource(),
 					((SetUpButton) event.getSource()).getConfiguration());
 			setUpFrame.colorFrame.setVisible(false);
+		}
+		//Up button
+		else if(event.getSource() == upButton) {
+			if(this.currentRow == 1)return;
+			switchRow(this.currentRow - 1);
+		}
+		//Down button
+		else if(event.getSource() == downButton) {
+			if(this.currentRow == this.numRows)return;
+			switchRow(this.currentRow + 1);
+		}
+		//Add button
+		else if(event.getSource() == addButtons) {
+			
+		}
+		//Remove button
+		else if(event.getSource() == removeButtons) {
+			
 		}
 	}
 

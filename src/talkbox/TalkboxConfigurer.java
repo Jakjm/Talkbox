@@ -70,11 +70,6 @@ public class TalkboxConfigurer {
 
 			selector = new FileSelector(null, FileSelector.DIRECTORY);
 		}
-
-		private void initButtons() {
-			setUpButtons.setEnabled(false);
-		}
-
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == setUpButtons) {
@@ -93,24 +88,29 @@ public class TalkboxConfigurer {
 							panel.configureSetup();
 							setUpButtons.setEnabled(true);
 						}
-						// Otherwise
+						// Otherwise, show an error message.
 						else {
 							JOptionPane.showMessageDialog(null,
 									"Failed to read a talkbox configuration from \n the selected directory."
 											+ " Please ensure it is \n a correct talkboxData directory");
 						}
+						//Set selector to invisible. 
 						selector.setVisible(false);
 					}
 				});
 			}
-			// create new config directory
+			//Create new configuration directory, and use it. 
 			else if (event.getSource() == createNew) {
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {
+						//Create the directory within the dir selected by user.
 						config = new Configuration(file.getPath());
 						panel.configureSetup();
+						
+						//Adjust enabling of buttons.
 						setUpButtons.setEnabled(true);
+						//Set selector to invisible. 
 						selector.setVisible(false);
 					}
 				});

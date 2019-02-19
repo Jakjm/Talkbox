@@ -1,9 +1,14 @@
 package talkbox;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -46,7 +51,7 @@ public class TalkboxSimulator {
 				// If the configuration is valid, open it
 				if (configuration != null) {
 					selector.setVisible(false);
-					panel.setupConfiguration(configuration);
+					panel.setupConfiguration();
 					frame.setVisible(true);
 				}
 				// Otherwise, keep going until one is found
@@ -69,25 +74,109 @@ public class TalkboxSimulator {
 	 * @author jordan
 	 *
 	 */
-	public class TalkboxPanel extends JPanel {
+	public class TalkboxPanel extends JPanel implements ActionListener{
 		SimulatorButton[] buttons;
-
+		private JButton downButton;
+		private JButton upButton;
+		private JLabel rowLabel;
+		private static final int ROWS = 1;
+		private static final int COLS = 6;
+		private int currentRow = 1;
+		private int numRows;
 		public TalkboxPanel() {
-			GridLayout layout = new GridLayout(1, 6);
-			this.setLayout(layout);
-			buttons = new SimulatorButton[6];
+			this.setLayout(new BorderLayout());
+			
+			//Setting up buttons panel
+			JPanel buttonsPanel = new JPanel(); 
+			buttonsPanel.setLayout(new GridLayout(ROWS,COLS));
+			buttons = new SimulatorButton[COLS];
 			for (int i = 0; i < buttons.length; i++) {
 				buttons[i] = new SimulatorButton();
-				this.add(buttons[i]);
+				buttonsPanel.add(buttons[i]);
 			}
+			
+			//Setting up row panel
+			JPanel rowPanel = new JPanel();
+			rowPanel.setLayout(new GridLayout(1,4));
+			rowPanel.add(new JLabel(" Switch Rows:"));
+			
+			//Creating the down button
+			downButton = new JButton("▼");
+			downButton.addActionListener(this);
+			rowPanel.add(downButton);
+			
+			
+			//Creating the up button
+			upButton = new JButton("▲");
+			upButton.addActionListener(this);
+			rowPanel.add(upButton);
+			
+			//Adding the row label
+			rowLabel = new JLabel();
+			rowPanel.add(rowLabel);
+			
+			this.add(buttonsPanel,BorderLayout.CENTER);
+			this.add(rowPanel,BorderLayout.SOUTH);
+			
 			this.revalidate();
 			this.repaint();
 		}
-
-		public void setupConfiguration(Configuration config) {
-			for (int i = 0; i < buttons.length; i++) {
-				buttons[i].setupWithConfiguration(config.buttonConfigs[i]);
+		/**
+		 * Method for updating the text of the row label
+		 */
+		public void updateRowLabel() {
+			rowLabel.setText(String.format(" Row: %d / %d",this.currentRow,this.numRows));
+		}
+		/**
+		 * Setting up the simulator with the talkbox configuration
+		 */
+		public void setupConfiguration() {
+			this.currentRow = 1;
+			numRows = configuration.buttonConfigs.length / COLS;
+			switchRow(currentRow);
+		}
+		/**
+		 * Switches to the given configuration row
+		 * @param row - the row to switch to.
+		 * @throws IllegalArgumentException if the row is outside the range [1,this.numRows]
+		 */
+		public void switchRow(int row) {
+			if(row < 1 || row > this.numRows) {
+				throw new IllegalArgumentException(String.format("Illegal row %d / %d",row,this.numRows));
 			}
+			this.currentRow = row;
+			/*
+			 * Loading the configurations at the given row.
+			 */
+			int configIndex = (row - 1) * COLS;
+			for(int buttonIndex = 0; buttonIndex < COLS;buttonIndex++) {
+				buttons[buttonIndex].setConfiguration(configuration.buttonConfigs[configIndex]);
+				++configIndex;
+			}
+			updateRowLabel();
+			
+			/*
+			 * Updating which buttons are enabled.
+			 */
+			if(this.currentRow == 1) {
+				this.upButton.setEnabled(false);
+			}
+			else {
+				this.upButton.setEnabled(true);
+			}
+			
+			if(this.currentRow == this.numRows) {
+				this.downButton.setEnabled(false);
+			}
+			else {
+				this.downButton.setEnabled(true);
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 
