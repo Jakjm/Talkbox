@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -24,7 +25,7 @@ public class AllTests {
 	public static void createTestDir() {
 		new File(HOME + "talkboxtest").mkdirs();
 	}
-
+	
 	@AfterClass
 	public static void tearDown() {
 		FileIO.deleteFolder(new File(TESTING));

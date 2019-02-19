@@ -219,13 +219,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			if(this.currentRow == this.numRows)return;
 			switchRow(this.currentRow + 1);
 		}
-		//Add button
+		//Add button set
 		else if(event.getSource() == addButtons) {
-			
+			config.addAudioSet();
 		}
-		//Remove button
+		//Remove button set
 		else if(event.getSource() == removeButtons) {
-			
+//			TODO Removes the ith audio set: config.removeAudioSet(i);
 		}
 	}
 

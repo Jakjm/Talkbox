@@ -21,11 +21,12 @@ public class ConfigSerializationTest {
 	@Test
 	public void testSerialize() {
 		Configuration cf = new Configuration(TESTING);
-		cf.setActiveButtons(3);
-		ConfigSerialization.serialize(TESTING + FileIO.SEP + "test.tbc", cf);
-		assertTrue(new File(TESTING + FileIO.SEP + "test.tbc").exists());
+		assertTrue(cf.getNumberOfAudioButtons() == 0);
+		cf.addAudioSet();
+		assertTrue(cf.getTotalNumberOfButtons() == 12);
 		// deserialize
-		Configuration p = ConfigSerialization.deserialize(TESTING + FileIO.SEP + "test.tbc");
-		assertTrue(p.getNumberOfAudioButtons() == 3);
+		Configuration p = ConfigSerialization.deserialize(TESTING + FileIO.SEP + "talkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc");
+		assertTrue(p.getTotalNumberOfButtons() == 12);
+		FileIO.deleteFolder(new File(cf.getConfigDir()));
 	}
 }

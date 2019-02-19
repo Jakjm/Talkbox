@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
@@ -111,7 +112,7 @@ public class FileIO {
 
 	/**
 	 * Reads the specified text file and returns an array of each line.
-	 * 
+	 * @param toRead The file to read.
 	 * @return The array of lines.
 	 */
 	public static String[] readTextFile(File toRead) {

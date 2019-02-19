@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import filehandler.FileIO;
 import talkbox.TalkBoxConfiguration;
 
@@ -16,15 +17,13 @@ import talkbox.TalkBoxConfiguration;
  * @author Alberto Mastrofrancesco
  * @author Jordan Malek
  * @author Rohan Talkad
- * @version 1
+ * @version Feb 19th 2019
  */
 public class Configuration implements TalkBoxConfiguration {
 	private static final long serialVersionUID = -8081539415877004914L;
-	// number of virtual buttons supported
-	private int activeButtons = 6;
 	// number of physical audio buttons supported
-	private int totalButtons = activeButtons;
-	// number of audio files
+	private int totalButtons = 6;
+	// each audio set is a row of six buttons
 	private int audioSets;
 	// array of buttonconfigs
 	public transient ButtonConfiguration[] buttonConfigs;
@@ -36,16 +35,15 @@ public class Configuration implements TalkBoxConfiguration {
 	 * Constructor for configuration instance. Creates the directory folder with
 	 * button configuration folders. The default number of buttons is six.
 	 * 
-	 * @pathname the directory in which the talkboxData directory is being made in
+	 * @param path the directory in which the talkboxData directory is being made in
 	 */
-	public Configuration(String pathname) {
+	public Configuration(String path) {
 		this.audioSets = 1;
-		pathname += FileIO.SEP + "talkboxData";
-		this.talkboxPath = pathname;
-		this.buttonConfigs = new ButtonConfiguration[this.activeButtons];
+		this.talkboxPath = path + FileIO.SEP + "talkboxData";
+		this.buttonConfigs = new ButtonConfiguration[this.totalButtons];
 		// create the directories for the buttons and the serialized config
-		new File(pathname).mkdirs();
-		new File(pathname.concat(FileIO.SEP + "serialized_config")).mkdir();
+		new File(this.talkboxPath).mkdir();
+		new File(this.talkboxPath + FileIO.SEP + "serialized_config").mkdir();
 		// create all button directories
 		this.createButtonConfigsDirs();
 		this.serializeConfig();
@@ -65,7 +63,7 @@ public class Configuration implements TalkBoxConfiguration {
 			// setting the talkbox path (unserialized)
 			config.talkboxPath = file.getPath();
 			// Reading the button configurations
-			config.buttonConfigs = new ButtonConfiguration[config.activeButtons];
+			config.buttonConfigs = new ButtonConfiguration[config.totalButtons];
 			String buttonPath = file.getPath() + FileIO.SEP + "button_config_";
 			for (int i = 0; i < config.totalButtons; i++) {
 				File buttonFile = new File(buttonPath + i);
@@ -77,13 +75,14 @@ public class Configuration implements TalkBoxConfiguration {
 		}
 		// If there are any errors with the reading, return null.
 		catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Unable to read configuration - please try again");
 			return null;
 		}
 	}
 
 	/**
-	 * Serialize the current Configuration instance. File is placed in the default
+	 * Serializes the current Configuration instance. File is placed in the default
 	 * directory in the "serialized_config" folder.
 	 */
 	public void serializeConfig() {
@@ -92,29 +91,28 @@ public class Configuration implements TalkBoxConfiguration {
 	}
 
 	/**
-	 * Create specified amount of button configuration directories in the default
+	 * Creates specified amount of button configuration directories in the default
 	 * directory.
 	 */
 	public void createButtonConfigsDirs() {
-		// make empty directories for active buttons
-		for (int i = 0; i < this.activeButtons; i++) {
+		for (int i = 0; i < this.totalButtons; i++) {
 			addButtonConfig(i);
 		}
 	}
 
 	/**
-	 * Add specified button config folder. Adds image and sound files.
+	 * Adds the specified button config folder. Each folder contains a button.txt
+	 * specifying the button's text, audio file, and color.
 	 * 
 	 * @param i The button number.
 	 */
 	public void addButtonConfig(int i) {
 		String dir = talkboxPath.concat(FileIO.SEP + "button_config_").concat(String.valueOf(i));
 		new File(dir).mkdir();
-		// add sound and image folders
 		new File(dir.concat(FileIO.SEP + "sound")).mkdir();
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
 		// create new button configuration: this creates the text file with the
-		// associated sound, color, and image
+		// associated text, color, and sound.
 		ButtonConfiguration b = new ButtonConfiguration("Button " + i, null, null, new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
@@ -123,16 +121,16 @@ public class Configuration implements TalkBoxConfiguration {
 	}
 
 	/**
-	 * Set the number of active buttons. If new active buttons are needed, adds the
-	 * remaining number of active button config folders.
+	 * Sets the number of total button configuration folders. If there are already
+	 * buttons in the directory, only the remaining ones will be added.
 	 * 
-	 * @param activeButtons
+	 * @param buttons The new number of buttons.
 	 */
-	public void setActiveButtons(int buttons) {
-		for (int i = this.activeButtons; i <= buttons; i++) {
+	private void setTotalButtons(int buttons) {
+		for (int i = this.totalButtons; i <= buttons; i++) {
 			this.addButtonConfig(i - 1);
 		}
-		this.activeButtons = buttons;
+		this.totalButtons = buttons;
 	}
 
 	/**
@@ -142,14 +140,15 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public void addAudioSet() {
 		// update array size
-		int newSize = this.activeButtons + 6;
+		int newSize = this.totalButtons + 6;
 		ButtonConfiguration[] newConfigs = new ButtonConfiguration[newSize];
-		for (int i = 0; i < this.activeButtons; i++) {
+		for (int i = 0; i < this.totalButtons; i++) {
 			newConfigs[i] = this.buttonConfigs[i];
 		}
 		this.buttonConfigs = newConfigs;
-		this.setActiveButtons(newSize);
-		this.totalButtons = newSize;
+		// change add file configs
+		this.setTotalButtons(newSize);
+		this.getNumberOfAudioButtons();
 		this.audioSets++;
 		this.serializeConfig();
 	}
@@ -174,11 +173,24 @@ public class Configuration implements TalkBoxConfiguration {
 	 * Returns the number of active buttons that when pressed will play an audio
 	 * file.
 	 * 
-	 * @return int A positive integer.
+	 * @return int The total number of active buttons.
 	 */
 	@Override
 	public int getNumberOfAudioButtons() {
-		return this.activeButtons;
+		int buttons = 0;
+		FilenameFilter configDirs = new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return (name.contains("button_config_"));
+			}
+		};
+		for (File f : new File(this.getConfigDir()).listFiles(configDirs)) {
+			// checking whether button.txt has a sound file
+			if ((FileIO.readTextFile(new File(f.getPath() + FileIO.SEP + "button.txt"))[2]).equals("1")) {
+				buttons++;
+			}
+		}
+		return buttons;
 	}
 
 	/**
@@ -224,22 +236,47 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	@Override
 	public String[][] getAudioFileNames() {
-		String[][] audioFileNames = new String[this.activeButtons][this.audioSets];
+		int activeButtons = this.getNumberOfAudioButtons();
+		String[][] audioFileNames = new String[activeButtons][this.audioSets];
 		// sound folder for each button
 		File soundFolder;
 		// filter for WAVE files
 		FilenameFilter filter = new FilenameFilter() {
+			@Override
 			public boolean accept(File dir, String name) {
 				return name.endsWith(".wav") || name.endsWith(".wave");
 			}
 		};
 		// get WAVE files for each button
 		for (int i = 0; i < this.audioSets; i++) {
-			for (int j = 0; j < this.activeButtons; j++) {
-				soundFolder = new File(talkboxPath + (FileIO.SEP + "button_config_") + j);
-				audioFileNames[i][j] = soundFolder.list(filter)[j];
+			for (int j = 0; j < i * 6; j++) {
+				soundFolder = new File(talkboxPath + (FileIO.SEP + "button_config_") + j + FileIO.SEP + "sound");
+				audioFileNames[i][j] = soundFolder.list(filter)[0];
 			}
 		}
 		return audioFileNames;
+	}
+
+	/**
+	 * Removes the i-th (1 .. n) audio set's button_config_ folders. Renames the remaining
+	 * configuration folders to continue from the previous ones.
+	 * 
+	 * @param audioSet The audioset to remove.
+	 */
+	public void removeAudioset(int audioSet) {
+		// start from the first button of the i-th audio set
+		int startButton = (audioSet - 1) * 6;
+		for (int j = startButton; j < startButton + 6; j++) {
+			FileIO.deleteFolder(this.buttonConfigs[j].returnDir());
+			this.totalButtons--;
+		}
+		// renaming remaining folders
+		for (int j = startButton + 6; j < this.totalButtons; j++) {
+			File buttonConfig = this.buttonConfigs[j].returnDir();
+			buttonConfig.renameTo(new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6)));
+		}
+		this.audioSets--;
+		this.serializeConfig();
+
 	}
 }

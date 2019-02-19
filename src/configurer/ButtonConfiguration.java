@@ -2,7 +2,6 @@ package configurer;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.Arrays;
 
 import javax.swing.UIManager;
 
@@ -20,9 +19,9 @@ public class ButtonConfiguration {
 	 * directory.
 	 * 
 	 * @param buttonText The text to be included.
-	 * @param color      The color of the button.
+	 * @param color		 The color of the button.
 	 * @param soundFile  The sound file associated with the button.
-	 * @param The        directory of the button.
+	 * @param buttonDir  The path to the button configuration directory.
 	 */
 	public ButtonConfiguration(String buttonText, Color color, File soundFile, File buttonDir) {
 		if (color == null) {
@@ -63,6 +62,15 @@ public class ButtonConfiguration {
 		}
 		// write to file
 		FileIO.createTextFile(new File(textDir), data);
+	}
+	
+	/**
+	 * Add sound file to the button configuration.
+	 * @param f The sound file.
+	 */
+	public void addSoundFile(File f) {
+		this.soundFile = f;
+		this.writeButtonTxt();
 	}
 
 	/**
