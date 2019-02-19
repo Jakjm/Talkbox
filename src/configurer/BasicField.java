@@ -30,7 +30,10 @@ public class BasicField extends JPanel {
 		this.inputField = new JTextField();
 		this.add(inputField);
 	}
-
+	public void setFieldFont(Font font) {
+		this.label.setFont(font);
+		this.inputField.setFont(font);
+	}
 	public BasicField(String fieldName, Color color) {
 		this(fieldName);
 		this.setBackground(color);

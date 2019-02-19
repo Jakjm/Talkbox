@@ -1,7 +1,9 @@
 package talkbox;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
-
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -46,28 +49,51 @@ public class TalkboxConfigurer {
 		JButton editOld;
 		JButton selectExisting;
 		FileSelector selector;
-
+		private static final String TITLE = "Talkbox Configurator";
+		private final Font TITLE_FONT = new Font(Font.SANS_SERIF,Font.BOLD,42);
+		private final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,26);
 		public MenuPanel() {
-			this.setLayout(new GridLayout(2, 2));
+			this.setLayout(new BorderLayout());
+			//Adding title label
+			JLabel titleLabel = new JLabel(TITLE);
+			titleLabel.setBackground(Color.blue);
+			titleLabel.setForeground(Color.orange);
+			titleLabel.setFont(TITLE_FONT);
+			titleLabel.setHorizontalAlignment(JLabel.CENTER);
+			this.add(titleLabel,BorderLayout.NORTH);
+			this.setBackground(Color.blue);
+			
+			
+			//Adding buttons to the button panel
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setLayout(new GridLayout(2, 2));
+			
 			// Recording Button
 			recordAudio = new JButton("Record Audio");
 			recordAudio.addActionListener(this);
-			this.add(recordAudio);
+			recordAudio.setFont(BUTTON_FONT);
+			buttonPanel.add(recordAudio);
+			
 			// Set up button
 			setUpButtons = new JButton("Set Up Buttons");
 			setUpButtons.addActionListener(this);
-			this.add(setUpButtons);
+			setUpButtons.setFont(BUTTON_FONT);
+			buttonPanel.add(setUpButtons);
 			// Set it disabled by default
 			setUpButtons.setEnabled(false);
+			
 			// Create new config directory
-			createNew = new JButton("Create new configuration directory");
+			createNew = new JButton("Create New Configuration");
+			createNew.setFont(BUTTON_FONT);
 			createNew.addActionListener(this);
-			this.add(createNew);
+			buttonPanel.add(createNew);
+			
 			// Select existing config directory
-			selectExisting = new JButton("Select existing configuration directory");
+			selectExisting = new JButton("Open Existing Configuration");
 			selectExisting.addActionListener(this);
-			this.add(selectExisting);
-
+			selectExisting.setFont(BUTTON_FONT);
+			buttonPanel.add(selectExisting);
+			this.add(buttonPanel,BorderLayout.CENTER);
 			selector = new FileSelector(null, FileSelector.DIRECTORY);
 		}
 		@Override
@@ -79,6 +105,7 @@ public class TalkboxConfigurer {
 			}
 			// set pre-existing configration
 			else if (event.getSource() == selectExisting) {
+				JOptionPane.showMessageDialog(null,"Please select a talkboxData Configuration Directory");
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {
@@ -91,8 +118,8 @@ public class TalkboxConfigurer {
 						// Otherwise, show an error message.
 						else {
 							JOptionPane.showMessageDialog(null,
-									"Failed to read a talkbox configuration from \n the selected directory."
-											+ " Please ensure it is \n a correct talkboxData directory");
+									"Failed to read a Talkbox Configuration from the selected directory.\n"
+											+ " Please ensure it is a valid talkboxData Directory");
 						}
 						//Set selector to invisible. 
 						selector.setVisible(false);
@@ -101,6 +128,8 @@ public class TalkboxConfigurer {
 			}
 			//Create new configuration directory, and use it. 
 			else if (event.getSource() == createNew) {
+				JOptionPane.showMessageDialog(null, 
+						"Please select a directory for the talkboxData Directory to be saved in.");
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {

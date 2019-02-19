@@ -2,6 +2,7 @@ package configurer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -69,6 +70,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	private int currentRow = 1;
 	/** The number of rows of button configurations**/
 	private int numRows;
+	private static final Font OUTER_FONT = new Font(Font.SERIF,Font.PLAIN,16);
 	public SetUpPanel(BasePanel panel) {
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
@@ -89,12 +91,18 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		//Creating the top panel
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 2));
+		topPanel.setBackground(Color.blue);
 		
-		JLabel setupLabel = new JLabel("Button Setup");
+		//Setup label
+		JLabel setupLabel = new JLabel(" Button Setup");
+		setupLabel.setForeground(Color.orange);
+		setupLabel.setBackground(Color.blue);
+		setupLabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,25));
 		topPanel.add(setupLabel);
 		
 		//Creating the back to main menu button
 		backButton = new JButton("Back to Main Menu");
+		backButton.setFont(OUTER_FONT);
 		backButton.addActionListener(this);
 		topPanel.add(backButton);
 		
@@ -105,27 +113,32 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		
 		//Add rows button
 		addButtons = new JButton("Add Row of Buttons");
+		addButtons.setFont(OUTER_FONT);
 		addButtons.addActionListener(this);
 		bottomPanel.add(addButtons);
 				
 		//Delete rows button
 		removeButtons = new JButton("Remove Current Row");
+		removeButtons.setFont(OUTER_FONT);
 		removeButtons.addActionListener(this);
 		bottomPanel.add(removeButtons);
 		
 		//Down button
 		downButton = new JButton("▼");
+		downButton.setFont(OUTER_FONT);
 		downButton.addActionListener(this);
 		bottomPanel.add(downButton);
 		
 		
 		//Creating the up button
 		upButton = new JButton("▲");
+		upButton.setFont(OUTER_FONT);
 		upButton.addActionListener(this);
 		bottomPanel.add(upButton);
 		
 		//Row label
 		rowLabel = new JLabel();
+		rowLabel.setFont(OUTER_FONT);
 		bottomPanel.add(rowLabel);
 		
 		//Adding items to the setup panel
