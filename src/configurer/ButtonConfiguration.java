@@ -34,6 +34,13 @@ public class ButtonConfiguration {
 		this.buttonDir = buttonDir;
 		this.writeButtonTxt();
 	}
+	public void setButtonValues(String text,Color color,File audioFile) {
+		if(color == null)this.buttonColor = DEFAULT_COLOR;
+		else this.buttonColor = color;
+		this.buttonText = text;
+		this.soundFile = audioFile;
+		this.writeButtonTxt();
+	}
 
 	/**
 	 * @return The directory to this button configuration.

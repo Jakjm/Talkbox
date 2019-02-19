@@ -170,6 +170,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		 */
 		int configIndex = (row - 1) * COLS;
 		for(int buttonIndex = 0; buttonIndex < COLS;buttonIndex++) {
+			System.out.println(buttonIndex + " " + configIndex);
 			buttons[buttonIndex].setConfiguration(config.buttonConfigs[configIndex]);
 			++configIndex;
 		}
@@ -193,6 +194,11 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		else {
 			this.downButton.setEnabled(true);
 		}
+	}
+	//Updates the number of rows
+	public void updateRows() {
+		this.numRows = config.buttonConfigs.length / COLS;
+		switchRow(this.currentRow);
 	}
 	/**
 	 * Setting the SetUpPanel to be editing the given TalkboxConfiguration
@@ -235,6 +241,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		//Add button set
 		else if(event.getSource() == addButtons) {
 			config.addAudioSet();
+			updateRows();
 		}
 		//Remove button set
 		else if(event.getSource() == removeButtons) {
@@ -245,8 +252,8 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	public class SetUpButton extends JButton {
 		private static final String style = "";
 		private ButtonConfiguration config;
-
 		public SetUpButton() {
+			
 		}
 
 		public ButtonConfiguration getConfiguration() {
@@ -467,9 +474,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					if (musicPlayer != null)
 						musicPlayer.play();
 				} else if (event.getSource() == confirmSetup) {
-					ButtonConfiguration config = new ButtonConfiguration(nameField.getText(), currentColor,
-							currentAudioFile, currentButton.getConfiguration().returnDir());
-					currentButton.setConfiguration(config);
+					currentButton.getConfiguration().setButtonValues(nameField.getText(),currentColor,currentAudioFile);
+					currentButton.setConfiguration(currentButton.getConfiguration());
+					currentButton.getConfiguration().writeButtonTxt();
 					hideSetupFrame();
 				}
 			}
