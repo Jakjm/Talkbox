@@ -35,7 +35,7 @@ public class ConfigurationTest {
 		assertTrue(cf.getTotalNumberOfButtons() == 6);
 		assertTrue(cf.getNumberOfAudioButtons() == 0);
 		File tbDir = new File(cf.getConfigDir());
-		HashSet<String> names = new HashSet<>();
+		HashSet<String> names = new HashSet<String>();
 		for (int i = 0; i < 6; i++) {
 			names.add("button_config_" + i);
 		}

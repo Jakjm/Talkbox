@@ -70,7 +70,7 @@ public class MusicTest {
 			player.setMode(MusicPlayer.LOOP);
 			player.play();
 			// Have the track loop for 4 seconds
-			long playTime = System.currentTimeMillis() + 4000;
+			long playTime = System.currentTimeMillis() + 1000;
 			while (System.currentTimeMillis() < playTime) {
 				if (!player.isPlaying()) {
 					fail();
@@ -125,9 +125,11 @@ public class MusicTest {
 
 			// Playing - it should be starting from 2:02
 			player.play();
-			while (player.isPlaying()) {
-
+			long timeDelay = System.currentTimeMillis() + 2000;
+			while(System.currentTimeMillis() < timeDelay) {
+				
 			}
+			player.stop();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -146,19 +148,21 @@ public class MusicTest {
 			fail();
 		}
 
-		// Playing for 4 seconds
-		long playTime = System.currentTimeMillis() + 4000;
+		// Playing for 2 seconds
+		long playTime = System.currentTimeMillis() + 2000;
 		player.play();
 		while (System.currentTimeMillis() < playTime) {
 
 		}
 
-		// Resetting and then playign for five seconds.
+		// Resetting and then playing for five seconds.
 		player.reset();
+		if(player.isPlaying())fail();
 		if (!player.currentTrackPosition().equals("0:00")) {
 			fail();
 		}
-		playTime = System.currentTimeMillis() + 5000;
+		
+		playTime = System.currentTimeMillis() + 2000;
 		player.play();
 		while (System.currentTimeMillis() < playTime) {
 
