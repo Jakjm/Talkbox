@@ -1,11 +1,16 @@
 package talkbox;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,19 +21,27 @@ import browsing.FileSelector;
 import browsing.SelectionListener;
 import configurer.Configuration;
 import simulator.SimulatorButton;
+import simulator.SimulatorPanel;
 
 /**
  * Talkbox simulator app for the talkbox.
- * 
  * @author jordan
- *
+ * @version February 20th 2019
  */
 public class TalkboxSimulator {
 	TalkboxFrame frame;
-	TalkboxPanel panel;
+	SimulatorPanel simulatorPanel;
 	FileSelector selector;
 	public Configuration configuration;
-
+	public JPanel backPanel;
+	public MenuPanel menuPanel;
+	private static final String SIMULATOR = "SIM";
+	private static final String MAIN_MENU = "MAIN";
+	/**The size of the frame while in the main menu**/
+	private static final Dimension MAIN_SIZE = new Dimension(300,400);
+	/**The size of the frame while using the actual simulator**/
+	private static final Dimension SIM_SIZE = new Dimension(900,600);
+	private CardLayout layout; 
 	/** Main method that simply creates a new talkbox simulator instance **/
 	public static void main(String[] args) {
 		new TalkboxSimulator();
@@ -37,146 +50,83 @@ public class TalkboxSimulator {
 	public TalkboxSimulator() {
 		// Initializing frame,panel...
 		frame = new TalkboxFrame();
-		panel = new TalkboxPanel();
-		frame.setContentPane(panel);
+		backPanel = new JPanel();
+		layout = new CardLayout();
+		backPanel.setLayout(layout);
+		
+		//Adding the simulator panel to the back panel
+		simulatorPanel = new SimulatorPanel(this);
+		backPanel.add(simulatorPanel,SIMULATOR);
+		
+		menuPanel = new MenuPanel();
+		backPanel.add(menuPanel,MAIN_MENU);
+		frame.setContentPane(backPanel);
+		showMain();
+		
 
 		// Trying to open a configuration file
 		selector = new FileSelector(null, FileSelector.DIRECTORY);
-		JOptionPane.showMessageDialog(null, "Please select a talkboxData configuration.");
-
-		// Setting up what should happen once a file is found
-		selector.setSelectionListener(new SelectionListener() {
-			public void onFileSelected(File file) {
-				configuration = Configuration.readConfiguration(file);
-				// If the configuration is valid, open it
-				if (configuration != null) {
-					selector.setVisible(false);
-					panel.setupConfiguration();
-					frame.setVisible(true);
-				}
-				// Otherwise, keep going until one is found
-				else {
-					int response = JOptionPane.showConfirmDialog(null,
-							"Configuration not valid, please try again.\n" + "Would you like to quit?");
-					if (response == JOptionPane.YES_OPTION) {
-						System.exit(0);
-					}
-				}
-			}
-		});
-		// Making the selector visible.
-		selector.setVisible(true);
+		frame.setVisible(true);
 	}
-
-	/**
-	 * Talkbox panel for the talkbox simulator panel
-	 * 
-	 * @author jordan
-	 *
-	 */
-	public class TalkboxPanel extends JPanel implements ActionListener{
-		SimulatorButton[] buttons;
-		private JButton downButton;
-		private JButton upButton;
-		private JLabel rowLabel;
-		private static final int ROWS = 1;
-		private static final int COLS = 6;
-		private int currentRow = 1;
-		private int numRows;
-		public TalkboxPanel() {
-			this.setLayout(new BorderLayout());
+	public void showMain() {
+		frame.setSize(MAIN_SIZE);
+		layout.show(backPanel,MAIN_MENU);
+	}
+	public void showSim() {
+		frame.setSize(SIM_SIZE);
+		layout.show(backPanel,SIMULATOR);
+	}
+	public class MenuPanel extends JPanel implements ActionListener{
+		private JButton openConfig;
+		private JButton openSimulator;
+		public MenuPanel() {
+			this.setLayout(new GridLayout(5,-1));
+			this.setBackground(Color.blue);
 			
-			//Setting up buttons panel
-			JPanel buttonsPanel = new JPanel(); 
-			buttonsPanel.setLayout(new GridLayout(ROWS,COLS));
-			buttons = new SimulatorButton[COLS];
-			for (int i = 0; i < buttons.length; i++) {
-				buttons[i] = new SimulatorButton();
-				buttonsPanel.add(buttons[i]);
-			}
+			JLabel titleLabel = new JLabel("Talkbox Simulator");
+			titleLabel.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,32));
+			titleLabel.setHorizontalAlignment(JLabel.CENTER);
+			titleLabel.setForeground(Color.orange);
+			this.add(titleLabel);
 			
-			//Setting up row panel
-			JPanel rowPanel = new JPanel();
-			rowPanel.setLayout(new GridLayout(1,4));
-			rowPanel.add(new JLabel(" Switch Rows:"));
+			openConfig = new JButton("Open Talkbox Configuration");
+			openConfig.addActionListener(this);
+			this.add(openConfig);
 			
-			//Creating the down button
-			downButton = new JButton("▼");
-			downButton.addActionListener(this);
-			rowPanel.add(downButton);
-			
-			
-			//Creating the up button
-			upButton = new JButton("▲");
-			upButton.addActionListener(this);
-			rowPanel.add(upButton);
-			
-			//Adding the row label
-			rowLabel = new JLabel();
-			rowPanel.add(rowLabel);
-			
-			this.add(buttonsPanel,BorderLayout.CENTER);
-			this.add(rowPanel,BorderLayout.SOUTH);
-			
-			this.revalidate();
-			this.repaint();
+			openSimulator = new JButton("Simulate Configuration");
+			openSimulator.addActionListener(this);
+			this.add(openSimulator);
+			openSimulator.setEnabled(false);
 		}
-		/**
-		 * Method for updating the text of the row label
-		 */
-		public void updateRowLabel() {
-			rowLabel.setText(String.format(" Row: %d / %d",this.currentRow,this.numRows));
-		}
-		/**
-		 * Setting up the simulator with the talkbox configuration
-		 */
-		public void setupConfiguration() {
-			this.currentRow = 1;
-			numRows = configuration.buttonConfigs.length / COLS;
-			switchRow(currentRow);
-		}
-		/**
-		 * Switches to the given configuration row
-		 * @param row - the row to switch to.
-		 * @throws IllegalArgumentException if the row is outside the range [1,this.numRows]
-		 */
-		public void switchRow(int row) {
-			if(row < 1 || row > this.numRows) {
-				throw new IllegalArgumentException(String.format("Illegal row %d / %d",row,this.numRows));
+		public void actionPerformed(ActionEvent event) {
+			if(event.getSource() == openConfig) {
+				JOptionPane.showMessageDialog(null, "Please select a talkboxData configuration.");
+				// Making the selector visible.
+				selector.setVisible(true);
+				
+				// Setting up what should happen once a file is found
+				selector.setSelectionListener(new SelectionListener() {
+					public void onFileSelected(File file) {
+						Configuration loadConfig = Configuration.readConfiguration(file);
+						// If the configuration is valid, open it
+						if (loadConfig != null) {
+							selector.setVisible(false);
+							configuration = loadConfig;
+							simulatorPanel.setupConfiguration(configuration);
+							openSimulator.setEnabled(true);
+						}
+						// Otherwise, keep going until one is found
+						else {
+							JOptionPane.showMessageDialog(null,
+									"Configuration not valid, please try again.");
+						}
+					}
+				});
+				
 			}
-			this.currentRow = row;
-			/*
-			 * Loading the configurations at the given row.
-			 */
-			int configIndex = (row - 1) * COLS;
-			for(int buttonIndex = 0; buttonIndex < COLS;buttonIndex++) {
-				buttons[buttonIndex].setConfiguration(configuration.buttonConfigs[configIndex]);
-				++configIndex;
+			else if(event.getSource() == openSimulator) {
+				showSim();
 			}
-			updateRowLabel();
-			
-			/*
-			 * Updating which buttons are enabled.
-			 */
-			if(this.currentRow == 1) {
-				this.upButton.setEnabled(false);
-			}
-			else {
-				this.upButton.setEnabled(true);
-			}
-			
-			if(this.currentRow == this.numRows) {
-				this.downButton.setEnabled(false);
-			}
-			else {
-				this.downButton.setEnabled(true);
-			}
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 	}
 
@@ -187,13 +137,7 @@ public class TalkboxSimulator {
 	 * @version January 31st 2019
 	 */
 	public class TalkboxFrame extends JFrame {
-		/** The width of the Talkbox frame **/
-		public static final int FRAME_X = 800;
-		/** The height of the Talkbox frame **/
-		public static final int FRAME_Y = 600;
-
 		public TalkboxFrame() {
-			super.setSize(FRAME_X, FRAME_Y);
 			/** Setting the frame to shutdown the program when closed **/
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setResizable(false);

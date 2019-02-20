@@ -40,7 +40,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	public static final int ROWS = 1;
 	/**The number of columns of buttons**/
 	public static final int COLS = 6;
-	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,14);
+	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,15);
 	private JPanel buttonPanel;
 	
 	private SetUpButton[] buttons;
@@ -299,7 +299,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		private Color currentColor;
 		private File currentAudioFile;
 		private SetUpButton currentButton;
-		private final Color DEFAULT_COLOR = UIManager.getColor("Button.background");
+		private final Color DEFAULT_COLOR = new Color(UIManager.getColor("Button.background").getRGB());
 
 		public SetUpFrame() {
 			// Frame initial values

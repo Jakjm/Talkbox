@@ -1,5 +1,6 @@
 package simulator;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -15,10 +16,11 @@ import musicplayer.MusicPlayer;
 public class SimulatorButton extends JButton implements ActionListener {
 	private MusicPlayer player;
 	private ButtonConfiguration config;
-
+	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,15);
 	public SimulatorButton() {
+		super("");
+		this.setFont(BUTTON_FONT);
 	}
-
 	public void setConfiguration(ButtonConfiguration config) {
 		this.config = config;
 		// Adjusting the text to use html that way the body linewraps
