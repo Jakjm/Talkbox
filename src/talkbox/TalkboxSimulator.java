@@ -38,7 +38,7 @@ public class TalkboxSimulator {
 	private static final String SIMULATOR = "SIM";
 	private static final String MAIN_MENU = "MAIN";
 	/**The size of the frame while in the main menu**/
-	private static final Dimension MAIN_SIZE = new Dimension(300,400);
+	private static final Dimension MAIN_SIZE = new Dimension(300,240);
 	/**The size of the frame while using the actual simulator**/
 	private static final Dimension SIM_SIZE = new Dimension(900,600);
 	private CardLayout layout; 
@@ -80,7 +80,7 @@ public class TalkboxSimulator {
 		private JButton openConfig;
 		private JButton openSimulator;
 		public MenuPanel() {
-			this.setLayout(new GridLayout(5,-1));
+			this.setLayout(new GridLayout(3,1));
 			this.setBackground(Color.blue);
 			
 			JLabel titleLabel = new JLabel("Talkbox Simulator");
