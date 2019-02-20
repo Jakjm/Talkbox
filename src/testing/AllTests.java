@@ -16,18 +16,16 @@ import filehandler.FileIO;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({SelectorTest.class,MusicTest.class,ConfigSerializationTest.class, FileIOTest.class, ConfigurationTest.class })
+@SuiteClasses({ConfigSerializationTest.class, FileIOTest.class, ConfigurationTest.class })
 public class AllTests {
-	public static String HOME = System.getProperty("user.home") + FileIO.SEP;
-	public static String TESTING = HOME + "talkboxtest";
 
 	@BeforeClass
 	public static void createTestDir() {
-		new File(HOME + "talkboxtest").mkdirs();
+		new File("test").mkdirs();
 	}
 	
 	@AfterClass
 	public static void tearDown() {
-		FileIO.deleteFolder(new File(TESTING));
+		FileIO.deleteFolder(new File("test"));
 	}
 }

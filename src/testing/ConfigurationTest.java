@@ -12,18 +12,17 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import configurer.ButtonConfiguration;
 import configurer.Configuration;
 import filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigurationTest {
-	public static String HOME = System.getProperty("user.home") + FileIO.SEP;
-	public static String TESTING = HOME + "talkboxtest";
 	public static Configuration cf;
 
 	@BeforeClass
 	public static void setUp() {
-		cf = new Configuration(TESTING);
+		cf = new Configuration("test");
 	}
 
 	/*
@@ -35,18 +34,11 @@ public class ConfigurationTest {
 		assertTrue(cf.getTotalNumberOfButtons() == 6);
 		assertTrue(cf.getNumberOfAudioButtons() == 0);
 		File tbDir = new File(cf.getConfigDir());
-		HashSet<String> names = new HashSet<String>();
-		for (int i = 0; i < 6; i++) {
-			names.add("button_config_" + i);
-		}
 		// see if button configuration folders are set
 		for (int i = 0; i < 6; i++) {
-			File x = tbDir.listFiles()[i];
-			if (!names.contains(x.getName())) {
-				fail("Button name" + x.getName());
-			}
+			assertTrue(new File(tbDir + FileIO.SEP + "button_config_" + i).exists());
 		}
-		assertTrue(tbDir.listFiles()[6].getName().equals("serialized_config"));
+		assertTrue(new File(tbDir + FileIO.SEP + "serialized_config").exists());
 		// add a new audio set
 		cf.addAudioSet();
 	}
@@ -54,9 +46,9 @@ public class ConfigurationTest {
 	@Test
 	public void testGetters() {
 		assertTrue(cf.getTotalNumberOfButtons() == 12);
-		assertEquals(cf.getConfigDir(), TESTING + FileIO.SEP + "talkboxData");
+		assertEquals(cf.getConfigDir(), "test" + FileIO.SEP + "talkboxData");
 		// test the ability to read from a .tbc configuration file
-		Configuration p = Configuration.readConfiguration(new File(TESTING + FileIO.SEP + "talkboxData"));
+		Configuration p = Configuration.readConfiguration(new File("test" + FileIO.SEP + "talkboxData"));
 		assertTrue(p.getNumberOfAudioSets() == cf.getNumberOfAudioSets());
 		assertTrue(p.getNumberOfAudioSets() == 2);
 		assertTrue(p.getNumberOfAudioButtons() == cf.getNumberOfAudioButtons());
@@ -64,13 +56,37 @@ public class ConfigurationTest {
 		p.addAudioSet();
 		assertTrue(p.getTotalNumberOfButtons() == 18);
 		// adding button sounds
-		File sound = new File(TESTING + FileIO.SEP + "test.wav");
+		File sound = new File("test" + FileIO.SEP + "test.wav");
 		p.getButtonConfigs()[0].addSoundFile(sound);
 		p.getButtonConfigs()[5].addSoundFile(sound);
 		assertTrue(p.getNumberOfAudioButtons() == 2);
-		Configuration f = Configuration.readConfiguration(new File(TESTING + FileIO.SEP + "talkboxData"));
+		Configuration f = Configuration.readConfiguration(new File("test" + FileIO.SEP + "talkboxData"));
 		f.removeAudioset(2);
 		assertTrue(f.getTotalNumberOfButtons() == 12);
-		FileIO.deleteFolder(new File(cf.getConfigDir()));
+		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "talkboxData"));
+	}
+	
+	@Test
+	public void getAudioFiles() {
+		String newTb = "test" + FileIO.SEP + "test2";
+		new File(newTb).mkdirs();
+		Configuration p = new Configuration(newTb);
+		ButtonConfiguration[] bc = p.getButtonConfigs();
+		bc[0].addSoundFile(new File("test"  + FileIO.SEP + "talkboxtest" + FileIO.SEP + "test.wav"));
+		bc[1].addSoundFile(new File("test"  + FileIO.SEP + "talkboxtest" + FileIO.SEP + "test.wav"));
+		String[][] audioSets = p.getAudioFileNames();
+		for (String[] audioSet : audioSets) {
+			int count = 0;
+			System.out.println(Arrays.toString(audioSet));
+			for (String name : audioSet) {
+				if (count < 2) {
+					assertTrue(name.equals("sound.wav"));
+				}
+				else {
+					assertTrue(name.equals("NO SOUND"));
+				}
+				count++;
+			}
+		}
 	}
 }
