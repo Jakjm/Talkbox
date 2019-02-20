@@ -40,7 +40,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	public static final int ROWS = 1;
 	/**The number of columns of buttons**/
 	public static final int COLS = 6;
-	
+	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,14);
 	private JPanel buttonPanel;
 	
 	private SetUpButton[] buttons;
@@ -118,7 +118,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		bottomPanel.add(addButtons);
 				
 		//Delete rows button
-		removeButtons = new JButton("Remove Current Row");
+		removeButtons = new JButton("Remove This Row");
 		removeButtons.setFont(OUTER_FONT);
 		removeButtons.addActionListener(this);
 		bottomPanel.add(removeButtons);
@@ -170,7 +170,6 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		 */
 		int configIndex = (row - 1) * COLS;
 		for(int buttonIndex = 0; buttonIndex < COLS;buttonIndex++) {
-			System.out.println(buttonIndex + " " + configIndex);
 			buttons[buttonIndex].setConfiguration(config.buttonConfigs[configIndex]);
 			++configIndex;
 		}
@@ -251,15 +250,14 @@ public class SetUpPanel extends JPanel implements ActionListener {
 
 	public class SetUpButton extends JButton {
 		private static final String style = "";
+		
 		private ButtonConfiguration config;
 		public SetUpButton() {
-			
+			this.setFont(BUTTON_FONT);
 		}
-
 		public ButtonConfiguration getConfiguration() {
 			return config;
 		}
-
 		public void setConfiguration(ButtonConfiguration config) {
 			this.config = config;
 			adaptToConfig();
