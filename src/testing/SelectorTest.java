@@ -16,11 +16,11 @@ import browsing.SelectionListener;
  * @author jordan
  * @version February 20th 2019
  */
-class SelectorTest {
+public class SelectorTest {
 	boolean selectedFile = false;
 	File textFile = null;
 	@Test
-	void test1() {
+	public void test1() {
 		FileSelector selector = null;
 		File testDirectory = null;
 		
