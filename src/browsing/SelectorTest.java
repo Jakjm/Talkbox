@@ -8,6 +8,9 @@ import java.io.PrintWriter;
 
 import org.junit.jupiter.api.Test;
 
+import browsing.FileSelector;
+import browsing.SelectionListener;
+
 /**
  * JUnit test for the FileSelector class.
  * @author jordan

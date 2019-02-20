@@ -16,8 +16,7 @@ import filehandler.FileIO;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({MusicTest.class,SelectorTest.class, ConfigSerializationTest.class, FileIOTest.class, 
-	ConfigurationTest.class })
+@SuiteClasses({MusicTest.class,SelectorTest.class, ConfigSerializationTest.class, FileIOTest.class,ConfigurationTest.class })
 public class AllTests {
 
 	@BeforeClass

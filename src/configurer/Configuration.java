@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import filehandler.FileIO;
 import talkbox.TalkBoxConfiguration;
@@ -236,22 +237,22 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	@Override
 	public String[][] getAudioFileNames() {
-		int activeButtons = this.getNumberOfAudioButtons();
-		String[][] audioFileNames = new String[activeButtons][this.audioSets];
+		String[][] audioFileNames = new String[this.audioSets][6];
+		System.out.println(this.audioSets);
+		System.out.println(this.getNumberOfAudioButtons());
 		// sound folder for each button
 		File soundFolder;
-		// filter for WAVE files
-		FilenameFilter filter = new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".wav") || name.endsWith(".wave");
-			}
-		};
 		// get WAVE files for each button
 		for (int i = 0; i < this.audioSets; i++) {
-			for (int j = 0; j < i * 6; j++) {
-				soundFolder = new File(talkboxPath + (FileIO.SEP + "button_config_") + j + FileIO.SEP + "sound");
-				audioFileNames[i][j] = soundFolder.list(filter)[0];
+			for (int j = i * 6; j < (i * 6) + 6; j++) {
+				soundFolder = new File(talkboxPath + FileIO.SEP + "button_config_" + j + FileIO.SEP + "sound");
+				File[] sounds = soundFolder.listFiles();
+				if (sounds.length > 0) {
+					audioFileNames[i][j] = sounds[0].getName();
+				}
+				else {
+					audioFileNames[i][j] = "NO SOUND";
+				}
 			}
 		}
 		return audioFileNames;
