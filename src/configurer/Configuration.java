@@ -270,22 +270,25 @@ public class Configuration implements TalkBoxConfiguration {
 		for (int j = startButton; j < this.totalButtons; j++) {
 			// removing the audio set
 			if (j < startButton + 6) {
-				FileIO.deleteFolder(this.buttonConfigs[j].returnDir());
+				File deletionFile = this.buttonConfigs[j].returnDir();
+				FileIO.deleteFolder(deletionFile);
 			}
 			//renaming button config folders and changing text files
 			else {
 				File buttonConfig = this.buttonConfigs[j].returnDir();
 				File newDir = new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6));
+				//Resetting button directory and sound file
+				this.buttonConfigs[j].buttonDir = newDir;
+				if(this.buttonConfigs[j].soundFile != null) {
+					this.buttonConfigs[j].addSoundFile(new File(this.buttonConfigs[j].buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
+				}
 				boolean success = buttonConfig.renameTo(newDir);
-				if(success == false) {
-					throw new RuntimeException("NOT WORKING");
+				if(!success) {
+					throw new RuntimeException("Error");
 				}
 			}
-			if(this.totalButtons - j > 6) {
-				this.buttonConfigs[j] = this.buttonConfigs[j + 6];
-			}
 		}
-		for(int i = startButton + 6;i < totalButtons - 6;i++) {
+		for(int i = startButton;i < totalButtons - 6;i++) {
 			this.buttonConfigs[i] = this.buttonConfigs[i+6];
 		}
 		this.totalButtons -= 6;

@@ -130,16 +130,16 @@ public class FileIO {
 	}
 
 	/**
-	 * Deletes the specified folder.
-	 * 
+	 * Deletes the specified folder
 	 * @param folder the Folder to delete
 	 */
 	public static void deleteFolder(File folder) {
 		for (File x : folder.listFiles()) {
-			if (x.isFile()) {
-				x.delete();
-			} else {
+			if(x.isDirectory()){
 				deleteFolder(x);
+			}
+			else {
+				x.delete();
 			}
 		}
 		folder.delete();

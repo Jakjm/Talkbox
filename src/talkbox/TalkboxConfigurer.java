@@ -105,7 +105,7 @@ public class TalkboxConfigurer {
 			}
 			// set pre-existing configration
 			else if (event.getSource() == selectExisting) {
-				JOptionPane.showMessageDialog(null,"Please select a talkboxData Configuration Directory");
+				JOptionPane.showMessageDialog(null,"Please select a TalkboxData Configuration Directory");
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {
@@ -118,8 +118,7 @@ public class TalkboxConfigurer {
 						// Otherwise, show an error message.
 						else {
 							JOptionPane.showMessageDialog(null,
-									"Failed to read a Talkbox Configuration from the selected directory.\n"
-											+ " Please ensure it is a valid talkboxData Directory");
+									"Failed to read a Talkbox Configuration from the selected directory.\n");
 						}
 						//Set selector to invisible. 
 						selector.setVisible(false);
@@ -129,7 +128,7 @@ public class TalkboxConfigurer {
 			//Create new configuration directory, and use it. 
 			else if (event.getSource() == createNew) {
 				JOptionPane.showMessageDialog(null, 
-						"Please select a directory for the talkboxData Directory to be saved in.");
+						"Please select a directory for the TalkboxData Directory to be saved in.");
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
 					public void onFileSelected(File file) {

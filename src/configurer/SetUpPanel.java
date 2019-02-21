@@ -124,14 +124,14 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		bottomPanel.add(removeButtons);
 		
 		//Down button
-		downButton = new JButton("▼");
+		downButton = new JButton("View Lower Row");
 		downButton.setFont(OUTER_FONT);
 		downButton.addActionListener(this);
 		bottomPanel.add(downButton);
 		
 		
 		//Creating the up button
-		upButton = new JButton("▲");
+		upButton = new JButton("View Higher Row");
 		upButton.setFont(OUTER_FONT);
 		upButton.addActionListener(this);
 		bottomPanel.add(upButton);
@@ -264,6 +264,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		private ButtonConfiguration config;
 		public SetUpButton() {
 			this.setFont(BUTTON_FONT);
+			this.setFocusable(false);
 		}
 		public ButtonConfiguration getConfiguration() {
 			return config;
@@ -397,6 +398,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		public void windowClosing(WindowEvent arg0) {
 			colorFrame.setVisible(false);
 			emojiFrame.setVisible(false);
+			fileSelector.setVisible(false);
 		}
 
 		public void windowDeactivated(WindowEvent event) {

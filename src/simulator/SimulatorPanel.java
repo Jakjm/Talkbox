@@ -52,13 +52,13 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 		rowPanel.add(new JLabel(" Switch Rows:"));
 		
 		//Creating the down button
-		downButton = new JButton("▼");
+		downButton = new JButton("View Lower Row");
 		downButton.addActionListener(this);
 		rowPanel.add(downButton);
 		
 		
 		//Creating the up button
-		upButton = new JButton("▲");
+		upButton = new JButton("View Higher Row");
 		upButton.addActionListener(this);
 		rowPanel.add(upButton);
 		

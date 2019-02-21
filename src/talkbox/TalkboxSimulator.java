@@ -100,7 +100,7 @@ public class TalkboxSimulator {
 		}
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == openConfig) {
-				JOptionPane.showMessageDialog(null, "Please select a talkboxData configuration.");
+				JOptionPane.showMessageDialog(null, "Please select a TalkboxData configuration.");
 				// Making the selector visible.
 				selector.setVisible(true);
 				
