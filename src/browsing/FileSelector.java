@@ -200,7 +200,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Method for returning to the previous directory when the button is pressed.
+	 * Method for returning to the containing directory. 
 	 */
 	private void goBack() {
 		if (currentFile.getParentFile() != null) {

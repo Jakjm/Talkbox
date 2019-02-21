@@ -79,9 +79,10 @@ public class EmojiSearchPane extends JPanel implements KeyListener {
 		// System.out.println("***" + searchQuery + "***");
 		ArrayList<Emoji> searchList = searchList(searchQuery);
 		for (Emoji currentEmoji : searchList) {
-			JButton emojiButton = new JButton(currentEmoji.emoji());
+			JButton emojiButton = new JButton();
 			emojiButton.addActionListener(buttonListener);
 			emojiButton.setFont(emojiFont);
+			emojiButton.setText(currentEmoji.emoji());
 			emojiPanel.add(emojiButton);
 		}
 		emojiPanel.repaint();
@@ -90,7 +91,6 @@ public class EmojiSearchPane extends JPanel implements KeyListener {
 
 	/**
 	 * Adds the emojis that match the given search query.
-	 * 
 	 * @param searchQuery
 	 * @return the list of emojis that match the criteria.
 	 */

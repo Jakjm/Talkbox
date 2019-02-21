@@ -1,13 +1,11 @@
 package testing;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 import browsing.FileSelector;
 import browsing.SelectionListener;
 
@@ -17,8 +15,8 @@ import browsing.SelectionListener;
  * @version February 20th 2019
  */
 public class SelectorTest {
-	boolean selectedFile = false;
-	File textFile = null;
+	public boolean selectedFile = false;
+	public File textFile = null;
 	@Test
 	public void test1() {
 		FileSelector selector = null;

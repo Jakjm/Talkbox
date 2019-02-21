@@ -8,74 +8,77 @@ import java.util.ArrayList;
 
 /**
  * Hardcoded class to get emojis and descriptions.
- * 
  * @author jordan
- *
  */
 public final class EmojiUtils {
-	// The range of emoticons
-	private static final int EMOTICON_START = 0x1F600;
-	private static final int EMOTICON_FINISH = 0x1F650;
-	private static Emoji[] emojiList;
-
-	public static String[] getEmojis() {
-		String[] emojiArray = new String[EMOTICON_FINISH - EMOTICON_START];
-		for (int i = 0; i < emojiArray.length; i++) {
-			char[] emojiCharacters = Character.toChars(EMOTICON_START + i);
-			String newEmoji = new String(emojiCharacters, 0, emojiCharacters.length);
-			emojiArray[i] = newEmoji;
-		}
-		return emojiArray;
-	}
-
-	public static void main(String[] args) {
-		getRanges("emoji-data.txt");
-	}
-
+	/**The list of emojis within the file**/
+	private static Emoji[] emojiList = readEmojis("emoji-data.txt");
+	private static final int HEX_RADIX = 0x10;
 	public static Emoji[] getEmojiList() {
-		getRanges("emoji-data.txt");
 		return emojiList;
 	}
-
 	private static InputStream getStream(String path) {
 		return EmojiUtils.class.getResourceAsStream(path);
 	}
-
-	private static void getRanges(String path) {
-		ArrayList<String> infoLines = new ArrayList<String>();
-		/*
-		 * Adding each of the information lines from the file to an arraylist.
-		 */
-		InputStream stream = getStream(path);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String line;
+	/**
+	 * Reads the emojis from the text file.
+	 * @param path - the path of the text file within the package.
+	 * @return an array of the emojis.
+	 */
+	private static Emoji [] readEmojis(String path) {
+		//Setting up input stream to read emojis from the file
+		InputStream emojiFileStream = getStream(path);
+		BufferedReader fileReader = new BufferedReader(new InputStreamReader(emojiFileStream));
+		
+		//Parsing emojis and their descriptions.
+		ArrayList<Emoji> emojiList = new ArrayList<Emoji>();
 		try {
-			line = reader.readLine();
-			while (line != null) {
-				// If the line isn't blank, or a comment, we add the line to our arraylist.
-				if (line.length() > 0 && line.charAt(0) != ' ' && line.charAt(0) != '#') {
-					if (line.substring(0, line.indexOf(" ;")).length() < 6) {
-						line = line.substring(0, line.indexOf(" ;")) + "|" + line.substring(line.lastIndexOf(")") + 1);
-						infoLines.add(line);
+			String line = fileReader.readLine();
+			while(line != null) {
+				if(line.length() > 0 && line.charAt(0) != '#') {
+					String unicode = line.substring(0,line.indexOf(" ;"));
+					//For now, skip if the line is too long
+					String emoji = null;
+					if(unicode.length() > 8) {
+						int space = unicode.indexOf(" ");
+						//Getting the two sets of chars
+						String first = unicode.substring(0,space);
+						char [] firstChars = Character.toChars(Integer.parseInt(first,HEX_RADIX));
+						String last = unicode.substring(space + 1);
+						char [] lastChars = Character.toChars(Integer.parseInt(last,HEX_RADIX));
+						
+						//Combining the arrays into one
+						char [] combined = new char[firstChars.length + lastChars.length];
+						for(int i = 0;i < firstChars.length;i++) {
+							combined[i] = firstChars[i];
+						}
+						for(int i = 0;i < lastChars.length;i++) {
+							combined[i + firstChars.length] = lastChars[i];
+						}
+						emoji = new String(combined,0,combined.length);
 					}
+					else {
+						char [] emojiChars = Character.toChars(Integer.parseInt(unicode,HEX_RADIX));
+						emoji = new String(emojiChars,0,emojiChars.length);
+					}
+					
+					String description = line.substring(line.lastIndexOf(")") + 1);
+					emojiList.add(new Emoji(emoji,description));
 				}
-				line = reader.readLine();
+				line = fileReader.readLine();
 			}
-		} catch (IOException e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
-
-		// Adding each of the emoji groups.
-		emojiList = new Emoji[infoLines.size()];
+		
+		//Putting the array list into an array
+		Emoji [] actualList = new Emoji[emojiList.size()];
 		int lineCount = 0;
-		for (String currentLine : infoLines) {
-			// Adding the emoji
-			char[] emojiChars = Character
-					.toChars(Integer.parseInt(currentLine.substring(0, currentLine.indexOf("|")), 16));
-			String emoji = new String(emojiChars, 0, emojiChars.length);
-			String emojiDescription = currentLine.substring(currentLine.indexOf("|") + 1);
-			emojiList[lineCount] = new Emoji(emoji, emojiDescription);
+		for(Emoji current : emojiList) {
+			actualList[lineCount] = current;
 			lineCount++;
 		}
+		return actualList;
 	}
 }
