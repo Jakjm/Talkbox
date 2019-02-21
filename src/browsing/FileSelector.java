@@ -46,8 +46,8 @@ public class FileSelector extends JFrame implements ActionListener {
 	public static final int TEXT = 4;
 	// The home directory of the user.
 	private SelectionListener listener;
-	private static final String fileSep = System.getProperty("file.separator");
-	private final static File homeFile = new File(System.getProperty("user.home"));
+	public static final String fileSep = System.getProperty("file.separator");
+	public final static File homeFile = new File(System.getProperty("user.home"));
 
 	/**
 	 * Main method for testing
@@ -62,8 +62,10 @@ public class FileSelector extends JFrame implements ActionListener {
 	/**
 	 * Allows the user to select the selection mode the file selector should be in.
 	 * See the static constants for arbitrary, picture, and directory selections.
-	 * 
-	 * @param mode
+	 * @param listener - the file listener for defining
+	 * what should be done once a file of the mode has been clicked. null for doing nothing.
+	 * @param mode - the type of file to be opened by the FileSelector
+	 * FileSelector.DIRECTORY, FileSelector.SOUND, etc
 	 */
 	public FileSelector(SelectionListener listener, int mode) {
 		this(listener);
@@ -132,26 +134,24 @@ public class FileSelector extends JFrame implements ActionListener {
 		innerPaneScroll.setVisible(true);
 		outerPanel.add(innerPaneScroll, BorderLayout.CENTER);
 
-		updateForFile(homeFile);
+		openDirectory(homeFile);
 	}
 
 	public void reset() {
-		updateForFile(homeFile);
+		openDirectory(homeFile);
 	}
-
 	/**
-	 * Updates the panel with the list of files under the currentDirectory.
-	 * 
-	 * @param file
+	 * Updates the panel with the list of files contained within the given directory.
+	 * @param directory - the directory to move into, and create buttons for.
 	 */
-	public void updateForFile(File file) {
+	public void openDirectory(File directory) {
 		clearOldFileButtons();
 
 		/*
 		 * Getting the list of files under this file and adding them to the selectable
 		 * button list.
 		 */
-		File[] fileList = file.listFiles();
+		File[] fileList = directory.listFiles();
 		for (int i = 0; i < fileList.length; i++) {
 			File currentFile = fileList[i];
 			if (currentFile.getName().charAt(0) != '.') {
@@ -160,7 +160,7 @@ public class FileSelector extends JFrame implements ActionListener {
 				// System.out.println("adding");
 			}
 		}
-		currentFile = file;
+		currentFile = directory;
 		if (currentFile.getPath().equals(homeFile.getPath())) {
 			returnHome.setEnabled(false);
 		} else {
@@ -204,7 +204,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	 */
 	private void goBack() {
 		if (currentFile.getParentFile() != null) {
-			updateForFile(currentFile.getParentFile());
+			openDirectory(currentFile.getParentFile());
 		}
 	}
 
@@ -213,7 +213,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	 */
 	private void goHome() {
 		if (!currentFile.getPath().equals(homeFile.getPath())) {
-			updateForFile(homeFile);
+			openDirectory(homeFile);
 		}
 	}
 
@@ -342,13 +342,13 @@ public class FileSelector extends JFrame implements ActionListener {
 					if (result == JOptionPane.YES_OPTION) {
 						selector.select(thisFile);
 					} else {
-						selector.updateForFile(thisFile);
+						selector.openDirectory(thisFile);
 					}
 				} else {
 					selector.select(thisFile);
 				}
 			} else if (this.type == DIRECTORY) {
-				selector.updateForFile(thisFile);
+				selector.openDirectory(thisFile);
 			}
 		}
 	}

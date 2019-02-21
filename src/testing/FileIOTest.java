@@ -13,7 +13,8 @@ import filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileIOTest {
-	public static String HOME = System.getProperty("user.home") + FileIO.SEP;
+	//haha
+	public static String HOME = "test" + FileIO.SEP;
 	public static String TESTING = HOME + "talkboxtest";
 	private static String RESOURCE = "src" + FileIO.SEP + "testing" + FileIO.SEP;
 	private static File[] FILES = new File[] { new File(RESOURCE + "test.wav"), new File(RESOURCE + "notwave.m4a"),
