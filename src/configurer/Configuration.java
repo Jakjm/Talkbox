@@ -124,12 +124,11 @@ public class Configuration implements TalkBoxConfiguration {
 	/**
 	 * Sets the number of total button configuration folders. If there are already
 	 * buttons in the directory, only the remaining ones will be added.
-	 * 
 	 * @param buttons The new number of buttons.
 	 */
 	private void setTotalButtons(int buttons) {
-		for (int i = this.totalButtons; i <= buttons; i++) {
-			this.addButtonConfig(i - 1);
+		for (int i = this.totalButtons; i < buttons; i++) {
+			this.addButtonConfig(i);
 		}
 		this.totalButtons = buttons;
 	}
@@ -283,7 +282,6 @@ public class Configuration implements TalkBoxConfiguration {
 				}
 			}
 			if(this.totalButtons - j > 6) {
-				System.out.print("rem");
 				this.buttonConfigs[j] = this.buttonConfigs[j + 6];
 			}
 		}
