@@ -267,15 +267,18 @@ public class Configuration implements TalkBoxConfiguration {
 	public void removeAudioset(int audioSet) {
 		// start from the first button of the i-th audio set
 		int startButton = (audioSet - 1) * 6;
-		for (int j = startButton; j < startButton + 6; j++) {
-			FileIO.deleteFolder(this.buttonConfigs[j].returnDir());
-			this.totalButtons--;
+		for (int j = startButton; j < this.totalButtons; j++) {
+			// removing the audio set
+			if (j < startButton + 6) {
+				FileIO.deleteFolder(this.buttonConfigs[j].returnDir());
+			}
+			//renaming button config folders and changing text files
+			else {
+				File buttonConfig = this.buttonConfigs[j].returnDir();
+				buttonConfig.renameTo(new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6)));
+			}
 		}
-		// renaming remaining folders
-		for (int j = startButton + 6; j < this.totalButtons; j++) {
-			File buttonConfig = this.buttonConfigs[j].returnDir();
-			buttonConfig.renameTo(new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6)));
-		}
+		this.totalButtons -= 6;
 		this.audioSets--;
 		this.serializeConfig();
 
