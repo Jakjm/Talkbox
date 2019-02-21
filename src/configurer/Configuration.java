@@ -264,9 +264,10 @@ public class Configuration implements TalkBoxConfiguration {
 	 * 
 	 * @param audioSet The audioset to remove.
 	 */
-	public void removeAudioset(int audioSet) {
+	public void removeAudioSet(int audioSet) {
 		// start from the first button of the i-th audio set
 		int startButton = (audioSet - 1) * 6;
+		
 		for (int j = startButton; j < this.totalButtons; j++) {
 			// removing the audio set
 			if (j < startButton + 6) {
@@ -275,12 +276,29 @@ public class Configuration implements TalkBoxConfiguration {
 			//renaming button config folders and changing text files
 			else {
 				File buttonConfig = this.buttonConfigs[j].returnDir();
-				buttonConfig.renameTo(new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6)));
+				File newDir = new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6));
+				boolean success = buttonConfig.renameTo(newDir);
+				if(success == false) {
+					throw new RuntimeException("NOT WORKING");
+				}
 			}
+			if(this.totalButtons - j > 6) {
+				System.out.print("rem");
+				this.buttonConfigs[j] = this.buttonConfigs[j + 6];
+			}
+		}
+		for(int i = startButton + 6;i < totalButtons - 6;i++) {
+			this.buttonConfigs[i] = this.buttonConfigs[i+6];
 		}
 		this.totalButtons -= 6;
 		this.audioSets--;
 		this.serializeConfig();
-
+		
+		//Updating the array of button configs
+		ButtonConfiguration [] newArray = new ButtonConfiguration[this.totalButtons];
+		for(int i = 0;i < newArray.length;i++) {
+			newArray[i] = this.buttonConfigs[i];
+		}
+		this.buttonConfigs = newArray;
 	}
 }

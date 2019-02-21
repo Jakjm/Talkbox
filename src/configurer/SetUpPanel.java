@@ -178,15 +178,18 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		/*
 		 * Updating which buttons are enabled.
 		 */
-		if(this.currentRow == 1) {
-			this.upButton.setEnabled(false);
+		if(this.numRows == 1) {
 			this.removeButtons.setEnabled(false);
 		}
 		else {
-			this.upButton.setEnabled(true);
 			this.removeButtons.setEnabled(true);
 		}
-		
+		if(this.currentRow == 1) {
+			this.upButton.setEnabled(false);
+		}
+		else {
+			this.upButton.setEnabled(true);
+		}
 		if(this.currentRow == this.numRows) {
 			this.downButton.setEnabled(false);
 		}
@@ -197,7 +200,6 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	//Updates the number of rows
 	public void updateRows() {
 		this.numRows = config.buttonConfigs.length / COLS;
-		switchRow(this.currentRow);
 	}
 	/**
 	 * Setting the SetUpPanel to be editing the given TalkboxConfiguration
@@ -241,10 +243,18 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		else if(event.getSource() == addButtons) {
 			config.addAudioSet();
 			updateRows();
+			switchRow(this.currentRow);
 		}
 		//Remove button set
 		else if(event.getSource() == removeButtons) {
-//			TODO Removes the ith audio set: config.removeAudioSet(i);
+			config.removeAudioSet(this.currentRow);
+			updateRows();
+			if(this.currentRow == 1) {
+				switchRow(this.currentRow);
+			}
+			else {
+				switchRow(this.currentRow - 1);
+			}
 		}
 	}
 

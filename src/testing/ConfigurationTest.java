@@ -61,7 +61,7 @@ public class ConfigurationTest {
 		p.getButtonConfigs()[5].addSoundFile(sound);
 		assertTrue(p.getNumberOfAudioButtons() == 2);
 		Configuration f = Configuration.readConfiguration(new File("test" + FileIO.SEP + "talkboxData"));
-		f.removeAudioset(2);
+		f.removeAudioSet(2);
 		assertTrue(f.getTotalNumberOfButtons() == 12);
 		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "talkboxData"));
 	}
