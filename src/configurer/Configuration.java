@@ -40,7 +40,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 */
 	public Configuration(String path) {
 		this.audioSets = 1;
-		this.talkboxPath = path + FileIO.SEP + "talkboxData";
+		this.talkboxPath = path + FileIO.SEP + "TalkboxData";
 		this.buttonConfigs = new ButtonConfiguration[this.totalButtons];
 		// create the directories for the buttons and the serialized config
 		new File(this.talkboxPath).mkdir();
@@ -114,7 +114,7 @@ public class Configuration implements TalkBoxConfiguration {
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
 		// create new button configuration: this creates the text file with the
 		// associated text, color, and sound.
-		ButtonConfiguration b = new ButtonConfiguration("Button " + i, null, null, new File(dir));
+		ButtonConfiguration b = new ButtonConfiguration("Button", null, null, new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
 		// write the text file

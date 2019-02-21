@@ -46,9 +46,9 @@ public class ConfigurationTest {
 	@Test
 	public void testGetters() {
 		assertTrue(cf.getTotalNumberOfButtons() == 12);
-		assertEquals(cf.getConfigDir(), "test" + FileIO.SEP + "talkboxData");
+		assertEquals(cf.getConfigDir(), "test" + FileIO.SEP + "TalkboxData");
 		// test the ability to read from a .tbc configuration file
-		Configuration p = Configuration.readConfiguration(new File("test" + FileIO.SEP + "talkboxData"));
+		Configuration p = Configuration.readConfiguration(new File("test" + FileIO.SEP + "TalkboxData"));
 		assertTrue(p.getNumberOfAudioSets() == cf.getNumberOfAudioSets());
 		assertTrue(p.getNumberOfAudioSets() == 2);
 		assertTrue(p.getNumberOfAudioButtons() == cf.getNumberOfAudioButtons());
@@ -60,10 +60,10 @@ public class ConfigurationTest {
 		p.getButtonConfigs()[0].addSoundFile(sound);
 		p.getButtonConfigs()[5].addSoundFile(sound);
 		assertTrue(p.getNumberOfAudioButtons() == 2);
-		Configuration f = Configuration.readConfiguration(new File("test" + FileIO.SEP + "talkboxData"));
+		Configuration f = Configuration.readConfiguration(new File("test" + FileIO.SEP + "TalkboxData"));
 		f.removeAudioSet(2);
 		assertTrue(f.getTotalNumberOfButtons() == 12);
-		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "talkboxData"));
+		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "TalkboxData"));
 	}
 	
 	@Test
@@ -72,8 +72,8 @@ public class ConfigurationTest {
 		new File(newTb).mkdirs();
 		Configuration p = new Configuration(newTb);
 		ButtonConfiguration[] bc = p.getButtonConfigs();
-		bc[0].addSoundFile(new File("test"  + FileIO.SEP + "talkboxtest" + FileIO.SEP + "test.wav"));
-		bc[1].addSoundFile(new File("test"  + FileIO.SEP + "talkboxtest" + FileIO.SEP + "test.wav"));
+		bc[0].addSoundFile(new File("test"  + FileIO.SEP + "Talkboxtest" + FileIO.SEP + "test.wav"));
+		bc[1].addSoundFile(new File("test"  + FileIO.SEP + "Talkboxtest" + FileIO.SEP + "test.wav"));
 		String[][] audioSets = p.getAudioFileNames();
 		for (String[] audioSet : audioSets) {
 			int count = 0;
