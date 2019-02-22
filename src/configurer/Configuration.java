@@ -178,15 +178,8 @@ public class Configuration implements TalkBoxConfiguration {
 	@Override
 	public int getNumberOfAudioButtons() {
 		int buttons = 0;
-		FilenameFilter configDirs = new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return (name.contains("button_config_"));
-			}
-		};
-		for (File f : new File(this.getConfigDir()).listFiles(configDirs)) {
-			// checking whether button.txt has a sound file
-			if ((FileIO.readTextFile(new File(f.getPath() + FileIO.SEP + "button.txt"))[2]).equals("1")) {
+		for (ButtonConfiguration b : this.buttonConfigs) {
+			if (b.getSoundFile() != null) {
 				buttons++;
 			}
 		}
@@ -278,18 +271,12 @@ public class Configuration implements TalkBoxConfiguration {
 				File buttonConfig = this.buttonConfigs[j].returnDir();
 				File newDir = new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6));
 				//Resetting button directory and sound file
-				this.buttonConfigs[j].buttonDir = newDir;
-				if(this.buttonConfigs[j].soundFile != null) {
-					this.buttonConfigs[j].addSoundFile(new File(this.buttonConfigs[j].buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
-				}
-				boolean success = buttonConfig.renameTo(newDir);
-				if(!success) {
-					throw new RuntimeException("Error");
-				}
+				this.buttonConfigs[j].changeDirectory(newDir);
 			}
-		}
-		for(int i = startButton;i < totalButtons - 6;i++) {
-			this.buttonConfigs[i] = this.buttonConfigs[i+6];
+			// shifting array buttons left
+			if (j < this.totalButtons - 6) {
+				this.buttonConfigs[j] = this.buttonConfigs[j+6];
+			}
 		}
 		this.totalButtons -= 6;
 		this.audioSets--;

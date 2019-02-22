@@ -97,4 +97,37 @@ public class ButtonConfiguration {
 		}
 		return new ButtonConfiguration(input[0], col, sound, buttonDir);
 	}
+	/**
+	 * Returns the sound file of the button.
+	 */
+	public File getSoundFile() {
+		return this.soundFile;
+	}
+	
+	/**
+	 * Changes the directory of the button and its sound file.
+	 * @param newDir The new button_config_ directory.
+	 */
+	public void changeDirectory(File newDir) {
+		boolean success = this.buttonDir.renameTo(newDir);
+		if(!success) {
+			throw new RuntimeException("Error");
+		}
+		// change the directory of the audio file and button_config_
+		else {
+			this.buttonDir = newDir;
+			if(this.soundFile != null) {
+				this.addSoundFile(new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
+			}
+		}
+	}
+	/**
+	 * String representation of buttons. Used in testing.
+	 */
+	@Override
+	public String toString() {
+		String audioName = this.soundFile != null ? this.soundFile.getName() : "null";
+		String format = String.format("Audio file is [%s]\nColor is [%s]\nText is [%s]\n", audioName, this.buttonColor.toString(), this.buttonText);
+		return format;
+	}
 }
