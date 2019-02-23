@@ -62,7 +62,9 @@ public class ButtonConfiguration {
 		String data = this.buttonText + '\n' + this.buttonColor.getRGB() + '\n';
 		// if the sound file is not null copy it to the sound directory
 		if (this.soundFile != null) {
-			FileIO.copyFile(soundFile, new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
+			File internalFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
+			FileIO.copyFile(soundFile, internalFile);
+			this.soundFile = internalFile;
 			data += 1;
 		} else {
 			data += 0;

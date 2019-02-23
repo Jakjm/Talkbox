@@ -349,7 +349,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			this.currentColorPanel.setBackground(this.currentColor);
 			this.currentAudioFile = config.soundFile;
 			if (this.currentAudioFile != null) {
-				currentPath.setText("Sound Path:" + this.currentAudioFile.getPath());
+				currentPath.setText("Sound Path: " + this.currentAudioFile.getPath());
 				musicPlayer = new MusicPlayer(this.currentAudioFile);
 			} else {
 				currentPath.setText("Sound Path:(none)");
@@ -486,7 +486,6 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				} else if (event.getSource() == confirmSetup) {
 					currentButton.getConfiguration().setButtonValues(nameField.getText(),currentColor,currentAudioFile);
 					currentButton.setConfiguration(currentButton.getConfiguration());
-					currentButton.getConfiguration().writeButtonTxt();
 					hideSetupFrame();
 				}
 			}
