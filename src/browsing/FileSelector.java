@@ -137,7 +137,6 @@ public class FileSelector extends JFrame implements ActionListener {
 		openDirectory(homeFile);
 	}
 	public void setVisible(boolean b) {
-		openDirectory(this.currentFile);
 		super.setVisible(b);
 	}
 	public void reset() {
