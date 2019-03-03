@@ -22,7 +22,7 @@ public class ConfigSerializationTest {
 		cf.addAudioSet();
 		assertTrue(cf.getTotalNumberOfButtons() == 12);
 		// deserialize
-		Configuration p = ConfigSerialization.deserialize("test" + FileIO.SEP + "talkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc");
+		Configuration p = ConfigSerialization.deserialize("test" + FileIO.SEP + "TalkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc");
 		assertTrue(p.getTotalNumberOfButtons() == 12);
 		FileIO.deleteFolder(new File(cf.getConfigDir()));
 	}

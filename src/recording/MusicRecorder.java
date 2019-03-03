@@ -14,7 +14,6 @@ import javax.sound.sampled.TargetDataLine;
 
 /**
  * Rewritten Audio Recording Class
- * 
  * @author jordan
  * @version January 20th 2019
  */
@@ -91,7 +90,7 @@ public class MusicRecorder {
 		return this.format;
 	}
 
-	/** Task that for recording **/
+	/** Task for continuously recording **/
 	private class ThreadTask implements Runnable {
 		public void run() {
 			stream = new ByteArrayOutputStream();

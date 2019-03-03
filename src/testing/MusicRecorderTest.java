@@ -16,16 +16,15 @@ public class MusicRecorderTest {
 	public void test() {
 		MusicRecorder g = new MusicRecorder();
 		g.record();
-		// recording for 5 seconds
-		try {
-			Thread.sleep(5000);
-		}
-		catch (InterruptedException e) {
+		//Waiting five seconds
+		long currentTime = System.currentTimeMillis() + 5200;
+		while(System.currentTimeMillis() < currentTime) {
+			
 		}
 		File testFile = new File("test/test.wav");
 		MusicRecorder.writeToFile(g.stop(), g.getFormat(), testFile);
 		MusicPlayer p = new MusicPlayer(testFile);
-		assertEquals("0:04", p.getTrackLength());
+		assertEquals("0:05", p.getTrackLength());
 	}
 
 }
