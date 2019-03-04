@@ -24,6 +24,14 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
 }
-
+test{
+	useJUnitPlatform()
+	testLogging{
+		events "passed","skipped","failed"
+	}
+}
+jar{
+	attributes 'Main-Class':'main.java.Talkbox.TalkboxConfigurer.java'
+}
 // Define the main class for the application
-mainClassName = 'Talkbox.App'
+mainClassName = 'Talkbox.TalkboxConfigurer'
