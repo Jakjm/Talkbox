@@ -19,10 +19,24 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
-
 dependencies {
     // Use JUnit test framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+}
+sourceSets{
+	
+	main{
+		java{
+			srcDirs = ['src']
+		}
+	}
+	
+	test{
+		java{
+			srcDirs = ['src/test']
+		}
+	}
+	
 }
 test{
 	useJUnitPlatform()
@@ -30,8 +44,15 @@ test{
 		events "passed","skipped","failed"
 	}
 }
+
+
+
+
 jar{
-	attributes 'Main-Class':'main.java.Talkbox.TalkboxConfigurer.java'
+	manifest{
+		attributes 'Main-Class': 'main.java.Talkbox.TalkboxConfigurer.java'
+	}
+	
 }
 // Define the main class for the application
 mainClassName = 'Talkbox.TalkboxConfigurer'
