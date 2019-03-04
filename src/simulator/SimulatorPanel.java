@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import configurer.Configuration;
-import talkbox.TalkboxSimulator;
+import main.java.Talkbox.TalkboxSimulator;
 
 /**
  * Talkbox panel for the talkbox simulator panel

@@ -1,4 +1,4 @@
-package talkbox;
+package main.java.Talkbox;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

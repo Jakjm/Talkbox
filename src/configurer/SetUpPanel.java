@@ -24,8 +24,9 @@ import browsing.FileSelector;
 import browsing.SelectionListener;
 import emojiPanel.EmojiSearchPane.EmojiSearchFrame;
 import filehandler.FileIO;
+import main.java.Talkbox.TalkboxConfigurer.BasePanel;
 import musicplayer.MusicPlayer;
-import talkbox.TalkboxConfigurer.BasePanel;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;

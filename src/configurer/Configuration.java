@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 import filehandler.FileIO;
-import talkbox.TalkBoxConfiguration;
 
 /**
  * Configuration for the Talkbox interface. Creates a directory to store

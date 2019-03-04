@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import recording.MusicRecorder;
-import talkbox.TalkboxConfigurer.BasePanel;
 
 import javax.sound.sampled.AudioFormat;
 import javax.swing.JButton;
@@ -20,6 +19,7 @@ import javax.swing.JTextField;
 
 import browsing.FileSelector;
 import browsing.SelectionListener;
+import main.java.Talkbox.TalkboxConfigurer.BasePanel;
 
 /**
  * Recording panel for the Talkbox Configurer Application

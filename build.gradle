@@ -22,8 +22,7 @@ repositories {
 
 dependencies {
     // Use JUnit test framework
-    compile 'org.junit.jupiter:junit-jupiter-api:5.3.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
 }
 
 // Define the main class for the application
