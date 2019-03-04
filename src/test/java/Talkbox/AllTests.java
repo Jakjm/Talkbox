@@ -1,4 +1,4 @@
-package testing;
+package test.java.Talkbox;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ import filehandler.FileIO;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({SelectorTest.class, ConfigSerializationTest.class, FileIOTest.class,ConfigurationTest.class, MusicRecorderTest.class })
+@SuiteClasses({MusicTest.class,SelectorTest.class, ConfigSerializationTest.class, FileIOTest.class,ConfigurationTest.class, MusicRecorderTest.class })
 public class AllTests {
 
 	@BeforeClass

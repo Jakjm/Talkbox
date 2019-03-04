@@ -1,4 +1,4 @@
-package testing;
+package test.java.Talkbox;
 
 import org.junit.Test;
 
@@ -13,10 +13,8 @@ import filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileIOTest {
-	//haha
-	public static String HOME = "test" + FileIO.SEP;
-	public static String TESTING = HOME + "talkboxtest";
-	private static String RESOURCE = "src" + FileIO.SEP + "testing" + FileIO.SEP;
+	public static String TESTING = "test" + FileIO.SEP + "talkboxtest";
+	private static String RESOURCE = "src" + FileIO.SEP + "test/resources" + FileIO.SEP;
 	private static File[] FILES = new File[] { new File(RESOURCE + "test.wav"), new File(RESOURCE + "notwave.m4a"),
 			new File(RESOURCE + "image.png"), new File(RESOURCE + "harbin.jpg") };
 

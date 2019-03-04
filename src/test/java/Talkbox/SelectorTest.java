@@ -1,4 +1,4 @@
-package testing;
+package test.java.Talkbox;
 import static org.junit.Assert.*;
 
 import java.io.File;
