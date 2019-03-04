@@ -1,4 +1,4 @@
-package emojiPanel;
+package main.java.Talkbox.emojiPanel;
 
 import java.io.BufferedReader;
 import java.io.IOException;

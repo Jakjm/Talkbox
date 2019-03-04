@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import filehandler.FileIO;
+import main.java.Talkbox.filehandler.FileIO;
 
 /**
  * Tests for FileIO, ConfigSerialization, and Configuration.

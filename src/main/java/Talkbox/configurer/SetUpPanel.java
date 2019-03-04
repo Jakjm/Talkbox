@@ -1,4 +1,4 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,12 +20,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import browsing.FileSelector;
-import browsing.SelectionListener;
-import emojiPanel.EmojiSearchPane.EmojiSearchFrame;
-import filehandler.FileIO;
 import main.java.Talkbox.TalkboxConfigurer.BasePanel;
-import musicplayer.MusicPlayer;
+import main.java.Talkbox.browsing.FileSelector;
+import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.emojiPanel.EmojiSearchPane.EmojiSearchFrame;
+import main.java.Talkbox.filehandler.FileIO;
+import main.java.Talkbox.musicplayer.MusicPlayer;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

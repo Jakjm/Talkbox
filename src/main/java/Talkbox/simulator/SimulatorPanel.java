@@ -1,4 +1,4 @@
-package simulator;
+package main.java.Talkbox.simulator;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -9,8 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import configurer.Configuration;
 import main.java.Talkbox.TalkboxSimulator;
+import main.java.Talkbox.configurer.Configuration;
 
 /**
  * Talkbox panel for the talkbox simulator panel

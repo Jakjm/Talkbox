@@ -17,11 +17,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import browsing.FileSelector;
-import browsing.SelectionListener;
-import configurer.Configuration;
-import simulator.SimulatorButton;
-import simulator.SimulatorPanel;
+import main.java.Talkbox.browsing.FileSelector;
+import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.configurer.Configuration;
+import main.java.Talkbox.simulator.SimulatorButton;
+import main.java.Talkbox.simulator.SimulatorPanel;
 
 /**
  * Talkbox simulator app for the talkbox.

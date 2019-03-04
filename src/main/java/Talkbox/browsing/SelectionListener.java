@@ -1,4 +1,4 @@
-package browsing;
+package main.java.Talkbox.browsing;
 
 import java.io.File;
 

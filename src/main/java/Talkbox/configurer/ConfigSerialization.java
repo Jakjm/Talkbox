@@ -1,4 +1,4 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.io.File;
 import java.io.FileInputStream;

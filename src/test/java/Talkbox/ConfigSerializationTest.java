@@ -8,9 +8,9 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import configurer.ConfigSerialization;
-import configurer.Configuration;
-import filehandler.FileIO;
+import main.java.Talkbox.configurer.ConfigSerialization;
+import main.java.Talkbox.configurer.Configuration;
+import main.java.Talkbox.filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ConfigSerializationTest {

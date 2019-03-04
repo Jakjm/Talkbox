@@ -1,4 +1,4 @@
-package musicplayer;
+package main.java.Talkbox.musicplayer;
 
 import java.io.BufferedInputStream;
 import java.io.File;

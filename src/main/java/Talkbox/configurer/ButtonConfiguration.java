@@ -1,11 +1,11 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.awt.Color;
 import java.io.File;
 
 import javax.swing.UIManager;
 
-import filehandler.FileIO;
+import main.java.Talkbox.filehandler.FileIO;
 
 public class ButtonConfiguration {
 	public String buttonText;

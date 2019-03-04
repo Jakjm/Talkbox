@@ -15,11 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import browsing.FileSelector;
-import browsing.SelectionListener;
-import configurer.Configuration;
-import configurer.RecordingPanel;
-import configurer.SetUpPanel;
+import main.java.Talkbox.browsing.FileSelector;
+import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.configurer.Configuration;
+import main.java.Talkbox.configurer.RecordingPanel;
+import main.java.Talkbox.configurer.SetUpPanel;
 
 /**
  * Main class for the Talkbox Configuration App

@@ -1,4 +1,4 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.io.Serializable;
 import java.nio.file.Path;

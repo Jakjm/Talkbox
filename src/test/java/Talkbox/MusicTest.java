@@ -6,8 +6,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import filehandler.FileIO;
-import musicplayer.MusicPlayer;
+import main.java.Talkbox.filehandler.FileIO;
+import main.java.Talkbox.musicplayer.MusicPlayer;
 /**
  * Testing the opening of a music player for errors.
  */

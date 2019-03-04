@@ -1,4 +1,4 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,15 +11,14 @@ import java.io.File;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import recording.MusicRecorder;
-
 import javax.sound.sampled.AudioFormat;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import browsing.FileSelector;
-import browsing.SelectionListener;
 import main.java.Talkbox.TalkboxConfigurer.BasePanel;
+import main.java.Talkbox.browsing.FileSelector;
+import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.recording.MusicRecorder;
 
 /**
  * Recording panel for the Talkbox Configurer Application

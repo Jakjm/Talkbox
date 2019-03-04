@@ -1,11 +1,12 @@
-package simulator;
+package main.java.Talkbox.simulator;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import configurer.ButtonConfiguration;
-import musicplayer.MusicPlayer;
+
+import main.java.Talkbox.configurer.ButtonConfiguration;
+import main.java.Talkbox.musicplayer.MusicPlayer;
 
 /**
  * Simulator button for the talkbox simulator app

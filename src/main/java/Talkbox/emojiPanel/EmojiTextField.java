@@ -1,9 +1,7 @@
-package configurer;
+package main.java.Talkbox.emojiPanel;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyListener;
-
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,11 +13,11 @@ import javax.swing.JTextField;
  * @author jakjm
  * @version March 26th 2017
  */
-public class BasicField extends JPanel {
+public class EmojiTextField extends JPanel {
 	private JLabel label;
 	private JTextField inputField;
 
-	public BasicField(String fieldName) {
+	public EmojiTextField(String fieldName) {
 		super();
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -28,13 +26,14 @@ public class BasicField extends JPanel {
 		this.add(label);
 
 		this.inputField = new JTextField();
+		this.inputField.setSize(200, 30);
+		// Prevents stretching or squashing.
+		this.inputField.setMinimumSize(inputField.getSize());
+		this.inputField.setMaximumSize(inputField.getSize());
 		this.add(inputField);
 	}
-	public void setFieldFont(Font font) {
-		this.label.setFont(font);
-		this.inputField.setFont(font);
-	}
-	public BasicField(String fieldName, Color color) {
+
+	public EmojiTextField(String fieldName, Color color) {
 		this(fieldName);
 		this.setBackground(color);
 	}
@@ -53,7 +52,7 @@ public class BasicField extends JPanel {
 		inputField.setText("");
 	}
 
-	public void setText(String text) {
+	public void setValue(String text) {
 		inputField.setText(text);
 	}
 
@@ -67,30 +66,20 @@ public class BasicField extends JPanel {
 	}
 
 	/**
-	 * Inserts a string of text at the cursor position
-	 */
-	public void insertTextAtCursor(String string) {
-		int caretPos = inputField.getCaretPosition();
-		String currentText = inputField.getText();
-		String newText = currentText.substring(0, caretPos) + string + currentText.substring(caretPos);
-		inputField.setText(newText);
-	}
-
-	/**
 	 * Returns the value in the text field.
 	 * 
 	 * @return the value in the textField.
 	 */
-	public String getText() {
+	public String getValue() {
 		return inputField.getText();
 	}
 
 	public int parseIntValue() {
-		return Integer.parseInt(getText().trim());
+		return Integer.parseInt(getValue());
 	}
 
 	public float parseFloatValue() {
-		return Float.parseFloat(getText().trim());
+		return Float.parseFloat(getValue());
 	}
 
 }

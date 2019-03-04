@@ -1,4 +1,4 @@
-package filehandler;
+package main.java.Talkbox.filehandler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

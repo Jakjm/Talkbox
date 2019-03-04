@@ -1,4 +1,4 @@
-package configurer;
+package main.java.Talkbox.configurer;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import filehandler.FileIO;
+import main.java.Talkbox.filehandler.FileIO;
 
 /**
  * Configuration for the Talkbox interface. Creates a directory to store

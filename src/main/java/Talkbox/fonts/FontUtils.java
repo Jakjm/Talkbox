@@ -1,4 +1,4 @@
-package fonts;
+package main.java.Talkbox.fonts;
 
 import java.awt.Font;
 import java.awt.FontFormatException;

@@ -21,22 +21,7 @@ repositories {
 }
 dependencies {
     // Use JUnit test framework
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
-}
-sourceSets{
-	
-	main{
-		java{
-			srcDirs = ['src']
-		}
-	}
-	
-	test{
-		java{
-			srcDirs = ['src/test']
-		}
-	}
-	
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
 }
 test{
 	useJUnitPlatform()

@@ -1,4 +1,4 @@
-package recording;
+package main.java.Talkbox.recording;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

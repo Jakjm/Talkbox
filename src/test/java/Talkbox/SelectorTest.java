@@ -6,8 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import org.junit.Test;
-import browsing.FileSelector;
-import browsing.SelectionListener;
+
+import main.java.Talkbox.browsing.FileSelector;
+import main.java.Talkbox.browsing.SelectionListener;
 
 /**
  * JUnit test for the FileSelector class.

@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
-import filehandler.FileIO;
+import main.java.Talkbox.filehandler.FileIO;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileIOTest {

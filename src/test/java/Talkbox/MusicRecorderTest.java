@@ -7,8 +7,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import musicplayer.MusicPlayer;
-import recording.MusicRecorder;
+import main.java.Talkbox.musicplayer.MusicPlayer;
+import main.java.Talkbox.recording.MusicRecorder;
 
 public class MusicRecorderTest {
 

@@ -1,4 +1,4 @@
-package emojiPanel;
+package main.java.Talkbox.emojiPanel;
 
 /**
  * Class for grouping an emoji with its description

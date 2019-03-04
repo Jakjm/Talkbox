@@ -1,4 +1,4 @@
-package emojiPanel;
+package main.java.Talkbox.emojiPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import fonts.FontUtils;
+import main.java.Talkbox.fonts.FontUtils;
 
 /**
  * Search pane for emojis within the app.
