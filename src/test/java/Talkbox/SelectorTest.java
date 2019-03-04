@@ -1,12 +1,9 @@
 package test.java.Talkbox;
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-
-import org.junit.Test;
-
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 

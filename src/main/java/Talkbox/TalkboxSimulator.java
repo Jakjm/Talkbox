@@ -30,6 +30,7 @@ import main.java.Talkbox.simulator.SimulatorPanel;
  */
 public class TalkboxSimulator {
 	TalkboxFrame frame;
+	
 	SimulatorPanel simulatorPanel;
 	FileSelector selector;
 	public Configuration configuration;

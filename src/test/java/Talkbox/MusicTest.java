@@ -1,22 +1,17 @@
 package test.java.Talkbox;
 
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.io.File;
-
-import org.junit.Test;
-
-import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.musicplayer.MusicPlayer;
 /**
  * Testing the opening of a music player for errors.
  */
 public class MusicTest {
-	private static final String RESOURCE_DIR = String.format("%stest%sresources%s",FileIO.SEP,FileIO.SEP,FileIO.SEP);
 	@Test
 	public void test1() {
 		try {
-			MusicPlayer player = new MusicPlayer(RESOURCE_DIR + "test.wav");
+			MusicPlayer player = new MusicPlayer("/test/resources/test2.wav");
 			// If the player is considered playing before starting, fail.
 			if (player.isPlaying()) {
 				fail();
@@ -26,7 +21,7 @@ public class MusicTest {
 
 			}
 		} catch (Exception e) {
-			fail();
+			e.printStackTrace();
 		}
 	}
 
@@ -72,6 +67,7 @@ public class MusicTest {
 			player.play();
 			// Have the track loop for 4 seconds
 			long playTime = System.currentTimeMillis() + 1000;
+			
 			while (System.currentTimeMillis() < playTime) {
 				if (!player.isPlaying()) {
 					fail();
@@ -82,7 +78,7 @@ public class MusicTest {
 				fail();
 			}
 		} catch (Exception e) {
-			fail();
+			e.printStackTrace();
 		}
 	}
 

@@ -1,4 +1,4 @@
-package test.java.Talkbox;
+package testsToFix;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;

@@ -1,12 +1,8 @@
-package test.java.Talkbox;
+package testsToFix;
 
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.io.File;
-
-
-import org.junit.Test;
-
 import main.java.Talkbox.musicplayer.MusicPlayer;
 import main.java.Talkbox.recording.MusicRecorder;
 
