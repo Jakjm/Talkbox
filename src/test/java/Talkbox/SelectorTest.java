@@ -56,6 +56,7 @@ public class SelectorTest {
 		//Removing the testing directories.
 		textFile.delete();
 		testDirectory.delete();
+		selector.setVisible(false);
 	}
 
 }
