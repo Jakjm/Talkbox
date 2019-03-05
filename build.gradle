@@ -29,8 +29,22 @@ test{
 		events "passed","skipped","failed"
 	}
 }
-
+task simulatorJar(type: Jar){
+	baseName = 'TalkboxSimulator'
+	from('src'){
+		include 'main/java/Talkbox/fonts/NotoColorEmoji.ttf'
+		include 'main/java/Talkbox/emojiPanel/emoji-data.txt'
+	}
+	manifest{
+		attributes 'Main-Class': 'main.java.Talkbox.TalkboxSimulator'
+	}
+}
 jar{
+	baseName = 'TalkboxConfigurer'
+	from('src'){
+		include 'main/java/Talkbox/fonts/NotoColorEmoji.ttf'
+		include 'main/java/Talkbox/emojiPanel/emoji-data.txt'
+	}
 	manifest{
 		attributes 'Main-Class': 'main.java.Talkbox.TalkboxConfigurer'
 	}
