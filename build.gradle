@@ -29,18 +29,16 @@ test{
 		events "passed","skipped","failed"
 	}
 }
+//Talkbox Simulator Jar creation task
 task simulatorJar(type: Jar){
-	baseName = 'TalkboxSimulator'
-	from('src'){
-		include 'main/java/Talkbox/fonts/NotoColorEmoji.ttf'
-		include 'main/java/Talkbox/emojiPanel/emoji-data.txt'
-	}
+	baseName = 'Talkbox Simulator'
 	manifest{
 		attributes 'Main-Class': 'main.java.Talkbox.TalkboxSimulator'
 	}
 }
+//Talkbox Configurer Jar creation task
 jar{
-	baseName = 'TalkboxConfigurer'
+	baseName = 'Talkbox Configurer'
 	from('src'){
 		include 'main/java/Talkbox/fonts/NotoColorEmoji.ttf'
 		include 'main/java/Talkbox/emojiPanel/emoji-data.txt'
@@ -48,6 +46,13 @@ jar{
 	manifest{
 		attributes 'Main-Class': 'main.java.Talkbox.TalkboxConfigurer'
 	}
+	doLast {
+        copy {
+            from 'build/libs/Talkbox Configurer.jar'
+            into "Executables"
+        }
+
+    }
 }
 // Define the main class for the application
 mainClassName = 'Talkbox.TalkboxConfigurer'
