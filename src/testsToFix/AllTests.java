@@ -9,8 +9,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import main.java.Talkbox.filehandler.FileIO;
-import test.java.Talkbox.MusicTest;
-import test.java.Talkbox.SelectorTest;
 
 /**
  * Tests for FileIO, ConfigSerialization, and Configuration.

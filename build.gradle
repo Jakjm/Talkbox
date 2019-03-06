@@ -32,6 +32,10 @@ test{
 //Talkbox Simulator Jar creation task
 task simulatorJar(type: Jar){
 	baseName = 'Talkbox Simulator'
+	from('src'){
+		include 'main/java/Talkbox/fonts/NotoColorEmoji.ttf'
+		include 'main/java/Talkbox/emojiPanel/emoji-data.txt'
+	}
 	manifest{
 		attributes 'Main-Class': 'main.java.Talkbox.TalkboxSimulator'
 	}
@@ -51,8 +55,8 @@ jar{
             from 'build/libs/Talkbox Configurer.jar'
             into "Executables"
         }
-
     }
 }
+
 // Define the main class for the application
 mainClassName = 'Talkbox.TalkboxConfigurer'
