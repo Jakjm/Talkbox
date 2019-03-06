@@ -1,4 +1,4 @@
-package testsToFix;
+package externalTests;
 
 import java.io.File;
 
