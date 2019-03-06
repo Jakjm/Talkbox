@@ -42,3 +42,5 @@ jobs:
       - run: gradle test
       # run build
       - run: gradle build
+      # run simulator jar creation
+      - run: gradle simJar
