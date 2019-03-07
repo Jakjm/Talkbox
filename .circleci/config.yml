@@ -40,8 +40,11 @@ jobs:
 
       # run tests!
       - run: gradle test
-      # run build
-      - run: gradle build
       # store test-results
       - store_test_results:
         path: test-results
+
+      # run build
+      - run: gradle build
+      # run simulator jar creation
+      - run: gradle simJar
