@@ -25,14 +25,12 @@ public class ConfigurationTest {
 
 	@BeforeAll
 	public static void setUp() {
+		new File("test").mkdirs();
 		cf = new Configuration("test");
 	}
 
-	/*
-	 * TODO: this isn't going to work - there are more files in the configuration directory. 
-	 */
 	@Test
-	public void testButtons() {
+	public void testA() {
 		// default number is 6
 		assertTrue(cf.getTotalNumberOfButtons() == 6);
 		assertTrue(cf.getNumberOfAudioButtons() == 0);
@@ -47,7 +45,7 @@ public class ConfigurationTest {
 	}
 
 	@Test
-	public void testGetters() {
+	public void testB() {
 		assertTrue(cf.getTotalNumberOfButtons() == 12);
 		assertEquals(cf.getConfigDir(), "test" + FileIO.SEP + "TalkboxData");
 		// test the ability to read from a .tbc configuration file
@@ -59,7 +57,7 @@ public class ConfigurationTest {
 		p.addAudioSet();
 		assertTrue(p.getTotalNumberOfButtons() == 18);
 		// adding button sounds
-		File sound = new File("test" + FileIO.SEP + "test.wav");
+		File sound = new File("src" + FileIO.SEP + "test" + FileIO.SEP + "resources" + "test.wav");
 		p.getButtonConfigs()[0].addSoundFile(sound);
 		p.getButtonConfigs()[5].addSoundFile(sound);
 		assertTrue(p.getNumberOfAudioButtons() == 2);
@@ -69,17 +67,14 @@ public class ConfigurationTest {
 		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "TalkboxData"));
 	}
 	
-	/**
-	 * TODO: Needs to be fixed
-	 */
-	//@Test
-	public void getAudioFiles() {
-		String newTb = "test" + FileIO.SEP + "test2";
-		new File(newTb).mkdirs();
+	@Test
+	public void testC() {
+		String newTb = "test" + FileIO.SEP + "Talkboxtest";
+		new File(newTb).mkdir();
 		Configuration p = new Configuration(newTb);
 		ButtonConfiguration[] bc = p.getButtonConfigs();
-		bc[0].addSoundFile(new File("test"  + FileIO.SEP + "Talkboxtest" + FileIO.SEP + "test.wav"));
-		bc[1].addSoundFile(new File("test"  + FileIO.SEP + "Talkboxtest" + FileIO.SEP + "test.wav"));
+		bc[0].addSoundFile(new File("src/test/resources/test.wav"));
+		bc[1].addSoundFile(new File("src/test/resources/test.wav"));
 		String[][] audioSets = p.getAudioFileNames();
 		for (String[] audioSet : audioSets) {
 			int count = 0;
@@ -94,5 +89,6 @@ public class ConfigurationTest {
 				count++;
 			}
 		}
+		FileIO.deleteFolder(new File("test"));
 	}
 }

@@ -14,7 +14,8 @@ import main.java.Talkbox.filehandler.FileIO;
 public class ConfigSerializationTest {
 
 	@Test
-	public void testSerialize() {
+	public void testA() {
+		new File("test").mkdirs();
 		Configuration cf = new Configuration("test");
 		assertTrue(cf.getNumberOfAudioButtons() == 0);
 		cf.addAudioSet();
@@ -23,5 +24,7 @@ public class ConfigSerializationTest {
 		Configuration p = ConfigSerialization.deserialize("test" + FileIO.SEP + "TalkboxData" + FileIO.SEP + "serialized_config" + FileIO.SEP + "config.tbc");
 		assertTrue(p.getTotalNumberOfButtons() == 12);
 		FileIO.deleteFolder(new File(cf.getConfigDir()));
+		new File("test").mkdirs();
+		FileIO.deleteFolder(new File("test"));
 	}
 }

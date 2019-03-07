@@ -1,10 +1,10 @@
 package externalTests;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
@@ -13,11 +13,11 @@ import main.java.Talkbox.filehandler.FileIO;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FileIOTest {
 	public static String TESTING = "test" + FileIO.SEP + "talkboxtest";
-	private static String RESOURCE = "src" + FileIO.SEP + "test/resources" + FileIO.SEP;
+	private static String RESOURCE = "src" + FileIO.SEP + "test" + FileIO.SEP + "resources" + FileIO.SEP;
 	private static File[] FILES = new File[] { new File(RESOURCE + "test.wav"), new File(RESOURCE + "notwave.m4a"),
 			new File(RESOURCE + "image.png"), new File(RESOURCE + "harbin.jpg") };
 
-	@BeforeClass
+	@BeforeAll
 	public static void setUp() {
 		// creating directory for testing copy methods
 		new File(TESTING + FileIO.SEP + "copy").mkdirs();
@@ -29,7 +29,7 @@ public class FileIOTest {
 	}
 
 	@Test
-	public void testWaveFormat() {
+	public void testA() {
 		// testing wave file
 		assertTrue(FileIO.checkWaveFormat(FILES[0]));
 		assertTrue(FileIO.checkFileFormatByPath(TESTING + FileIO.SEP + "test.wav"));
@@ -39,7 +39,7 @@ public class FileIOTest {
 	}
 
 	@Test
-	public void testCopyFile() {
+	public void testB() {
 		// copy by directory
 		String dest = TESTING + FileIO.SEP + "copy";
 		FileIO.copyFile(TESTING + FileIO.SEP + "test.wav", dest + FileIO.SEP + "test.wav");
@@ -59,7 +59,7 @@ public class FileIOTest {
 	}
 
 	@Test
-	public void testWriteToText() {
+	public void testC() {
 		File textPath = new File(TESTING + FileIO.SEP + "create.txt");
 		FileIO.createTextFile(textPath, "testing123");
 		String[] f = FileIO.readTextFile(textPath);
