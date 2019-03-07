@@ -64,5 +64,6 @@ public class FileIOTest {
 		FileIO.createTextFile(textPath, "testing123");
 		String[] f = FileIO.readTextFile(textPath);
 		assertTrue(f[0].equals("testing123"));
+		FileIO.deleteFolder(new File("test"));
 	}
 }
