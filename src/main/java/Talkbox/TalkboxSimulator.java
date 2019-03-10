@@ -1,6 +1,5 @@
 package main.java.Talkbox;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +18,6 @@ import javax.swing.JPanel;
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.configurer.Configuration;
-import main.java.Talkbox.simulator.SimulatorButton;
 import main.java.Talkbox.simulator.SimulatorPanel;
 
 /**

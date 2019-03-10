@@ -17,10 +17,12 @@ import main.java.Talkbox.musicplayer.MusicPlayer;
 public class SimulatorButton extends JButton implements ActionListener {
 	private MusicPlayer player;
 	private ButtonConfiguration config;
+	private SimulatorPanel panel;
 	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,15);
-	public SimulatorButton() {
+	public SimulatorButton(SimulatorPanel panel) {
 		super("");
 		this.setFont(BUTTON_FONT);
+		this.panel = panel;
 	}
 	public void setConfiguration(ButtonConfiguration config) {
 		this.config = config;
@@ -36,20 +38,30 @@ public class SimulatorButton extends JButton implements ActionListener {
 		this.addActionListener(this);
 	}
 	public boolean isPlaying() {
-		return player.isPlaying();
+		if(player == null) {
+			return false;
+		}
+		else return player.isPlaying();
 	}
 	public void stop() {
+		if(player == null) {
+			return;
+		}
 		player.stop();
 		player.reset();
 	}
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		// If there is no soundplayer, do nothing
-		if (player == null)
+		if (player == null) {
 			return;
+		}
+		//Stop simulator panel music
+		panel.stopMusic();
 		if (player.isPlaying()) {
 			return;
-		} else {
+		} 
+		else {
 			player.play();
 		}
 	}

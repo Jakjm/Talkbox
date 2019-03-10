@@ -55,7 +55,6 @@ public class FileSelector extends JFrame implements ActionListener {
 
 	/**
 	 * Main method for testing
-	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {

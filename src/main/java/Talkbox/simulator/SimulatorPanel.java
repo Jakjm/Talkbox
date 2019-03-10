@@ -18,7 +18,7 @@ import main.java.Talkbox.configurer.Configuration;
  * @author jordan
  */
 public class SimulatorPanel extends JPanel implements ActionListener{
-	SimulatorButton[] buttons;
+	public SimulatorButton[] buttons;
 	private JButton downButton;
 	private JButton upButton;
 	private JButton mainMenuButton;
@@ -37,7 +37,7 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 		buttonsPanel.setLayout(new GridLayout(ROWS,COLS));
 		buttons = new SimulatorButton[COLS];
 		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = new SimulatorButton();
+			buttons[i] = new SimulatorButton(this);
 			buttonsPanel.add(buttons[i]);
 		}
 		
@@ -72,6 +72,17 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 		
 		this.revalidate();
 		this.repaint();
+	}
+	/**
+	 * Stops the playback of all of the buttons.
+	 */
+	public void stopMusic() {
+		//Disabling other buttons
+		for(int i = 0;i < this.buttons.length;i++) {
+			if(this.buttons[i].isPlaying()) {
+				this.buttons[i].stop();
+			}
+		}
 	}
 	/**
 	 * Method for updating the text of the row label
@@ -133,15 +144,18 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 		//Up button
 		if(e.getSource() == this.upButton) {
 			if(this.currentRow == 1)return;
+			stopMusic();
 			switchRow(this.currentRow - 1);
 		}
 		//Down button
 		else if(e.getSource() == this.downButton) {
 			if(this.currentRow == this.numRows)return;
+			stopMusic();
 			switchRow(this.currentRow + 1);
 		}
 		//Main menu button
 		else if(e.getSource() == this.mainMenuButton) {
+			stopMusic();
 			sim.showMain();
 		}
 		
