@@ -34,7 +34,7 @@ import javax.swing.JFrame;
 /**
  * Setup panel for the Talkbox Configurer app
  * @author jordan
- * @version February 18th 2019
+ * @version March 10th 2019
  */
 public class SetUpPanel extends JPanel implements ActionListener {
 	/**The number of rows of buttons**/
@@ -259,9 +259,12 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 	}
 
-	public class SetUpButton extends JButton {
-		private static final String style = "";
-		
+	/**
+	 * Setup button to display the visuals of the button once created
+	 * @author jordan
+	 * @version jakjm
+	 */
+	public class SetUpButton extends JButton {	
 		private ButtonConfiguration config;
 		public SetUpButton() {
 			this.setFont(BUTTON_FONT);
@@ -301,16 +304,25 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		private JPanel buttonsPanel;
 		// Panel for color of button
 		private JPanel currentColorPanel;
-		// Music player for playing back sound
+		/**Music Player for the sound selected**/
 		private MusicPlayer musicPlayer;
-		// Selector frames
+		/**Button color selection frame*/
 		private ColorFrame colorFrame;
+		/**Audio File Selection Frame*/
 		private FileSelector fileSelector;
+		/**Emoji Selection frame*/
 		private EmojiSearchFrame emojiFrame;
-		// Current color, audio file
+		
+		/** Current color that the user has selected for the current SetUpButton */
 		private Color currentColor;
+		
+		/**Current AudioFile that has been selected for the current SetUpButton*/
 		private File currentAudioFile;
+		
+		/**Current button being edited**/
 		private SetUpButton currentButton;
+		
+		/**The default color of JButtons*/
 		private final Color DEFAULT_COLOR = new Color(UIManager.getColor("Button.background").getRGB());
 
 		public SetUpFrame() {
@@ -333,8 +345,19 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			ConfigPanel config = new ConfigPanel();
 			this.setContentPane(config);
 		}
-
+		/**
+		 * Hides the button setup frame, disabling the music player. 
+		 */
 		public void hideSetupFrame() {
+			colorFrame.setVisible(false);
+			emojiFrame.setVisible(false);
+			fileSelector.setVisible(false);
+			//Reset music if it is still playing
+			if(musicPlayer != null && musicPlayer.isPlaying()) {
+				musicPlayer.stop();
+				musicPlayer.reset();
+			}
+
 			this.setVisible(false);
 		}
 
@@ -397,9 +420,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 
 		public void windowClosing(WindowEvent arg0) {
-			colorFrame.setVisible(false);
-			emojiFrame.setVisible(false);
-			fileSelector.setVisible(false);
+			hideSetupFrame();
 		}
 
 		public void windowDeactivated(WindowEvent event) {
@@ -493,8 +514,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 
 		/**
-		 * Color frame for adding color to the button being configured.
-		 * 
+		 * Color frame for changing the color of the button being configured.
 		 * @author jordan
 		 */
 		public class ColorFrame extends JFrame implements ActionListener {
@@ -506,6 +526,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				this.setVisible(false);
 				this.setLayout(new GridLayout(3, 3));
 
+				//Adding the different colors.
 				this.add(new ColorButton(Color.red, this));
 				this.add(new ColorButton(Color.blue, this));
 				this.add(new ColorButton(Color.orange, this));
@@ -518,19 +539,16 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			}
 
 			/**
-			 * Color button for selecting a particular color from the color frame.
-			 * 
+			 * Color button for selecting a particular color from the color frame
 			 * @author jordan
 			 */
 			public class ColorButton extends JButton {
 				private Color thisColor;
-
 				public ColorButton(Color color, ActionListener listener) {
 					thisColor = color;
 					this.setIcon(createColorButtonIcon(color, 60));
 					this.addActionListener(listener);
 				}
-
 				public Color getColor() {
 					return thisColor;
 				}

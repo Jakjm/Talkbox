@@ -1,17 +1,20 @@
 package main.java.Talkbox.browsing;
 
+import javax.imageio.ImageIO;
 /**
  * Basic GUI class for File selection.
  * @author jakjm
  * @version January 31st 2019
  */
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -20,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class FileSelector extends JFrame implements ActionListener {
+	
 	private static final long serialVersionUID = 1L;
 	/** Backmost panel of the panel. */
 	private JPanel outerPanel;
@@ -78,7 +82,7 @@ public class FileSelector extends JFrame implements ActionListener {
 		// Default configuration for the window.
 		super("Open File");
 		this.listener = listener;
-		this.setSize(600, 300);
+		this.setSize(650, 400);
 		this.setVisible(false);
 		this.setEnabled(true);
 		this.setResizable(false);
@@ -100,16 +104,15 @@ public class FileSelector extends JFrame implements ActionListener {
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new GridLayout(1, 2));
 
-		backButton = new JButton();
-		backButton.add(new JLabel("<- Go Back ->"));
+		backButton = new JButton("Parent Folder");
 		backButton.addActionListener(this);
 		backButton.setVisible(true);
 		backButton.setEnabled(true);
 		buttonsPanel.add(backButton);
+		
 
 		// Buttons for the hud
-		returnHome = new JButton();
-		returnHome.add(new JLabel("Back to Home"));
+		returnHome = new JButton("Back to Home");
 		returnHome.addActionListener(this);
 		returnHome.setVisible(true);
 		returnHome.setEnabled(true);
@@ -121,16 +124,14 @@ public class FileSelector extends JFrame implements ActionListener {
 
 		// Inner Panel for Buttons
 		innerPanel = new JPanel();
-		innerPanel.setSize((int) (0.8 * outerPanel.getSize().getWidth()),
-				(int) (0.6 * outerPanel.getSize().getHeight()));
 		innerPanel.setVisible(true);
-		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+		innerPanel.setLayout(new GridLayout(-1,2));
 
 		// Configuring the inner scroll pane, which traverses the inner panel.
 		innerPaneScroll = new JScrollPane();
 		innerPaneScroll.setViewportView(innerPanel);
 		innerPaneScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		innerPaneScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		innerPaneScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		innerPaneScroll.setVisible(true);
 		outerPanel.add(innerPaneScroll, BorderLayout.CENTER);
 
@@ -176,7 +177,7 @@ public class FileSelector extends JFrame implements ActionListener {
 		outerPanel.revalidate();
 
 		// Sets the directory label to the current directory we are in.
-		directoryLabel.setText("Current Directory: " + currentFile.getPath() + fileSep);
+		directoryLabel.setText("Current Path: " + currentFile.getPath());
 	}
 
 	public void setSelectionListener(SelectionListener listener) {
@@ -239,7 +240,6 @@ public class FileSelector extends JFrame implements ActionListener {
 	 */
 	private class FileButton extends JButton implements ActionListener {
 		private static final long serialVersionUID = 1L;
-		private JLabel buttonLabel;
 		private File thisFile;
 		private final String[] PICTURE_FILE_TYPES = { "jpg", "bmp", "jpeg", "png" };
 		private final String[] SOUND_FILE_TYPES = { "wav", "mp3" };
@@ -258,17 +258,10 @@ public class FileSelector extends JFrame implements ActionListener {
 		/** The constant for storing that the file is a text file. **/
 		public static final int TEXT = 4;
 
-		/** The constant for telling the user that the file is a picture file **/
-		public static final String PIC_TEXT = " (Picture)";
-		/** The constant for telling the user that the file is a sound file **/
-		public static final String SOUND_TEXT = " (Sound)";
-		/** The constant for telling the user that the file is a directory **/
-		public static final String DIR_TEXT = " (Directory)";
-		/** The constant for telling the user that the file is a directory **/
-		public static final String TEXT_TEXT = " (Text)";
-		/** The constant for telling the user that the file is an unknown file **/
-		public static final String UNK_TEXT = " (Unknown)";
 
+		
+		
+		
 		private FileSelector selector;
 
 		/**
@@ -284,20 +277,22 @@ public class FileSelector extends JFrame implements ActionListener {
 			this.setEnabled(true);
 			this.addActionListener(this);
 			// Determines the type of file this button is for.
-			String type = determineType();
+			determineType();
 
 			// Adding a button to select this file/directory.
-			buttonLabel = new JLabel(file.getName() + type);
-			this.add(buttonLabel);
+			String buttonText = String.format("<html><body>%s</body></html>",file.getName());
+			this.setText(buttonText);
+			this.setVerticalTextPosition(SwingConstants.BOTTOM);
+			this.setHorizontalTextPosition(SwingConstants.CENTER);
 			this.selector = selector;
-
 		}
 
-		public String determineType() {
+		public void determineType() {
 			// Checking if the file is a directory.
 			if (thisFile.isDirectory()) {
 				type = DIRECTORY;
-				return DIR_TEXT;
+				this.setIcon(FileIcons.FOLDER_ICON);
+				return;
 			}
 			String fileName = thisFile.getName();
 			String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -305,27 +300,31 @@ public class FileSelector extends JFrame implements ActionListener {
 			for (int i = 0; i < PICTURE_FILE_TYPES.length; i++) {
 				if (fileExtension.equals(PICTURE_FILE_TYPES[i])) {
 					type = PICTURE;
-					return PIC_TEXT;
+					this.setIcon(FileIcons.IMAGE_ICON);
+					return;
 				}
 			}
 			// Checking if the file is a sound file.
 			for (int i = 0; i < SOUND_FILE_TYPES.length; i++) {
 				if (fileExtension.equals(SOUND_FILE_TYPES[i])) {
 					type = SOUND;
-					return SOUND_TEXT;
+					this.setIcon(FileIcons.SOUND_ICON);
+					return;
 				}
 			}
 			// Checking if the file is a text file.
 			for (int i = 0; i < TEXT_FILE_TYPES.length; i++) {
 				if (fileExtension.equals(TEXT_FILE_TYPES[i])) {
 					type = TEXT;
-					return TEXT_TEXT;
+					this.setIcon(FileIcons.TEXT_ICON);
+					return;
 				}
 			}
 
 			// If we do not know the filetype.
 			type = UNKNOWN;
-			return UNK_TEXT;
+			this.setIcon(FileIcons.UNKNOWN_ICON);
+			return;
 		}
 
 		/**

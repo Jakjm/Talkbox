@@ -35,7 +35,13 @@ public class SimulatorButton extends JButton implements ActionListener {
 		}
 		this.addActionListener(this);
 	}
-
+	public boolean isPlaying() {
+		return player.isPlaying();
+	}
+	public void stop() {
+		player.stop();
+		player.reset();
+	}
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		// If there is no soundplayer, do nothing

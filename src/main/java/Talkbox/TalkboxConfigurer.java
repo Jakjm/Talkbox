@@ -23,7 +23,6 @@ import main.java.Talkbox.configurer.SetUpPanel;
 
 /**
  * Main class for the Talkbox Configuration App
- * 
  * @author jordan
  * @version January 31st 2019
  */

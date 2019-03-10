@@ -14,9 +14,8 @@ import main.java.Talkbox.configurer.Configuration;
 
 /**
  * Talkbox panel for the talkbox simulator panel
- * 
+ * @version March 10th 2019
  * @author jordan
- *
  */
 public class SimulatorPanel extends JPanel implements ActionListener{
 	SimulatorButton[] buttons;
@@ -43,33 +42,33 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 		}
 		
 		//Setting up row panel
-		JPanel rowPanel = new JPanel();
-		rowPanel.setLayout(new GridLayout(1,5));
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1,5));
 		mainMenuButton = new JButton("Back to Main Menu");
 		mainMenuButton.addActionListener(this);
-		rowPanel.add(mainMenuButton);
+		buttonPanel.add(mainMenuButton);
 		
-		rowPanel.add(new JLabel(" Switch Rows:"));
+		buttonPanel.add(new JLabel(" Switch Sets:"));
 		
 		//Creating the down button
-		downButton = new JButton("View Lower Row");
+		downButton = new JButton("View Lower Set");
 		downButton.addActionListener(this);
-		rowPanel.add(downButton);
+		buttonPanel.add(downButton);
 		
 		
 		//Creating the up button
-		upButton = new JButton("View Higher Row");
+		upButton = new JButton("View Higher Set");
 		upButton.addActionListener(this);
-		rowPanel.add(upButton);
+		buttonPanel.add(upButton);
 		
 		
 		
 		//Adding the row label
 		rowLabel = new JLabel();
-		rowPanel.add(rowLabel);
+		buttonPanel.add(rowLabel);
 		
 		this.add(buttonsPanel,BorderLayout.CENTER);
-		this.add(rowPanel,BorderLayout.SOUTH);
+		this.add(buttonPanel,BorderLayout.SOUTH);
 		
 		this.revalidate();
 		this.repaint();
@@ -78,7 +77,7 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 	 * Method for updating the text of the row label
 	 */
 	public void updateRowLabel() {
-		rowLabel.setText(String.format(" Row: %d / %d",this.currentRow,this.numRows));
+		rowLabel.setText(String.format(" Set: %d / %d",this.currentRow,this.numRows));
 	}
 	/**
 	 * Setting up the simulator with the talkbox configuration

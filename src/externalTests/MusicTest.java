@@ -11,7 +11,7 @@ public class MusicTest {
 	@Test
 	public void test1() {
 		try {
-			MusicPlayer player = new MusicPlayer("src/test/resources/test.wav");
+			MusicPlayer player = new MusicPlayer("/test/resources/test.wav");
 			// If the player is considered playing before starting, fail.
 			if (player.isPlaying()) {
 				fail();
