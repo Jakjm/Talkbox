@@ -113,26 +113,26 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		
 		
 		//Add rows button
-		addButtons = new JButton("Add Row of Buttons");
+		addButtons = new JButton("Add Set of Buttons");
 		addButtons.setFont(OUTER_FONT);
 		addButtons.addActionListener(this);
 		bottomPanel.add(addButtons);
 				
 		//Delete rows button
-		removeButtons = new JButton("Remove This Row");
+		removeButtons = new JButton("Remove This Set");
 		removeButtons.setFont(OUTER_FONT);
 		removeButtons.addActionListener(this);
 		bottomPanel.add(removeButtons);
 		
 		//Down button
-		downButton = new JButton("View Lower Row");
+		downButton = new JButton("View Lower Set");
 		downButton.setFont(OUTER_FONT);
 		downButton.addActionListener(this);
 		bottomPanel.add(downButton);
 		
 		
 		//Creating the up button
-		upButton = new JButton("View Higher Row");
+		upButton = new JButton("View Higher Set");
 		upButton.setFont(OUTER_FONT);
 		upButton.addActionListener(this);
 		bottomPanel.add(upButton);
@@ -153,7 +153,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	 * Updating the text of the current row label
 	 */
 	public void updateRowLabel() {
-		rowLabel.setText(String.format(" Row: %d / %d",this.currentRow,this.numRows));
+		rowLabel.setText(String.format(" Set: %d / %d",this.currentRow,this.numRows));
 	}
 	
 	/**
@@ -221,6 +221,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		//If the button pressed was the back button...
 		if (event.getSource() == backButton) {
+			setUpFrame.hideSetupFrame();
 			panel.showMainMenu();
 		}
 		//Otherwise if it was one of the setup buttons
@@ -233,11 +234,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		//Up button
 		else if(event.getSource() == upButton) {
 			if(this.currentRow == 1)return;
+			setUpFrame.hideSetupFrame();
 			switchRow(this.currentRow - 1);
 		}
 		//Down button
 		else if(event.getSource() == downButton) {
 			if(this.currentRow == this.numRows)return;
+			setUpFrame.hideSetupFrame();
 			switchRow(this.currentRow + 1);
 		}
 		//Add button set
@@ -503,8 +506,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				} else if (event.getSource() == selectSound) {
 					fileSelector.setVisible(true);
 				} else if (event.getSource() == playSound) {
-					if (musicPlayer != null)
+					if (musicPlayer != null) {
 						musicPlayer.play();
+					}
 				} else if (event.getSource() == confirmSetup) {
 					currentButton.getConfiguration().setButtonValues(nameField.getText(),currentColor,currentAudioFile);
 					currentButton.setConfiguration(currentButton.getConfiguration());

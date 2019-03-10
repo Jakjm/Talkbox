@@ -23,7 +23,9 @@ public class SimulatorPanel extends JPanel implements ActionListener{
 	private JButton upButton;
 	private JButton mainMenuButton;
 	private JLabel rowLabel;
+	/**The number of rows displayed at any one time**/
 	private static final int ROWS = 1;
+	/**The number of cols displayed at any one time**/
 	private static final int COLS = 6;
 	private int currentRow = 1;
 	private int numRows;

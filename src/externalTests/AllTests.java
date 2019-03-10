@@ -12,7 +12,6 @@ import main.java.Talkbox.filehandler.FileIO;
 
 /**
  * Tests for FileIO, ConfigSerialization, and Configuration.
- *
  */
 @RunWith(Suite.class)
 @SuiteClasses({MusicTest.class,SelectorTest.class, ConfigSerializationTest.class, FileIOTest.class,ConfigurationTest.class, MusicRecorderTest.class })
