@@ -44,6 +44,7 @@ task simJar(type: Jar){
 	doLast {
         copy {
             from 'build/libs/Talkbox Simulator.jar'
+            fileMode 0777
             into "Executables"
         }
     }
@@ -62,6 +63,7 @@ jar{
 	doLast {
         copy {
             from 'build/libs/Talkbox Configurer.jar'
+            fileMode 0777
             into "Executables"
         }
     }
