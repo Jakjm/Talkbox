@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -144,5 +145,19 @@ public class FileIO {
 		}
 		folder.delete();
 	}
-
+	/**
+	 * Returns whether a file is an image.
+	 * @param imageFile The image file.
+	 * @return True if the file is an image.
+	 */
+	public static boolean checkImageFile(File imageFile) {
+		boolean result = false;
+		try {
+			result = ImageIO.read(imageFile) != null;
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

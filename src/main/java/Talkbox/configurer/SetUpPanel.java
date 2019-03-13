@@ -282,9 +282,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 
 		public void adaptToConfig() {
-			this.setBackground(config.buttonColor);
+			this.setBackground(config.getButtonColor());
 			// Adjusting the text to use html that way the body linewraps
-			String adjustedText = String.format("<html><body>%s</body></html>", config.buttonText);
+			String adjustedText = String.format("<html><body>%s</body></html>", config.getButtonText());
 			this.setText(adjustedText);
 		}
 	}
@@ -372,9 +372,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		 */
 		public void openSetupFrame(SetUpButton button, ButtonConfiguration config) {
 			this.currentButton = button;
-			this.currentColor = config.buttonColor;
+			this.currentColor = config.getButtonColor();
 			this.currentColorPanel.setBackground(this.currentColor);
-			this.currentAudioFile = config.soundFile;
+			this.currentAudioFile = config.getSoundFile();
 			if (this.currentAudioFile != null) {
 				currentPath.setText("Sound Path: " + this.currentAudioFile.getPath());
 				musicPlayer = new MusicPlayer(this.currentAudioFile);
@@ -382,7 +382,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				currentPath.setText("Sound Path:(none)");
 				musicPlayer = null;
 			}
-			nameField.setText(config.buttonText);
+			nameField.setText(config.getButtonText());
 		}
 
 		public class OpenListener implements SelectionListener {
@@ -510,7 +510,11 @@ public class SetUpPanel extends JPanel implements ActionListener {
 						musicPlayer.play();
 					}
 				} else if (event.getSource() == confirmSetup) {
-					currentButton.getConfiguration().setButtonValues(nameField.getText(),currentColor,currentAudioFile);
+					ButtonConfiguration button = currentButton.getConfiguration();
+					button.setText(nameField.getText());
+					button.addColor(currentColor);
+					button.addSoundFile(currentAudioFile);
+					// TODO: local variable for selected image --> button.addImageFile(selectedImage)
 					currentButton.setConfiguration(currentButton.getConfiguration());
 					hideSetupFrame();
 				}

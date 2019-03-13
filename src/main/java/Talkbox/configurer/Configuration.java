@@ -113,7 +113,7 @@ public class Configuration implements TalkBoxConfiguration {
 		new File(dir.concat(FileIO.SEP + "image")).mkdir();
 		// create new button configuration: this creates the text file with the
 		// associated text, color, and sound.
-		ButtonConfiguration b = new ButtonConfiguration("Button", null, null, new File(dir));
+		ButtonConfiguration b = new ButtonConfiguration("Button", new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
 		// write the text file
