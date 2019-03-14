@@ -3,6 +3,8 @@ package main.java.Talkbox.simulator;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.JButton;
 
 import main.java.Talkbox.configurer.ButtonConfiguration;
@@ -27,11 +29,12 @@ public class SimulatorButton extends JButton implements ActionListener {
 	public void setConfiguration(ButtonConfiguration config) {
 		this.config = config;
 		// Adjusting the text to use html that way the body linewraps
-		String adjustedText = String.format("<html><body>%s</body></html>", config.buttonText);
+		String adjustedText = String.format("<html><body>%s</body></html>", config.getButtonText());
 		this.setText(adjustedText);
-		this.setBackground(config.buttonColor);
-		if (config.soundFile != null) {
-			player = new MusicPlayer(config.soundFile);
+		this.setBackground(config.getButtonColor());
+		File soundFile = config.getSoundFile();
+		if (soundFile != null) {
+			player = new MusicPlayer(config.getSoundFile());
 		} else {
 			player = null;
 		}

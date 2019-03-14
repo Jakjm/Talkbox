@@ -64,6 +64,13 @@ public class FileIOTest {
 		FileIO.createTextFile(textPath, "testing123");
 		String[] f = FileIO.readTextFile(textPath);
 		assertTrue(f[0].equals("testing123"));
+	}
+	@Test
+	public void testD() {
+		File harbin = new File("src/test/resources/harbin.jpg");
+		File notImage = new File("src/test/resources/notwave.m4a");
+		assertTrue(FileIO.checkImageFile(harbin));
+		assertFalse(FileIO.checkImageFile(notImage));
 		FileIO.deleteFolder(new File("test"));
 	}
 }

@@ -1,10 +1,8 @@
 package main.java.Talkbox.configurer;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 import main.java.Talkbox.filehandler.FileIO;
 
@@ -116,8 +114,6 @@ public class Configuration implements TalkBoxConfiguration {
 		ButtonConfiguration b = new ButtonConfiguration("Button", new File(dir));
 		// add button config to the array
 		this.buttonConfigs[i] = b;
-		// write the text file
-		b.writeButtonTxt();
 	}
 
 	/**

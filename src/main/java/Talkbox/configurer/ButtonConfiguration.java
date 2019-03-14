@@ -8,63 +8,78 @@ import javax.swing.UIManager;
 import main.java.Talkbox.filehandler.FileIO;
 
 /**
- * TODO: Constructors were too long with lots of parameters. Specifically we are initializing a lot of things at different
- * times (like the sound and image file). So I've made getters instead. Because of this, every time we're done building a 
- * ButtonConfiguration, we'll have to call writeButtonTxt() to update the button.txt file. This is incomplete btw.
+ * This class sets the configuration for each virtual button on the panel. Each virtual button
+ * is linked to a button configuration folder in which a text-file holds information about
+ * its text, color, sound file and image file.
  * @author rtalkad
  *
  */
 public class ButtonConfiguration {
 	public static final Color DEFAULT_COLOR = UIManager.getColor("Button.background");
 	private String buttonText;
-	private Color buttonColor = DEFAULT_COLOR;
-	private File soundFile;
 	private File buttonDir;
-	private File imageFile;
+	private File buttonTxtDir;
+	private Color buttonColor = DEFAULT_COLOR;
+	private File soundFile = null;
+	private File imageFile = null;
 
 	/**
 	 * Public constructor that sets the button's text, color, audio file, and button
 	 * directory.
 	 * 
 	 * @param buttonText The text to be included.
-	 * @param color		 The color of the button.
+	 * @param color      The color of the button.
 	 * @param buttonDir  The path to the button configuration directory.
 	 */
 	public ButtonConfiguration(String buttonText, File buttonDir) {
 		this.buttonText = buttonText;
 		this.buttonDir = buttonDir;
-		this.imageFile = null;
+		this.buttonTxtDir = new File(this.buttonDir.getPath() + FileIO.SEP + "button.txt");
 		this.writeButtonTxt();
 	}
-	
+
 	/**
 	 * Add sound file to the button configuration.
+	 * 
 	 * @param f The sound file.
 	 */
-	public void addSoundFile(File f) {
-		if (f != null) {
+	public void addSoundFile(File sound) {
+		if (sound != null) {
 			this.soundFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
-			FileIO.copyFile(f, this.soundFile);
+			FileIO.copyFile(sound, this.soundFile);
 		}
 	}
-	
+
 	/**
 	 * Add image file to the button configuration.
+	 * 
+	 * @param image The image file (JPEG or PNG).
 	 */
-	public void addImageFile(File f) {
-		this.imageFile = f;
+	public void addImageFile(File image) {
+		if (image != null) {
+			this.imageFile = image;
+			FileIO.copyFile(image,
+					new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(image)));
+			FileIO.editTextLine(this.buttonTxtDir, "1", 2);
+		}
 	}
+
 	/**
 	 * Add color to button.
+	 * 
+	 * @param col The color object.
 	 */
 	public void addColor(Color col) {
 		this.buttonColor = col;
+		FileIO.editTextLine(this.buttonTxtDir, String.valueOf(this.buttonColor.getRGB()), 1);
 	}
+
 	/**
 	 * Set the button's text.
 	 */
 	public void setText(String txt) {
 		this.buttonText = txt;
+		FileIO.editTextLine(this.buttonTxtDir, this.buttonText, 0);
 	}
 
 	/**
@@ -76,15 +91,15 @@ public class ButtonConfiguration {
 	 */
 	public static ButtonConfiguration readButtonTxt(File buttonDir) {
 		String[] input = FileIO.readTextFile(new File(buttonDir + FileIO.SEP + "button.txt"));
-		// receive name of the button, the color, and whether it has a sound file or not
+		// Reading text file for button text, color, sound, and image
 		File sound = null;
 		File image = null;
 		if (Integer.parseInt(input[2]) == 1) {
 			sound = new File(buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 		}
 		if (Integer.parseInt(input[3]) == 1) {
-			//TODO: 
-			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + "image.*");
+			File f = new File(buttonDir + FileIO.SEP + "image").listFiles()[0];
+			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + f.getName());
 		}
 		ButtonConfiguration bc = new ButtonConfiguration(input[0], buttonDir);
 		bc.addColor(new Color(Integer.parseInt(input[1])));
@@ -92,58 +107,47 @@ public class ButtonConfiguration {
 		bc.addImageFile(image);
 		return bc;
 	}
-	/**
-	 * Returns the sound file of the button.
-	 */
-	public File getSoundFile() {
-		return this.soundFile;
-	}
-	
+
+
 	/**
 	 * Changes the directory of the button and its sound file.
+	 * 
 	 * @param newDir The new button_config_ directory.
 	 */
 	public void changeDirectory(File newDir) {
 		boolean success = this.buttonDir.renameTo(newDir);
-		if(!(success)) {
+		if (!(success)) {
 			throw new RuntimeException("Error");
 		}
 		// change the directory of the audio file and button_config_
 		else {
 			this.buttonDir = newDir;
-			if(this.soundFile != null) {
+			if (this.soundFile != null) {
 				this.addSoundFile(new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav"));
 			}
 		}
 	}
-	/**
-	 * Updates the button.txt file's button text, color in RGB, two binary integers representign
-	 * whether there are associated sound and image files with the button.
-	 * 
-	 */
-	public void writeButtonTxt() {
-		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
-		StringBuilder config = new StringBuilder(this.buttonText + '\n' + this.buttonColor.getRGB() + '\n');
-		config.append(this.soundFile != null ? "1" : "0");
-		config.append(this.imageFile != null ? "1" : "0");
-		FileIO.createTextFile(new File(textDir), config.toString());
-	}
-	
+
+
 	/**
 	 * String representation of buttons. Used in testing.
 	 */
 	@Override
 	public String toString() {
 		String audioName = this.soundFile != null ? this.soundFile.getName() : "null";
-		String format = String.format("Audio file is [%s]\nColor is [%s]\nText is [%s]\n", audioName, this.buttonColor.toString(), this.buttonText);
+		String imageName = this.imageFile != null ? this.imageFile.getName() : "null";
+		String format = String.format("Audio file is [%s]\nSound file is [%s]\nColor is [%s]\nText is [%s]\n",
+				audioName, imageName, this.buttonColor.toString(), this.buttonText);
 		return format;
 	}
+
 	/**
 	 * @return The button's color.
 	 */
 	public Color getButtonColor() {
 		return this.buttonColor;
 	}
+
 	/**
 	 * @return The button's text.
 	 */
@@ -156,5 +160,26 @@ public class ButtonConfiguration {
 	 */
 	public File returnDir() {
 		return this.buttonDir;
+	}
+	
+	/**
+	 * @return The sound file of the button.
+	 */
+	public File getSoundFile() {
+		return this.soundFile;
+	}
+	
+	/**
+	 * Intializes the button.txt file's. This contains the button's text, color in RGB,
+	 * and two binaries specifying whether the button has associated sound and image
+	 * files.
+	 */
+	private void writeButtonTxt() {
+		// The text file consists of four lines consisting of the button text, color, and whether
+		// it has sound and image files
+		String textDir = this.buttonDir + FileIO.SEP + "button.txt";
+		StringBuilder config = new StringBuilder(this.buttonText + '\n' + this.buttonColor.getRGB() + '\n');
+		config.append("0\n0");
+		FileIO.createTextFile(new File(textDir), config.toString());
 	}
 }

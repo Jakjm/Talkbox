@@ -114,21 +114,34 @@ public class FileIO {
 	/**
 	 * Reads the specified text file and returns an array of each line.
 	 * @param toRead The file to read.
+	 * @param lines The number of lines to read and return.
 	 * @return The array of lines.
 	 */
 	public static String[] readTextFile(File toRead) {
-		String[] data = new String[3];
+		String[] content = new String[4];
 		String line;
 		try (BufferedReader br = new BufferedReader(new FileReader(toRead))) {
 			int i = 0;
-			while ((line = br.readLine()) != null) {
-				data[i++] = line;
+			while (((line = br.readLine()) != null) && i < 4) {
+				content[i++] = line;
 			}
 		} catch (IOException e) {
 		}
-		return data;
+		return content;
 
 	}
+	/**
+	 * Edit the specified line of the text file.
+	 * @param toEdit The text file to edit.
+	 * @param newLine The replacement string.
+	 * @param lineNumber The line to replace.
+	 */
+	public static void editTextLine(File toEdit, String newLine, int lineNumber) {
+		String[] content = readTextFile(toEdit);
+		content[lineNumber] = newLine;
+		createTextFile(toEdit, String.join("/n", content));
+	}
+	
 
 	/**
 	 * Deletes the specified folder
@@ -159,5 +172,12 @@ public class FileIO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	/**
+	 * Returns the extension of the file name.
+	 */
+	public static String getExt(File file) {
+		String fileName = file.getName();
+		return fileName.substring(fileName.lastIndexOf("."));
 	}
 }
