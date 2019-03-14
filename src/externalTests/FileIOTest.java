@@ -73,4 +73,11 @@ public class FileIOTest {
 		assertFalse(FileIO.checkImageFile(notImage));
 		FileIO.deleteFolder(new File("test"));
 	}
+	@Test
+	public void testE() {
+		File txtTest = new File("test" + FileIO.SEP + "testReplace");
+		FileIO.createTextFile(txtTest, "erectus/nsapiens/nhabilis/npan");
+		FileIO.editTextLine(txtTest, "neanderthal", 2);
+		assertTrue(FileIO.readTextFile(txtTest)[2].contentEquals("neanderthal"));
+	}
 }

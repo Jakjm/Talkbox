@@ -48,6 +48,7 @@ public class ButtonConfiguration {
 			this.soundFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 			FileIO.copyFile(sound, this.soundFile);
 		}
+		FileIO.editTextLine(this.buttonTxtDir, "1", 2);
 	}
 
 	/**
@@ -170,8 +171,8 @@ public class ButtonConfiguration {
 	}
 	
 	/**
-	 * Intializes the button.txt file's. This contains the button's text, color in RGB,
-	 * and two binaries specifying whether the button has associated sound and image
+	 * Intializes the button.txt file. This contains the button's text, color in RGB,
+	 * and two integers (0 or 1) specifying whether the button has associated sound and image
 	 * files.
 	 */
 	private void writeButtonTxt() {
