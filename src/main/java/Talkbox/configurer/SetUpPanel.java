@@ -322,6 +322,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		/**Current AudioFile that has been selected for the current SetUpButton*/
 		private File currentAudioFile;
 		
+		/** Current image file that has been selected for the current button */
+		private File currentImageFile;
+		
 		/**Current button being edited**/
 		private SetUpButton currentButton;
 		
@@ -515,7 +518,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					button.addColor(currentColor);
 					button.addSoundFile(currentAudioFile);
 					// TODO: set local variable for selected image --> button.addImageFile(selectedImage)
-//					button.addImageFile(image);
+//					button.addImageFile(currentImageFile);
 					currentButton.setConfiguration(currentButton.getConfiguration());
 					hideSetupFrame();
 				}

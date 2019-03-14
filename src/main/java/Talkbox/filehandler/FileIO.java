@@ -96,7 +96,7 @@ public class FileIO {
 	}
 
 	/**
-	 * Creates and writes content to a text file.
+	 * Creates and writes content to a text file. Each line should be separated by a new line character.
 	 * 
 	 * @param toWrite The file to write to.
 	 * @param content The string to write.
@@ -131,7 +131,7 @@ public class FileIO {
 
 	}
 	/**
-	 * Edit the specified line of the text file.
+	 * Edit the specified line of the text file. Do not include the new line character.
 	 * @param toEdit The text file to edit.
 	 * @param newLine The replacement string.
 	 * @param lineNumber The line to replace.
@@ -139,7 +139,12 @@ public class FileIO {
 	public static void editTextLine(File toEdit, String newLine, int lineNumber) {
 		String[] content = readTextFile(toEdit);
 		content[lineNumber] = newLine;
-		createTextFile(toEdit, String.join("/n", content));
+		String newTxt = "";
+		for (int i = 0; i < 3; i++) {
+			newTxt += content[i] + "\n";
+		}
+		newTxt += content[3];
+		createTextFile(toEdit, newTxt);
 	}
 	
 

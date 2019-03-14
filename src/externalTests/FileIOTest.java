@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
+import java.util.Arrays;
 
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
@@ -71,13 +72,13 @@ public class FileIOTest {
 		File notImage = new File("src/test/resources/notwave.m4a");
 		assertTrue(FileIO.checkImageFile(harbin));
 		assertFalse(FileIO.checkImageFile(notImage));
-		FileIO.deleteFolder(new File("test"));
 	}
 	@Test
 	public void testE() {
-		File txtTest = new File("test" + FileIO.SEP + "testReplace");
-		FileIO.createTextFile(txtTest, "erectus/nsapiens/nhabilis/npan");
+		File txtTest = new File("test" + FileIO.SEP + "testReplace.txt");
+		FileIO.createTextFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' +  "habilis" + '\n' + "pan");
 		FileIO.editTextLine(txtTest, "neanderthal", 2);
-		assertTrue(FileIO.readTextFile(txtTest)[2].contentEquals("neanderthal"));
+		assertTrue(FileIO.readTextFile(txtTest)[2].equals("neanderthal"));
+		FileIO.deleteFolder(new File("test"));
 	}
 }
