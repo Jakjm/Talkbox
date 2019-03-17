@@ -26,6 +26,7 @@ import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.emojiPanel.EmojiSearchPane.EmojiSearchFrame;
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.musicplayer.MusicPlayer;
+import main.java.Talkbox.recording.MusicRecorder;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -226,6 +227,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 		//Otherwise if it was one of the setup buttons
 		else if(event.getSource() instanceof SetUpButton){
+			setUpFrame.hideSetupFrame();
 			setUpFrame.setVisible(true);
 			setUpFrame.openSetupFrame((SetUpButton) event.getSource(),
 					((SetUpButton) event.getSource()).getConfiguration());
@@ -299,12 +301,21 @@ public class SetUpPanel extends JPanel implements ActionListener {
 
 		private BasicField nameField;
 		private JButton emojiButton;
+		
+		/**Button for selecting sound from a pre-existing audio file.**/
 		private JButton selectSound;
+		
+		/**Button for recording sound directly to the button**/
+		private JButton recordSound;
+		
+		/**Button for playing the currently selected sound**/
 		private JButton playSound;
 		private JLabel currentPath;
 		private JButton setColor;
 		private JButton confirmSetup;
 		private JPanel buttonsPanel;
+		
+		
 		// Panel for color of button
 		private JPanel currentColorPanel;
 		/**Music Player for the sound selected**/
@@ -316,11 +327,15 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		/**Emoji Selection frame*/
 		private EmojiSearchFrame emojiFrame;
 		
+		private RecordingFrame recordingFrame;
+		
 		/** Current color that the user has selected for the current SetUpButton */
 		private Color currentColor;
 		
 		/**Current AudioFile that has been selected for the current SetUpButton*/
 		private File currentAudioFile;
+		
+		
 		
 		/** Current image file that has been selected for the current button */
 		private File currentImageFile;
@@ -343,6 +358,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			emojiFrame = new EmojiSearchFrame(new EmojiListener());
 			colorFrame = new ColorFrame();
 			fileSelector = new FileSelector(new OpenListener(), FileSelector.SOUND);
+			recordingFrame = new RecordingFrame();
 
 			// Getting default color for a jbutton
 			currentColor = DEFAULT_COLOR;
@@ -358,12 +374,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			colorFrame.setVisible(false);
 			emojiFrame.setVisible(false);
 			fileSelector.setVisible(false);
+			recordingFrame.hideRecordingFrame();
+			
 			//Reset music if it is still playing
 			if(musicPlayer != null && musicPlayer.isPlaying()) {
 				musicPlayer.stop();
 				musicPlayer.reset();
 			}
-
 			this.setVisible(false);
 		}
 
@@ -416,30 +433,24 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			this.currentButton = currentButton;
 		}
 
-		/*
-		 * Window state changed methods
+		
+		/**
+		 * Method for handling when the window has been closed.
+		 * Used by the WindowListener interface that the SetupFrame implements.
 		 */
-		public void windowActivated(WindowEvent arg0) {
-		}
-
-		public void windowClosed(WindowEvent event) {
-		}
-
 		public void windowClosing(WindowEvent arg0) {
 			hideSetupFrame();
 		}
 
-		public void windowDeactivated(WindowEvent event) {
-		}
-
-		public void windowDeiconified(WindowEvent event) {
-		}
-
-		public void windowIconified(WindowEvent event) {
-		}
-
-		public void windowOpened(WindowEvent event) {
-		}
+		/*
+		 * Window state changed methods
+		 */
+		public void windowActivated(WindowEvent arg0) {}
+		public void windowClosed(WindowEvent event) {}
+		public void windowDeactivated(WindowEvent event) {}
+		public void windowDeiconified(WindowEvent event) {}
+		public void windowIconified(WindowEvent event) {}
+		public void windowOpened(WindowEvent event) {}
 
 		public class ConfigPanel extends JPanel implements ActionListener {
 			public ConfigPanel() {
@@ -460,17 +471,40 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				buttonsPanel = new JPanel();
 				buttonsPanel.setLayout(new GridLayout(4, 1));
 
+				
+				//Panel concerning button sound.
 				JPanel soundButtons = new JPanel();
 				soundButtons.setLayout(new GridLayout(1, 2));
-				// Adding a sound selection button and a label displaying the current selection
-				selectSound = new JButton("Select Sound");
-				selectSound.addActionListener(this);
-				soundButtons.add(selectSound);
+				
 				// Adding a play sound button
 				playSound = new JButton("Play Sound");
 				playSound.addActionListener(this);
 				soundButtons.add(playSound);
+				
+				
+				
+				//Panel for selecting the sound for the button
+				JPanel soundSelection = new JPanel();
+				soundSelection.setLayout(new GridLayout(2,1));
+				
+				//Adding a sound selection button and a label displaying the current selection
+				selectSound = new JButton("Select Sound");
+				selectSound.setForeground(Color.red);
+				selectSound.addActionListener(this);
+				soundSelection.add(selectSound);
+				
+				//Adding a record sound button
+				recordSound = new JButton("Record Sound");
+				recordSound.addActionListener(this);
+				recordSound.setForeground(Color.red);
+				soundSelection.add(recordSound);
+				
+				
+				soundButtons.add(soundSelection);
 				buttonsPanel.add(soundButtons);
+				
+				
+				
 
 				currentPath = new JLabel("Sound Path:(none)");
 				buttonsPanel.add(currentPath);
@@ -498,17 +532,37 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					// Bringing up color frame
 					colorFrame.setLocation(new Point(getSetupLocation().x + 60, getSetupLocation().y + 200));
 					colorFrame.setVisible(true);
+					
 					// Hiding other frames
 					emojiFrame.setVisible(false);
+					fileSelector.setVisible(false);
+					recordingFrame.hideRecordingFrame();
 				} else if (event.getSource() == emojiButton) {
 					// Bringing up emoji pane
 					emojiFrame.setLocation(new Point(getSetupLocation().x + 200, getSetupLocation().y + 60));
 					emojiFrame.setVisible(true);
+					
 					// Hiding other frames
+					fileSelector.setVisible(false);
 					colorFrame.setVisible(false);
+					recordingFrame.hideRecordingFrame();
 				} else if (event.getSource() == selectSound) {
 					fileSelector.setVisible(true);
-				} else if (event.getSource() == playSound) {
+					
+					// Hiding other frames
+					colorFrame.setVisible(false);
+					emojiFrame.setVisible(false);
+					recordingFrame.hideRecordingFrame();
+				}else if(event.getSource() == recordSound) {
+			
+					recordingFrame.setVisible(true);
+					
+					// Hiding other frames
+					colorFrame.setVisible(false);
+					emojiFrame.setVisible(false);
+					fileSelector.setVisible(false);
+				}
+				else if (event.getSource() == playSound) {
 					if (musicPlayer != null) {
 						musicPlayer.play();
 					}
@@ -518,13 +572,95 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					button.addColor(currentColor);
 					button.addSoundFile(currentAudioFile);
 					// TODO: set local variable for selected image --> button.addImageFile(selectedImage)
-//					button.addImageFile(currentImageFile);
+					//button.addImageFile(currentImageFile);
 					currentButton.setConfiguration(currentButton.getConfiguration());
 					hideSetupFrame();
 				}
 			}
 		}
 
+		/**
+		 * Recording frame for recording sound directly from the SetUpButtons.
+		 * @author jordan
+		 * @version Saturday March 16th 2019
+		 */
+		public class RecordingFrame extends JFrame implements ActionListener, WindowListener{
+			public JButton recordButton;
+			public JLabel flashingLabel;
+			public JButton stopButton;
+			public MusicRecorder recorder;
+			public RecordingFrame() {
+				super("Record Sound");
+				this.setSize(250,200);
+				this.setLayout(new GridLayout(3,1));
+				this.addWindowListener(this);
+				
+				recorder = new MusicRecorder();
+				
+				//Setting up recording button
+				recordButton = new JButton("Record");
+				recordButton.addActionListener(this);
+				this.add(recordButton);
+				
+				//Setting up recording indicator
+				flashingLabel = new JLabel("");
+				flashingLabel.setForeground(Color.red);
+				this.add(flashingLabel);
+				
+				//Setting up the stop button
+				stopButton = new JButton("Stop Recording");
+				stopButton.addActionListener(this);
+				stopButton.setEnabled(false);
+				this.add(stopButton);
+				this.setVisible(false);
+			}
+			public void hideRecordingFrame() {
+				this.setVisible(false);
+				if(recorder.isRecording()) {
+					recorder.stop();
+				}
+			}
+			/**
+			 * ActionListener for the buttons for the recording frame
+			 */
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == recordButton) {
+					
+					//Updating buttons
+					recordButton.setEnabled(false);
+					stopButton.setEnabled(true);
+					recorder.record();
+				}
+				else if(e.getSource() == stopButton) {
+					
+					//Updating buttons
+					stopButton.setEnabled(false);
+					recordButton.setEnabled(true);
+					
+					File soundFile = new File(currentButton.getConfiguration().audioFilePath());
+					MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),soundFile);
+					
+					currentAudioFile = soundFile;
+					currentPath.setText("Sound Path: " + currentAudioFile.getPath());
+					musicPlayer = new MusicPlayer(currentAudioFile);
+				}
+			}
+			/**
+			 * Used for handling when the window has been closed.
+			 */
+			public void windowClosing(WindowEvent arg0) {
+				hideRecordingFrame();
+			}
+			/*
+			 * Window state changed methods
+			 */
+			public void windowActivated(WindowEvent arg0) {}
+			public void windowClosed(WindowEvent event) {}
+			public void windowDeactivated(WindowEvent arg0) {}
+			public void windowDeiconified(WindowEvent arg0) {}
+			public void windowIconified(WindowEvent arg0) {}
+			public void windowOpened(WindowEvent arg0) {}
+		}
 		/**
 		 * Color frame for changing the color of the button being configured.
 		 * @author jordan

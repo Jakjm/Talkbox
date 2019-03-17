@@ -41,8 +41,6 @@ public class MusicRecorder {
 
 	/**
 	 * Starts recording and writes to specified file.
-	 * 
-	 * @param file - the target file in .wav format
 	 */
 	public void record() {
 		if (this.state == RECORDING) {
@@ -82,7 +80,12 @@ public class MusicRecorder {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * Returns whether the music recorder is currently recording.
+	 */
+	public boolean isRecording() {
+		return this.state == RECORDING;
+	}
 	/**
 	 * @return the AudioFormat of the TargetDataline for this recorder.
 	 */

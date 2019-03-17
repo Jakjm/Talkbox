@@ -216,7 +216,7 @@ public class RecordingPanel extends JPanel implements ActionListener {
 			if(name.indexOf(".") == -1) {
 				return false;
 			}
-			String fileExtension = name.substring(name.indexOf("."));
+			String fileExtension = name.substring(name.lastIndexOf("."));
 			if(fileExtension.equals(".wav") || fileExtension.equals(".wave")) {
 				return true;
 			}

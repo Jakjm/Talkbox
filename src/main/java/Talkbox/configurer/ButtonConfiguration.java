@@ -61,8 +61,8 @@ public class ButtonConfiguration {
 		if (sound != null) {
 			this.soundFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 			FileIO.copyFile(sound, this.soundFile);
+			FileIO.editTextLine(this.buttonTxtDir, "1", 2);
 		}
-		FileIO.editTextLine(this.buttonTxtDir, "1", 2);
 	}
 
 
@@ -121,12 +121,10 @@ public class ButtonConfiguration {
 		if (!(success)) {
 			throw new RuntimeException("Error");
 		}
-		// Copying the old sound and image files to the newly named directory
-		File oldDir = this.buttonDir;
 		this.buttonDir = newDir;
-		this.buttonTxtDir = new File(oldDir.getPath() + FileIO.SEP + "button.txt");
+		this.buttonTxtDir = new File(newDir.getPath() + FileIO.SEP + "button.txt");
 		if (this.soundFile != null) {
-			this.soundFile = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");;
+			this.soundFile = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 		}
 		if (this.imageFile != null) {
 			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(this.imageFile));;
@@ -146,6 +144,9 @@ public class ButtonConfiguration {
 		return format;
 	}
 
+	public String audioFilePath() {
+		return this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav";
+	}
 	/**
 	 * @return The button's color.
 	 */
