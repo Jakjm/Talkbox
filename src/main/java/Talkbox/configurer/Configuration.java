@@ -3,6 +3,7 @@ package main.java.Talkbox.configurer;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import main.java.Talkbox.filehandler.FileIO;
 
@@ -27,6 +28,8 @@ public class Configuration implements TalkBoxConfiguration {
 	public transient ButtonConfiguration[] buttonConfigs;
 	// path to the talkbox directory
 	private transient String talkboxPath;
+	// set names
+	private ArrayList<String> setNames;
 
 	/**
 	 * <b> This constructor is only used for creating a new configuration </b>
@@ -44,6 +47,7 @@ public class Configuration implements TalkBoxConfiguration {
 		new File(this.talkboxPath + FileIO.SEP + "serialized_config").mkdir();
 		// create all button directories
 		this.createButtonConfigsDirs();
+		this.setNames.add("Set 1");
 		this.serializeConfig();
 	}
 
@@ -97,6 +101,14 @@ public class Configuration implements TalkBoxConfiguration {
 			addButtonConfig(i);
 		}
 	}
+	
+	/**
+	 * Add set's name.
+	 * @param j The given set.
+	 */
+	public void addSetName(int j, String newName) {
+		this.setNames.set(j, newName);
+	}
 
 	/**
 	 * Adds the specified button config folder. Each folder contains a button.txt
@@ -145,6 +157,7 @@ public class Configuration implements TalkBoxConfiguration {
 		this.setTotalButtons(newSize);
 		this.getNumberOfAudioButtons();
 		this.audioSets++;
+		this.setNames.add("Set " + this.audioSets);
 		this.serializeConfig();
 	}
 
@@ -244,7 +257,7 @@ public class Configuration implements TalkBoxConfiguration {
 		}
 		return audioFileNames;
 	}
-
+	
 	/**
 	 * Removes the i-th (1 .. n) audio set's button_config_ folders. Renames the remaining
 	 * configuration folders to continue from the previous ones.
@@ -260,6 +273,7 @@ public class Configuration implements TalkBoxConfiguration {
 			if (j < startButton + 6) {
 				File deletionFile = this.buttonConfigs[j].returnDir();
 				FileIO.deleteFolder(deletionFile);
+				this.setNames.remove(j);
 			}
 			//renaming button config folders and changing text files
 			else {

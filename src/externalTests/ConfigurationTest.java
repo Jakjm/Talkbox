@@ -89,6 +89,10 @@ public class ConfigurationTest {
 				count++;
 			}
 		}
+		String[] arr = FileIO.readTextFile(new File(bc[2].returnDir().getPath() + "/button.txt"));
+		bc[2].addImageFile(new File("src/test/resources/harbin.jpg"));
+		arr = FileIO.readTextFile(new File(bc[2].returnDir().getPath() + "/button.txt"));
+		assertTrue(arr[3].equals("1"));
 		FileIO.deleteFolder(new File("test"));
 	}
 }
