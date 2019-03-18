@@ -58,10 +58,13 @@ public class FileSelector extends JFrame implements ActionListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		FileSelector selector = new FileSelector(null, 1);
+		FileSelector selector = new FileSelector(null, 2);
+		selector.setAutoStop();
 		selector.setVisible(true);
 	}
-
+	public void setAutoStop() {
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 	/**
 	 * Allows the user to select the selection mode the file selector should be in.
 	 * See the static constants for arbitrary, picture, and directory selections.
@@ -124,13 +127,13 @@ public class FileSelector extends JFrame implements ActionListener {
 		// Inner Panel for Buttons
 		innerPanel = new JPanel();
 		innerPanel.setVisible(true);
-		innerPanel.setLayout(new GridLayout(-1,2));
+		innerPanel.setLayout(new GridLayout(-1,4));
 
 		// Configuring the inner scroll pane, which traverses the inner panel.
 		innerPaneScroll = new JScrollPane();
 		innerPaneScroll.setViewportView(innerPanel);
 		innerPaneScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		innerPaneScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		innerPaneScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		innerPaneScroll.setVisible(true);
 		outerPanel.add(innerPaneScroll, BorderLayout.CENTER);
 
@@ -159,9 +162,9 @@ public class FileSelector extends JFrame implements ActionListener {
 			if (currentFile.getName().charAt(0) != '.') {
 				FileButton button = new FileButton(this, currentFile);
 				innerPanel.add(button);
-				// System.out.println("adding");
 			}
 		}
+		
 		currentFile = directory;
 		if (currentFile.getPath().equals(homeFile.getPath())) {
 			returnHome.setEnabled(false);
@@ -275,11 +278,29 @@ public class FileSelector extends JFrame implements ActionListener {
 			this.setVisible(true);
 			this.setEnabled(true);
 			this.addActionListener(this);
+			
 			// Determines the type of file this button is for.
 			determineType();
 
+			String text = file.getName();
+			
+			//Formatting the text
+			int charsWithoutNL = 0;
+			for(int i = 1;i < text.length();i++) {
+				char c = text.charAt(i);
+				if(charsWithoutNL >= 14 || 
+						(charsWithoutNL >= 5 && (c == ' ' || c == '.' || c == '_' || c == '-' || Character.isUpperCase(c)))) {
+					text = text.substring(0,i) + "<br>" + text.substring(i);
+					charsWithoutNL = 0;
+					i = i + 4;
+				}
+				else {
+					++charsWithoutNL;
+				}
+			}
+			
 			// Adding a button to select this file/directory.
-			String buttonText = String.format("<html><body>%s</body></html>",file.getName());
+			String buttonText = String.format("<html>%s</html>",text);
 			this.setText(buttonText);
 			this.setVerticalTextPosition(SwingConstants.BOTTOM);
 			this.setHorizontalTextPosition(SwingConstants.CENTER);
