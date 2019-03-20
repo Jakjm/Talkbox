@@ -142,7 +142,7 @@ public class MusicTest {
 		// Skipping through the song
 		player.skip(2, 03);
 		if (!player.currentTrackPosition().equals("2:03")) {
-			fail();
+			fail(player.currentTrackPosition());
 		}
 
 		// Playing for 2 seconds
