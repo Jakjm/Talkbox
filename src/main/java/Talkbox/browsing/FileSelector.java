@@ -37,7 +37,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	private JButton returnHome; // Button for returning to the user's home directory.
 	private JScrollPane innerPaneScroll; // The scroll panel for the inser panel.
 
-	private int mode = -1; // Selection mode for the file selector.
+	private int mode = -1; // Selection   for the file selector.
 	/** The constant for storing that the file is of unknown type **/
 	public static final int UNKNOWN = -1;
 	/** The constant for storing that the file is a directory **/
@@ -48,6 +48,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	public static final int SOUND = 3;
 	/** The constant for storing that the file is a text file. **/
 	public static final int TEXT = 4;
+	
 	// The home directory of the user.
 	private SelectionListener listener;
 	public static final String fileSep = System.getProperty("file.separator");
@@ -62,6 +63,7 @@ public class FileSelector extends JFrame implements ActionListener {
 		selector.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selector.setVisible(true);
 	}
+	
 	/**
 	 * Allows the user to select the selection mode the file selector should be in.
 	 * See the static constants for arbitrary, picture, and directory selections.
@@ -72,8 +74,16 @@ public class FileSelector extends JFrame implements ActionListener {
 	 */
 	public FileSelector(SelectionListener listener, int mode) {
 		this(listener);
-		if (mode < UNKNOWN || mode > TEXT)
+		setMode(mode);
+	}
+	/**
+	 * Sets the mode of the file selector
+	 * @param mode
+	 */
+	public void setMode(int mode) {
+		if(mode < UNKNOWN || mode > TEXT) {
 			throw new IllegalArgumentException("Mode invalid");
+		}
 		this.mode = mode;
 	}
 
