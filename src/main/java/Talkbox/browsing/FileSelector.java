@@ -59,11 +59,8 @@ public class FileSelector extends JFrame implements ActionListener {
 	 */
 	public static void main(String[] args) {
 		FileSelector selector = new FileSelector(null, 2);
-		selector.setAutoStop();
+		selector.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selector.setVisible(true);
-	}
-	public void setAutoStop() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	/**
 	 * Allows the user to select the selection mode the file selector should be in.
