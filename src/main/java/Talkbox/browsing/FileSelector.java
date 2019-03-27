@@ -78,7 +78,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	}
 	/**
 	 * Sets the mode of the file selector
-	 * @param mode
+	 * @param mode - an integer mode in the range [-1,4]
 	 */
 	public void setMode(int mode) {
 		if(mode < UNKNOWN || mode > TEXT) {

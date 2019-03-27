@@ -310,10 +310,16 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		
 		/**Button for playing the currently selected sound**/
 		private JButton playSound;
-		private JLabel currentPath;
+		private JLabel currentSoundPath;
 		private JButton setColor;
 		private JButton confirmSetup;
 		private JPanel buttonsPanel;
+		
+		private JButton selectImage;
+		private JButton verticalOr;
+		private JButton horizontalOr;
+		private JButton squareOr;
+		
 		
 		
 		// Panel for color of button
@@ -396,10 +402,10 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			this.currentColorPanel.setBackground(this.currentColor);
 			this.currentAudioFile = config.getSoundFile();
 			if (this.currentAudioFile != null) {
-				currentPath.setText("Sound Path: " + this.currentAudioFile.getPath());
+				currentSoundPath.setText("Sound Path: " + this.currentAudioFile.getPath());
 				musicPlayer = new MusicPlayer(this.currentAudioFile);
 			} else {
-				currentPath.setText("Sound Path:(none)");
+				currentSoundPath.setText("Sound Path:(none)");
 				musicPlayer = null;
 			}
 			nameField.setText(config.getButtonText());
@@ -409,7 +415,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			public void onFileSelected(File file) {
 				if (FileIO.checkWaveFormat(file)) {
 					currentAudioFile = file;
-					currentPath.setText("Sound Path: " + currentAudioFile.getPath());
+					currentSoundPath.setText("Sound Path: " + currentAudioFile.getPath());
 					musicPlayer = new MusicPlayer(currentAudioFile);
 				} else {
 					JOptionPane.showMessageDialog(null, "Audio File must be of .wav format");
@@ -469,7 +475,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 
 				// Buttons panel for selecting the sound and the color
 				buttonsPanel = new JPanel();
-				buttonsPanel.setLayout(new GridLayout(4, 1));
+				buttonsPanel.setLayout(new GridLayout(5, 1));
 
 				
 				//Panel concerning button sound.
@@ -506,24 +512,61 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				
 				
 
-				currentPath = new JLabel("Sound Path:(none)");
-				buttonsPanel.add(currentPath);
+				currentSoundPath = new JLabel("Sound Path:(none)");
+				buttonsPanel.add(currentSoundPath);
 
 				// Button for setting the color that the button should have.
 				setColor = new JButton("Select Color");
 				setColor.addActionListener(this);
 				buttonsPanel.add(setColor);
 
+				//Color panel
 				currentColorPanel = new JPanel();
 				currentColorPanel.add(new JLabel("Current Color"));
 				currentColorPanel.setBackground(currentColor);
 				buttonsPanel.add(currentColorPanel);
+				
+				//Image selection panel
+				JPanel imageSelection = new JPanel();
+				imageSelection.setLayout(new GridLayout(1,2));
+				
+				//Select image button
+				selectImage = new JButton("Select Image");
+				selectImage.addActionListener(this);
+				imageSelection.add(selectImage);
+				
+				//Buttons for image orientation.
+				JPanel orientations = new JPanel();
+				orientations.setLayout(new GridLayout(1,3));
+				
+				//Square orientation button
+				squareOr = new JButton("Sq.");
+				squareOr.addActionListener(this);
+				orientations.add(squareOr);
+				
+				//Vertical orientation button
+				verticalOr = new JButton("Vert.");
+				verticalOr.addActionListener(this);
+				orientations.add(verticalOr);
+				
+				//Horizontal orientation button
+				horizontalOr = new JButton("Horiz.");
+				horizontalOr.addActionListener(this);
+				orientations.add(horizontalOr);
+				
+				imageSelection.add(orientations);
+				buttonsPanel.add(imageSelection);
+				
+				
+				
 
 				this.add(buttonsPanel, BorderLayout.CENTER);
 
+				//Confirm setup panel. 
 				confirmSetup = new JButton("Confirm Setup");
 				confirmSetup.addActionListener(this);
 				this.add(confirmSetup, BorderLayout.SOUTH);
+				
 
 			}
 
@@ -641,7 +684,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),soundFile);
 					
 					currentAudioFile = soundFile;
-					currentPath.setText("Sound Path: " + currentAudioFile.getPath());
+					currentSoundPath.setText("Sound Path: " + currentAudioFile.getPath());
 					musicPlayer = new MusicPlayer(currentAudioFile);
 				}
 			}
