@@ -96,12 +96,12 @@ public class FileIO {
 	}
 
 	/**
-	 * Creates and writes content to a text file. Each line should be separated by a new line character.
+	 * Writes content to a text file. Each line should be separated by a new line character.
 	 * 
 	 * @param toWrite The file to write to.
 	 * @param content The string to write.
 	 */
-	public static void createTextFile(File toWrite, String content) {
+	public static void textToFile(File toWrite, String content) {
 		BufferedWriter bf;
 		try {
 			bf = new BufferedWriter(new FileWriter(toWrite));
@@ -144,7 +144,7 @@ public class FileIO {
 			newTxt += content[i] + "\n";
 		}
 		newTxt += content[3];
-		createTextFile(toEdit, newTxt);
+		textToFile(toEdit, newTxt);
 	}
 	
 

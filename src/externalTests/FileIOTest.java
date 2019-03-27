@@ -62,7 +62,7 @@ public class FileIOTest {
 	@Test
 	public void testC() {
 		File textPath = new File(TESTING + FileIO.SEP + "create.txt");
-		FileIO.createTextFile(textPath, "testing123");
+		FileIO.textToFile(textPath, "testing123");
 		String[] f = FileIO.readTextFile(textPath);
 		assertTrue(f[0].equals("testing123"));
 	}
@@ -76,7 +76,7 @@ public class FileIOTest {
 	@Test
 	public void testE() {
 		File txtTest = new File("test" + FileIO.SEP + "testReplace.txt");
-		FileIO.createTextFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' +  "habilis" + '\n' + "pan");
+		FileIO.textToFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' +  "habilis" + '\n' + "pan");
 		FileIO.editTextLine(txtTest, "neanderthal", 2);
 		assertTrue(FileIO.readTextFile(txtTest)[2].equals("neanderthal"));
 		FileIO.deleteFolder(new File("test"));

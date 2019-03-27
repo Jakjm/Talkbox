@@ -35,7 +35,7 @@ public class ButtonConfiguration {
 		this.buttonText = buttonText;
 		this.buttonDir = buttonDir;
 		this.buttonTxtDir = new File(this.buttonDir.getPath() + FileIO.SEP + "button.txt");
-		FileIO.createTextFile(this.buttonTxtDir, this.buttonText + '\n' + this.buttonColor.getRGB() + "\n0\n0");
+		FileIO.textToFile(this.buttonTxtDir, this.buttonText + '\n' + this.buttonColor.getRGB() + "\n0\n0");
 	}
 	
 	/**
