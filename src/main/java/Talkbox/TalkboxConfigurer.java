@@ -20,6 +20,8 @@ import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.configurer.Configuration;
 import main.java.Talkbox.configurer.RecordingPanel;
 import main.java.Talkbox.configurer.SetUpPanel;
+import main.java.Talkbox.filehandler.FileIO;
+import main.java.log.LogController;
 
 /**
  * Main class for the Talkbox Configuration App
@@ -33,8 +35,11 @@ public class TalkboxConfigurer {
 	BasePanel panel;
 	/** The configuration that the configurer is currently setup with. **/
 	Configuration config;
+	/** Configuration logger */
+	private LogController configLog;
 
 	public TalkboxConfigurer() {
+		configLog = new LogController(LogController.LogType.CONFIG_LOG, null);
 		frame = new ConfigurerFrame();
 		panel = new BasePanel();
 		frame.setContentPane(panel);
@@ -99,8 +104,10 @@ public class TalkboxConfigurer {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == setUpButtons) {
 				panel.showSetup();
+				configLog.logMessage("Buttons being added");
 			} else if (event.getSource() == recordAudio) {
 				panel.showRecording();
+				configLog.logMessage("Recording panel opened");
 			}
 			// set pre-existing configration
 			else if (event.getSource() == selectExisting) {
@@ -111,6 +118,8 @@ public class TalkboxConfigurer {
 						config = Configuration.readConfiguration(file);
 						// If the configuration was successfully opened
 						if (config != null) {
+							configLog.logMessage("Previous configuration opened");
+							configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
 							panel.configureSetup();
 							setUpButtons.setEnabled(true);
 						}
@@ -118,6 +127,7 @@ public class TalkboxConfigurer {
 						else {
 							JOptionPane.showMessageDialog(null,
 									"Failed to read a Talkbox Configuration from the selected directory.\n");
+							configLog.logMessage("Configuration failed to open.");
 						}
 						//Set selector to invisible. 
 						selector.setVisible(false);
@@ -134,7 +144,8 @@ public class TalkboxConfigurer {
 						//Create the directory within the dir selected by user.
 						config = new Configuration(file.getPath());
 						panel.configureSetup();
-						
+						configLog.logMessage("New configuration created.");
+						configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "config_log.log"));
 						//Adjust enabling of buttons.
 						setUpButtons.setEnabled(true);
 						//Set selector to invisible. 
@@ -162,12 +173,12 @@ public class TalkboxConfigurer {
 			this.add(MENU, menu);
 
 			// Adding recording panel to the base
-			record = new RecordingPanel(this);
+			record = new RecordingPanel(this, configLog);
 			this.add(RECORD, record);
 
 			// Adding setup panel to the base; send it
 			// reference of current configurance
-			setup = new SetUpPanel(this);
+			setup = new SetUpPanel(this, configLog);
 			this.add(SETUP, setup);
 			layout.show(this, MENU);
 

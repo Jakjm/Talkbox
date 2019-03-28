@@ -68,10 +68,10 @@ public class FileIO {
 	}
 
 	/**
-	 * Moves file specified by directory into a path.
+	 * Copes the file specified by directory into a path.
 	 * 
 	 * @param file The path of the target file.
-	 * @param dest The path of the destination folder.
+	 * @param dest The path of the target file.
 	 */
 	public static void copyFile(File file, File dest) {
 		String filePath = file.getAbsolutePath();

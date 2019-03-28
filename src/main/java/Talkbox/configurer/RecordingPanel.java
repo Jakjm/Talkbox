@@ -19,6 +19,7 @@ import main.java.Talkbox.TalkboxConfigurer.BasePanel;
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.recording.MusicRecorder;
+import main.java.log.LogController;
 
 /**
  * Recording panel for the Talkbox Configurer Application
@@ -54,11 +55,14 @@ public class RecordingPanel extends JPanel implements ActionListener {
 	private static final Font PANEL_FONT = new Font(Font.SERIF,Font.PLAIN,28);
 	private volatile boolean isRecording = false;
 	
+	private LogController logger;
+	
 	/**
 	 * Creates the recording panel 
 	 * @param parent - the parent panel, used for returning to the main menu
 	 */
-	public RecordingPanel(BasePanel parent) {
+	public RecordingPanel(BasePanel parent, LogController logger) {
+		this.logger = logger;
 		this.parent = parent;
 		this.setLayout(new GridLayout(5, 1));
 
@@ -160,6 +164,7 @@ public class RecordingPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		//Recording button
 		if (event.getSource() == recordingButton) {
+			this.logger.logMessage("Recording button pressed.");
 			if(isRecording) {
 				return;
 			}
@@ -171,6 +176,7 @@ public class RecordingPanel extends JPanel implements ActionListener {
 			startBlinking();
 		//Main menu button
 		} else if (event.getSource() == mainMenu) {
+			this.logger.logMessage("Main menu button pressed.");
 			recorder.stop();
 			parent.showMainMenu();
 			stopBlinking();
@@ -180,6 +186,7 @@ public class RecordingPanel extends JPanel implements ActionListener {
 			if(!isRecording) {
 				return;
 			}
+			this.logger.logMessage("Stopped recording.");
 			stopBlinking();
 			mainMenu.setEnabled(true);
 			recordingButton.setEnabled(true);
@@ -233,7 +240,10 @@ public class RecordingPanel extends JPanel implements ActionListener {
 			String fileName = nameField.getText();
 			while(!checkNameFormat(fileName)) {
 				fileName = JOptionPane.showInputDialog("Filename invalid! Please enter a correct name for the file, ending in .wav");
+				logger.logMessage("Failed to add audio file.");
+				return;
 			}
+			logger.logMessage("Sound file added.");
 			File newFile = new File(directory.getPath() + System.getProperty("file.separator") + fileName);
 			MusicRecorder.writeToFile(stream, format, newFile);
 			fileSelector.setVisible(false);

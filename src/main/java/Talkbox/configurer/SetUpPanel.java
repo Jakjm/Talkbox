@@ -27,6 +27,7 @@ import main.java.Talkbox.emojiPanel.EmojiSearchPane.EmojiSearchFrame;
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.musicplayer.MusicPlayer;
 import main.java.Talkbox.recording.MusicRecorder;
+import main.java.log.LogController;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -72,8 +73,11 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	private int currentRow = 1;
 	/** The number of rows of button configurations**/
 	private int numRows;
+	/** The current long controller. */
+	private LogController logger;
 	private static final Font OUTER_FONT = new Font(Font.SERIF,Font.PLAIN,16);
-	public SetUpPanel(BasePanel panel) {
+	public SetUpPanel(BasePanel panel, LogController logger) {
+		this.logger = logger;
 		this.panel = panel;
 		this.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
@@ -166,6 +170,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		if(row < 1 || row > this.numRows) {
 			throw new IllegalArgumentException(String.format("Illegal row %d / %d",row,this.numRows));
 		}
+		this.logger.logMessage("Switching rows.");
 		this.currentRow = row;
 		/*
 		 * Loading the configurations at the given row.
@@ -224,6 +229,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		if (event.getSource() == backButton) {
 			setUpFrame.hideSetupFrame();
 			panel.showMainMenu();
+			this.logger.logMessage("Back button pressed");
 		}
 		//Otherwise if it was one of the setup buttons
 		else if(event.getSource() instanceof SetUpButton){
@@ -232,24 +238,28 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			setUpFrame.openSetupFrame((SetUpButton) event.getSource(),
 					((SetUpButton) event.getSource()).getConfiguration());
 			setUpFrame.colorFrame.setVisible(false);
+			this.logger.logMessage("Setup button pressed");
 		}
 		//Up button
 		else if(event.getSource() == upButton) {
 			if(this.currentRow == 1)return;
 			setUpFrame.hideSetupFrame();
 			switchRow(this.currentRow - 1);
+			this.logger.logMessage("Up button pressed");
 		}
 		//Down button
 		else if(event.getSource() == downButton) {
 			if(this.currentRow == this.numRows)return;
 			setUpFrame.hideSetupFrame();
 			switchRow(this.currentRow + 1);
+			this.logger.logMessage("Down button pressed");
 		}
 		//Add button set
 		else if(event.getSource() == addButtons) {
 			config.addAudioSet();
 			updateRows();
 			switchRow(this.currentRow);
+			this.logger.logMessage("Audioset added");
 		}
 		//Remove button set
 		else if(event.getSource() == removeButtons) {
@@ -261,6 +271,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			else {
 				switchRow(this.currentRow - 1);
 			}
+			this.logger.logMessage("Audioset removed");
 		}
 	}
 
@@ -411,6 +422,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					currentAudioFile = file;
 					currentPath.setText("Sound Path: " + currentAudioFile.getPath());
 					musicPlayer = new MusicPlayer(currentAudioFile);
+					logger.logMessage("Sound file added.");
 				} else {
 					JOptionPane.showMessageDialog(null, "Audio File must be of .wav format");
 				}
@@ -537,16 +549,18 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					emojiFrame.setVisible(false);
 					fileSelector.setVisible(false);
 					recordingFrame.hideRecordingFrame();
+					logger.logMessage("Color panel opened.");
 				} else if (event.getSource() == emojiButton) {
 					// Bringing up emoji pane
 					emojiFrame.setLocation(new Point(getSetupLocation().x + 200, getSetupLocation().y + 60));
 					emojiFrame.setVisible(true);
-					
+					logger.logMessage("Emoji panel opened.");
 					// Hiding other frames
 					fileSelector.setVisible(false);
 					colorFrame.setVisible(false);
 					recordingFrame.hideRecordingFrame();
 				} else if (event.getSource() == selectSound) {
+					logger.logMessage("Sound selection panel opened.");
 					fileSelector.setVisible(true);
 					
 					// Hiding other frames
@@ -554,7 +568,6 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					emojiFrame.setVisible(false);
 					recordingFrame.hideRecordingFrame();
 				}else if(event.getSource() == recordSound) {
-			
 					recordingFrame.setVisible(true);
 					
 					// Hiding other frames
@@ -564,6 +577,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				}
 				else if (event.getSource() == playSound) {
 					if (musicPlayer != null) {
+						logger.logMessage("Play sound button pressed.");
 						musicPlayer.play();
 					}
 				} else if (event.getSource() == confirmSetup) {
@@ -625,14 +639,14 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			 */
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource() == recordButton) {
-					
+					logger.logMessage("Recording button pressed.");
 					//Updating buttons
 					recordButton.setEnabled(false);
 					stopButton.setEnabled(true);
 					recorder.record();
 				}
 				else if(e.getSource() == stopButton) {
-					
+					logger.logMessage("Stopped recording.");
 					//Updating buttons
 					stopButton.setEnabled(false);
 					recordButton.setEnabled(true);
@@ -703,6 +717,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			}
 
 			public void actionPerformed(ActionEvent event) {
+				logger.logMessage("New color added");
 				ColorButton button = (ColorButton) event.getSource();
 				currentColor = button.getColor();
 				this.setVisible(false);

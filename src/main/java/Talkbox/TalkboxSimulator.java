@@ -18,7 +18,9 @@ import javax.swing.JPanel;
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.configurer.Configuration;
+import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.simulator.SimulatorPanel;
+import main.java.log.LogController;
 
 /**
  * Talkbox simulator app for the talkbox.
@@ -40,6 +42,7 @@ public class TalkboxSimulator {
 	/**The size of the frame while using the actual simulator**/
 	private static final Dimension SIM_SIZE = new Dimension(900,600);
 	private CardLayout layout; 
+	private LogController simLogger;
 	/** Main method that simply creates a new talkbox simulator instance **/
 	public static void main(String[] args) {
 		new TalkboxSimulator();
@@ -53,7 +56,8 @@ public class TalkboxSimulator {
 		backPanel.setLayout(layout);
 		
 		//Adding the simulator panel to the back panel
-		simulatorPanel = new SimulatorPanel(this);
+		this.simLogger = new LogController(LogController.LogType.SIM_LOG, null);
+		simulatorPanel = new SimulatorPanel(this, this.simLogger);
 		backPanel.add(simulatorPanel,SIMULATOR);
 		
 		menuPanel = new MenuPanel();
@@ -98,6 +102,7 @@ public class TalkboxSimulator {
 		}
 		public void actionPerformed(ActionEvent event) {
 			if(event.getSource() == openConfig) {
+				simLogger.logMessage("Select configuration button pressed.");
 				JOptionPane.showMessageDialog(null, "Please select a TalkboxData configuration.");
 				// Making the selector visible.
 				selector.setVisible(true);
@@ -112,11 +117,14 @@ public class TalkboxSimulator {
 							configuration = loadConfig;
 							simulatorPanel.setupConfiguration(configuration);
 							openSimulator.setEnabled(true);
+							simLogger.addLogFolder(new File(configuration.getConfigDir() + FileIO.SEP + "logs"));
+							simLogger.logMessage("Config added at " + configuration.getConfigDir());
 						}
 						// Otherwise, keep going until one is found
 						else {
 							JOptionPane.showMessageDialog(null,
 									"Configuration not valid, please try again.");
+							simLogger.logMessage("Failed to add configuration");
 						}
 					}
 				});
@@ -124,6 +132,7 @@ public class TalkboxSimulator {
 			}
 			else if(event.getSource() == openSimulator) {
 				showSim();
+				simLogger.logMessage("Simulator opened.");
 			}
 		}
 	}
