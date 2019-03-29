@@ -40,11 +40,11 @@ public class ButtonConfiguration {
 	
 	/**
 	 * Add image file to the button configuration.
-	 * 
 	 * @param image The image file (JPEG or PNG).
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
+			
 			this.imageFile = image;
 			FileIO.copyFile(image,
 					new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(image)));
@@ -144,6 +144,7 @@ public class ButtonConfiguration {
 		return format;
 	}
 
+	
 	public String audioFilePath() {
 		return this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav";
 	}

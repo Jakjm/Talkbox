@@ -631,8 +631,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					button.setText(nameField.getText());
 					button.addColor(currentColor);
 					button.addSoundFile(currentAudioFile);
-					// TODO: set local variable for selected image --> button.addImageFile(selectedImage)
-					//button.addImageFile(currentImageFile);
+					button.addImageFile(currentImageFile);
 					currentButton.setConfiguration(currentButton.getConfiguration());
 					hideSetupFrame();
 				}
@@ -846,6 +845,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					}
 				}
 				else if(event.getSource() == confirmImage) {
+					
 					
 				}
 			}
