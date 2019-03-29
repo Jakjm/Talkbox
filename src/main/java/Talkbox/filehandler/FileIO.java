@@ -215,4 +215,22 @@ public class FileIO {
 			FileIO.textToFile(f, "");
 		}
 	}
+	
+	/**
+	 * Compresses the text files with the given pattern into the destination folder.
+	 * @param pattern The pattern for the file name.
+	 * @param folder The folder of text files. 
+	 * @param The destination folder.
+	 */
+	public static void compressText(String pattern, File folder, File destination) {
+		ArrayList<File> files = getAllFiles(pattern, folder);
+		File destText = new File(destination.getPath() + SEP + pattern + "_Export");
+		StringBuilder sb = new StringBuilder("");
+		for (File f : files) {
+			for (String line : FileIO.readTextFile(f)) {
+				sb.append(line + "\n");
+			}
+		}
+		FileIO.textToFile(destText, sb.toString());
+	}
 }

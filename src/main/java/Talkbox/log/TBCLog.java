@@ -18,8 +18,10 @@ import java.awt.Font;
 public class TBCLog extends JFrame {
 	private JMenuItem resetLog;
 	private JMenuItem addLogsFolder;
+	private JMenuItem exportLog;
 	private LoggerPanel loggerPanel;
 	private FileSelector fileSelector;
+	private FileSelector exportSelector;
 	private File logFolder;
 
 	public static void main(String[] args) {
@@ -42,15 +44,21 @@ public class TBCLog extends JFrame {
 		options.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
 		TBCMenuListener menuListener = new TBCMenuListener();
 		addLogsFolder = new JMenuItem("Add Log Folder");
-		addLogsFolder.setFont(new Font("Yu Gothic UI Semilight", Font.BOLD | Font.ITALIC, 12));
+		addLogsFolder.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
 		addLogsFolder.addActionListener(menuListener);
 		options.add(addLogsFolder);
 		
 		resetLog = new JMenuItem("Reset Log");
-		resetLog.setFont(new Font("Yu Gothic UI Semilight", Font.ITALIC, 12));
+		resetLog.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
 		resetLog.setEnabled(false);
 		resetLog.addActionListener(menuListener);
 		options.add(resetLog);
+		
+		exportLog = new JMenuItem("Export Log");
+		exportLog.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
+		exportLog.setEnabled(false);
+		exportLog.addActionListener(menuListener);
+		options.add(exportLog);
 		
 		menuBar.add(options);
 		this.setJMenuBar(menuBar);
@@ -67,12 +75,16 @@ public class TBCLog extends JFrame {
 			if (e.getSource() == addLogsFolder) {
 				fileSelector = new FileSelector(new ConfigListener(), 1);
 				fileSelector.setVisible(true);
-				resetLog.setEnabled(true);
 			}
 			else if (e.getSource() == resetLog) {
 				loggerPanel.reset();
 				JOptionPane.showMessageDialog(null, "Logs erased");
 				resetLog.setEnabled(false);
+				exportLog.setEnabled(false);
+			}
+			else if (e.getSource() == exportLog) {
+				exportSelector = new FileSelector(new ExportListener(), 1);
+				exportSelector.setVisible(true);
 			}
 			
 		}
@@ -88,10 +100,19 @@ public class TBCLog extends JFrame {
 			if (((FileIO.getAllFiles(loggerPanel.LOG_TYPE.toString(), folder).size()) != 0)) {
 				logFolder = folder;
 				loggerPanel.addLogsFolder(folder);
+				resetLog.setEnabled(true);
+				exportLog.setEnabled(true);
 			} else {
 				JOptionPane.showMessageDialog(null, "Could not find log files. Try to correct directory.");
 			}
 			fileSelector.setVisible(false);
+		}
+	}
+	public class ExportListener implements SelectionListener {
+		public void onFileSelected(File folder) {
+			FileIO.compressText(loggerPanel.LOG_TYPE.toString(), logFolder, folder);
+			exportSelector.setVisible(false);
+			JOptionPane.showMessageDialog(null, "Log exported.");
 		}
 	}
 }

@@ -111,6 +111,7 @@ public class TalkboxConfigurer {
 			}
 			// set pre-existing configration
 			else if (event.getSource() == selectExisting) {
+				configLog.logMessage("Selecting existing configuration.");
 				JOptionPane.showMessageDialog(null,"Please select a TalkboxData Configuration Directory");
 				selector.setVisible(true);
 				selector.setSelectionListener(new SelectionListener() {
@@ -136,6 +137,7 @@ public class TalkboxConfigurer {
 			}
 			//Create new configuration directory, and use it. 
 			else if (event.getSource() == createNew) {
+				configLog.logMessage("Creating new configuration.");
 				JOptionPane.showMessageDialog(null, 
 						"Please select a directory for the TalkboxData Directory to be saved in.");
 				selector.setVisible(true);
@@ -144,8 +146,8 @@ public class TalkboxConfigurer {
 						//Create the directory within the dir selected by user.
 						config = new Configuration(file.getPath());
 						panel.configureSetup();
+						configLog.addLogFolder(new File(config.getConfigDir()));
 						configLog.logMessage("New configuration created.");
-						configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "config_log.log"));
 						//Adjust enabling of buttons.
 						setUpButtons.setEnabled(true);
 						//Set selector to invisible. 

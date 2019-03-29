@@ -30,7 +30,7 @@ public class LoggerPanel extends JPanel {
 		this.LOG_TYPE = lg;
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		textArea = new JTextArea();
-		textArea.setBackground(SystemColor.info);
+		textArea.setBackground(SystemColor.getHSBColor(66, 46, 100));
 		// Add scrolling 
 		JScrollPane scrollPane = new JScrollPane();
 		this.add(scrollPane);

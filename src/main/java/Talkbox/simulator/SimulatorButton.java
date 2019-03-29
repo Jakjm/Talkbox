@@ -46,7 +46,7 @@ public class SimulatorButton extends JButton implements ActionListener {
 			player = null;
 		}
 		this.addActionListener(this);
-		this.simLogger.logMessage("Update configuration for " + config.getButtonText());
+		this.simLogger.logMessage("Set configuration for " + config.getButtonText());
 	}
 	public boolean isPlaying() {
 		if(player == null) {
