@@ -170,7 +170,9 @@ public class ButtonConfiguration {
 	public File returnDir() {
 		return this.buttonDir;
 	}
-	
+	public File getImageFile() {
+		return this.imageFile;
+	}
 	/**
 	 * @return The sound file of the button.
 	 */
@@ -178,3 +180,4 @@ public class ButtonConfiguration {
 		return this.soundFile;
 	}
 }
+

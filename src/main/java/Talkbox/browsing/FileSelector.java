@@ -1,13 +1,5 @@
 package main.java.Talkbox.browsing;
 
-import javax.imageio.ImageIO;
-/**
- * Basic GUI class for File selection.
- * @author jakjm
- * @version January 31st 2019
- */
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +13,11 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
+/**
+ * Basic GUI class for File selection.
+ * @author jakjm
+ * @version January 31st 2019
+ */
 public class FileSelector extends JFrame implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
@@ -78,7 +74,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	}
 	/**
 	 * Sets the mode of the file selector
-	 * @param mode
+	 * @param mode - an integer mode in the range [-1,4]
 	 */
 	public void setMode(int mode) {
 		if(mode < UNKNOWN || mode > TEXT) {
