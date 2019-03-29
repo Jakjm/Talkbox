@@ -162,12 +162,18 @@ public class ButtonConfiguration {
 	}
 
 	/**
-	 * @return The directory to this button configuration.
+	 * @return The path to this button configuration.
 	 */
 	public File returnDir() {
 		return this.buttonDir;
 	}
 	
+	/**
+	 * @return The image file of the button. 
+	 */
+	public File getImageFile() {
+		return this.imageFile;
+	}
 	/**
 	 * @return The sound file of the button.
 	 */

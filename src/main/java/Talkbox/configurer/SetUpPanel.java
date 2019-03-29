@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +14,14 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import main.java.Talkbox.TalkboxConfigurer.BasePanel;
@@ -311,28 +315,35 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		/**Button for playing the currently selected sound**/
 		private JButton playSound;
 		private JLabel currentSoundPath;
+		private JLabel currentImagePath;
 		private JButton setColor;
 		private JButton confirmSetup;
 		private JPanel buttonsPanel;
 		
 		private JButton selectImage;
-		private JButton verticalOr;
-		private JButton horizontalOr;
-		private JButton squareOr;
+		
 		
 		
 		
 		// Panel for color of button
 		private JPanel currentColorPanel;
+		
 		/**Music Player for the sound selected**/
 		private MusicPlayer musicPlayer;
+		
 		/**Button color selection frame*/
 		private ColorFrame colorFrame;
-		/**Audio File Selection Frame*/
+		
+		/**File Selection Frame*/
 		private FileSelector fileSelector;
+		
 		/**Emoji Selection frame*/
 		private EmojiSearchFrame emojiFrame;
 		
+		/**Image selection frame**/
+		private ImageFrame imageFrame;
+		
+		/**Recording frame**/
 		private RecordingFrame recordingFrame;
 		
 		/** Current color that the user has selected for the current SetUpButton */
@@ -349,6 +360,8 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		/**Current button being edited**/
 		private SetUpButton currentButton;
 		
+		private ConfigPanel config;
+		
 		/**The default color of JButtons*/
 		private final Color DEFAULT_COLOR = new Color(UIManager.getColor("Button.background").getRGB());
 
@@ -357,30 +370,29 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			super("Setup Button");
 			this.addWindowListener(this);
 			this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			this.setSize(400, 300);
+			this.setSize(450, 450);
 			this.setVisible(false);
 
 			// Intializing other frames
 			emojiFrame = new EmojiSearchFrame(new EmojiListener());
 			colorFrame = new ColorFrame();
-			fileSelector = new FileSelector(new OpenListener(), FileSelector.SOUND);
+			fileSelector = new FileSelector(null, FileSelector.SOUND);
 			recordingFrame = new RecordingFrame();
+			imageFrame = new ImageFrame();
 
 			// Getting default color for a jbutton
 			currentColor = DEFAULT_COLOR;
 
 			// Adding the organizing configuration panel.
-			ConfigPanel config = new ConfigPanel();
+			config = new ConfigPanel();
 			this.setContentPane(config);
 		}
 		/**
 		 * Hides the button setup frame, disabling the music player. 
 		 */
 		public void hideSetupFrame() {
-			colorFrame.setVisible(false);
-			emojiFrame.setVisible(false);
-			fileSelector.setVisible(false);
-			recordingFrame.hideRecordingFrame();
+			config.hideAllSubFrames();
+
 			
 			//Reset music if it is still playing
 			if(musicPlayer != null && musicPlayer.isPlaying()) {
@@ -401,17 +413,35 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			this.currentColor = config.getButtonColor();
 			this.currentColorPanel.setBackground(this.currentColor);
 			this.currentAudioFile = config.getSoundFile();
+			this.currentImageFile = config.getImageFile();
+			nameField.setText(config.getButtonText());
+			
+			//Setting current audio file
 			if (this.currentAudioFile != null) {
 				currentSoundPath.setText("Sound Path: " + this.currentAudioFile.getPath());
 				musicPlayer = new MusicPlayer(this.currentAudioFile);
 			} else {
-				currentSoundPath.setText("Sound Path:(none)");
+				currentSoundPath.setText("Sound Path: (none)");
 				musicPlayer = null;
 			}
-			nameField.setText(config.getButtonText());
+			//Setting current image file.
+			if(this.currentImageFile !=null) {
+				currentImagePath.setText("Image Path: " + this.currentImageFile.getPath());
+			}
+			else {
+				currentImagePath.setText("ImagePath: (none)");
+			}
+			
+			
 		}
-
-		public class OpenListener implements SelectionListener {
+		
+		
+		/**
+		 * Listener for when an audio file has been opened. 
+		 * @author jordan
+		 * @version March 28th 2019.
+		 */
+		public class OpenSoundListener implements SelectionListener {
 			public void onFileSelected(File file) {
 				if (FileIO.checkWaveFormat(file)) {
 					currentAudioFile = file;
@@ -423,6 +453,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				fileSelector.setVisible(false);
 			}
 		}
+		
 
 		public class EmojiListener implements ActionListener {
 			public void actionPerformed(ActionEvent event) {
@@ -475,7 +506,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 
 				// Buttons panel for selecting the sound and the color
 				buttonsPanel = new JPanel();
-				buttonsPanel.setLayout(new GridLayout(5, 1));
+				buttonsPanel.setLayout(new GridLayout(6, 1));
 
 				
 				//Panel concerning button sound.
@@ -512,7 +543,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				
 				
 
-				currentSoundPath = new JLabel("Sound Path:(none)");
+				currentSoundPath = new JLabel("Sound Path: (none)");
 				buttonsPanel.add(currentSoundPath);
 
 				// Button for setting the color that the button should have.
@@ -526,36 +557,17 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				currentColorPanel.setBackground(currentColor);
 				buttonsPanel.add(currentColorPanel);
 				
-				//Image selection panel
-				JPanel imageSelection = new JPanel();
-				imageSelection.setLayout(new GridLayout(1,2));
+
 				
 				//Select image button
 				selectImage = new JButton("Select Image");
 				selectImage.addActionListener(this);
-				imageSelection.add(selectImage);
+				buttonsPanel.add(selectImage);
 				
-				//Buttons for image orientation.
-				JPanel orientations = new JPanel();
-				orientations.setLayout(new GridLayout(1,3));
 				
-				//Square orientation button
-				squareOr = new JButton("Sq.");
-				squareOr.addActionListener(this);
-				orientations.add(squareOr);
 				
-				//Vertical orientation button
-				verticalOr = new JButton("Vert.");
-				verticalOr.addActionListener(this);
-				orientations.add(verticalOr);
-				
-				//Horizontal orientation button
-				horizontalOr = new JButton("Horiz.");
-				horizontalOr.addActionListener(this);
-				orientations.add(horizontalOr);
-				
-				imageSelection.add(orientations);
-				buttonsPanel.add(imageSelection);
+				currentImagePath = new JLabel("Image Path: (none)");
+				buttonsPanel.add(currentImagePath);
 				
 				
 				
@@ -569,41 +581,46 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				
 
 			}
-
+			public void hideAllSubFrames() {
+				imageFrame.setVisible(false);
+				emojiFrame.setVisible(false);
+				fileSelector.setVisible(false);
+				colorFrame.setVisible(false);
+				recordingFrame.hideRecordingFrame();
+			}
 			public void actionPerformed(ActionEvent event) {
 				if (event.getSource() == setColor) {
+					hideAllSubFrames();
+					
 					// Bringing up color frame
 					colorFrame.setLocation(new Point(getSetupLocation().x + 60, getSetupLocation().y + 200));
 					colorFrame.setVisible(true);
 					
-					// Hiding other frames
-					emojiFrame.setVisible(false);
-					fileSelector.setVisible(false);
-					recordingFrame.hideRecordingFrame();
+					
 				} else if (event.getSource() == emojiButton) {
+					hideAllSubFrames();
+					
 					// Bringing up emoji pane
 					emojiFrame.setLocation(new Point(getSetupLocation().x + 200, getSetupLocation().y + 60));
 					emojiFrame.setVisible(true);
 					
-					// Hiding other frames
-					fileSelector.setVisible(false);
-					colorFrame.setVisible(false);
-					recordingFrame.hideRecordingFrame();
-				} else if (event.getSource() == selectSound) {
+				
+				} else if (event.getSource() == selectSound) { //Select sound button
+					hideAllSubFrames();
+					
+					fileSelector.setMode(FileSelector.SOUND);
+					fileSelector.setSelectionListener(new OpenSoundListener());
 					fileSelector.setVisible(true);
 					
-					// Hiding other frames
-					colorFrame.setVisible(false);
-					emojiFrame.setVisible(false);
-					recordingFrame.hideRecordingFrame();
-				}else if(event.getSource() == recordSound) {
-			
-					recordingFrame.setVisible(true);
+				}else if(event.getSource() == selectImage) {
+					hideAllSubFrames();
 					
-					// Hiding other frames
-					colorFrame.setVisible(false);
-					emojiFrame.setVisible(false);
-					fileSelector.setVisible(false);
+					//Opening image frame. 
+					imageFrame.setVisible(true);
+				}else if(event.getSource() == recordSound) {
+					hideAllSubFrames();
+					
+					recordingFrame.setVisible(true);
 				}
 				else if (event.getSource() == playSound) {
 					if (musicPlayer != null) {
@@ -661,6 +678,10 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				this.setVisible(false);
 				if(recorder.isRecording()) {
 					recorder.stop();
+					
+					//Resetting the buttons. 
+					recordButton.setEnabled(true);
+					stopButton.setEnabled(false);
 				}
 			}
 			/**
@@ -704,6 +725,174 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			public void windowIconified(WindowEvent arg0) {}
 			public void windowOpened(WindowEvent arg0) {}
 		}
+		
+		/**
+		 * Image frame for selecting and orienting the image for the buttons. 
+		 * @author jordan
+		 * @version Friday March 29th 2019
+		 */
+		public class ImageFrame extends JFrame implements ActionListener{
+			public JLabel imageLabel; 
+			public int orientation; 
+			
+			//Orientations
+			public static final int VERTICAL = 0;
+			public static final int HORIZONTAL = 1;
+			public static final int SQUARE = 2; 
+			
+			//Buttons
+			private JButton openImage; 
+			private JButton vertical;
+			private JButton horizontal;
+			private JButton square;
+			private JButton confirmImage;
+			
+			private static final int MAX_WIDTH = 160;
+			private static final int MAX_HEIGHT = 160; 
+			
+			
+			//The current icon image and the original image. 
+			private Image iconImage; 
+			private BufferedImage originalImage; 
+			
+			public ImageFrame() {
+				super("Select Image");
+				super.setSize(220,400);
+				super.setVisible(false);
+				super.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				super.setLayout(new BorderLayout());
+				
+				openImage = new JButton("Open Image");
+				openImage.addActionListener(this);
+				this.add(openImage,BorderLayout.NORTH);
+				
+				imageLabel = new JLabel("(Current Image)");
+				imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+				this.add(imageLabel,BorderLayout.CENTER);
+				
+				JPanel orientations = new JPanel();
+				orientations.setBackground(Color.white);
+				orientations.setLayout(new GridLayout(5,1));
+				
+				JLabel setOr = new JLabel("Set Orientation");
+				setOr.setHorizontalAlignment(SwingConstants.CENTER);
+				setOr.setHorizontalTextPosition(SwingConstants.CENTER);
+				setOr.setBackground(Color.white);
+				orientations.add(setOr);
+				
+				vertical = new JButton("Vertical");
+				vertical.addActionListener(this);
+				orientations.add(vertical);
+				vertical.setEnabled(false);
+				
+				square = new JButton("Square");
+				square.addActionListener(this);
+				orientations.add(square);
+				
+				horizontal = new JButton("Horizontal");
+				horizontal.addActionListener(this);
+				orientations.add(horizontal);
+				
+				confirmImage = new JButton("Confirm Image");
+				confirmImage.addActionListener(this);
+				orientations.add(confirmImage); 
+				
+				this.add(orientations, BorderLayout.SOUTH);
+			}
+			public void actionPerformed(ActionEvent event) {
+				if(event.getSource() == openImage){
+					fileSelector.setMode(FileSelector.PICTURE);
+					fileSelector.setSelectionListener(new OpenImageListener());
+					fileSelector.setVisible(true);
+				}
+				else if(event.getSource() == vertical) {
+					orientation = VERTICAL;
+					
+					//Resetting buttons
+					vertical.setEnabled(false);
+					square.setEnabled(true);
+					horizontal.setEnabled(true);
+					
+					
+					if(originalImage != null) {
+						iconImage = scaleImage(originalImage); 
+						imageLabel.setIcon(new ImageIcon(iconImage));
+					}
+				}
+				else if(event.getSource() == horizontal) {
+					orientation = HORIZONTAL;
+					
+					//Resetting buttons
+					horizontal.setEnabled(false);
+					vertical.setEnabled(true);
+					square.setEnabled(true);
+					
+					if(originalImage != null) {
+						iconImage = scaleImage(originalImage);
+						imageLabel.setIcon(new ImageIcon(iconImage));
+					}
+				}
+				else if(event.getSource() == square) {
+					orientation = SQUARE;
+					
+					//Resetting buttons
+					square.setEnabled(false);
+					horizontal.setEnabled(true);
+					vertical.setEnabled(true);
+					
+					if(originalImage != null) {
+						iconImage = scaleImage(originalImage);
+						imageLabel.setIcon(new ImageIcon(iconImage));
+					}
+				}
+				else if(event.getSource() == confirmImage) {
+					
+				}
+			}
+		}
+		public Image scaleImage(Image image) {
+			if(imageFrame.orientation == ImageFrame.SQUARE) {
+				if(image.getWidth(null) > ImageFrame.MAX_WIDTH || image.getHeight(null) > ImageFrame.MAX_HEIGHT) {
+					image = image.getScaledInstance(ImageFrame.MAX_WIDTH,ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
+				}
+			}
+			else if(imageFrame.orientation == ImageFrame.HORIZONTAL) {
+				if(image.getWidth(null) > ImageFrame.MAX_WIDTH || image.getHeight(null) > (ImageFrame.MAX_HEIGHT / 2)) {
+					image = image.getScaledInstance(ImageFrame.MAX_WIDTH,(ImageFrame.MAX_HEIGHT / 2),Image.SCALE_SMOOTH);
+				}
+			}
+			else if(imageFrame.orientation == ImageFrame.VERTICAL) {
+				if(image.getWidth(null) > (ImageFrame.MAX_WIDTH / 2) || image.getHeight(null) > ImageFrame.MAX_HEIGHT) {
+					image = image.getScaledInstance((ImageFrame.MAX_WIDTH / 2),ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
+				}
+			}
+			return image;
+		}
+		public class OpenImageListener implements SelectionListener {
+			public void onFileSelected(File file) {
+				if(!FileIO.checkImageFile(file)) {
+					JOptionPane.showMessageDialog(null,"Please choose a valid image file");
+				}
+				else {
+					currentImageFile = file;
+					imageFrame.originalImage = null;
+					try {
+						imageFrame.originalImage = ImageIO.read(file);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					imageFrame.iconImage = scaleImage(imageFrame.originalImage);
+					
+					ImageIcon icon = new ImageIcon(imageFrame.iconImage);
+					imageFrame.imageLabel.setText("");
+					imageFrame.imageLabel.setIcon(icon);
+					fileSelector.setVisible(false); 
+				}
+			}
+			
+			
+		}
+		
 		/**
 		 * Color frame for changing the color of the button being configured.
 		 * @author jordan
