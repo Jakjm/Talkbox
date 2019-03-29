@@ -70,17 +70,4 @@ public class LogController {
 		this.customLogger.log(Level.INFO, message);
 		
 	}
-	/**
-	 * Resets the log files in the given folder with the specified pattern.
-	 * Example: wipe("CONFIG_LOG", new File(logs)) will reset all logs with
-	 * the name "CONFIG_LOG".
-	 * @param pattern The string pattern of the log file name.
-	 * @param folder The folder of logs.
-	 */
-	public static void wipe(String pattern, File logs) {
-		ArrayList<File> files = FileIO.getAllFiles(pattern, logs);
-		for (File f : files) {
-			FileIO.textToFile(f, "");
-		}
-	}
 }

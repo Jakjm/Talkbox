@@ -202,4 +202,17 @@ public class FileIO {
 		}
 		return files;
 	}
+	/**
+	 * Resets the text files in the given folder with the specified pattern.
+	 * Example: wipe("CONFIG_LOG", new File(logs)) will reset all logs with
+	 * the name "CONFIG_LOG".
+	 * @param pattern The string pattern of the file names.
+	 * @param folder The folder of logs.
+	 */
+	public static void wipe(String pattern, File folder) {
+		ArrayList<File> files = getAllFiles(pattern, folder);
+		for (File f : files) {
+			FileIO.textToFile(f, "");
+		}
+	}
 }

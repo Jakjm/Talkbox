@@ -64,7 +64,7 @@ public class LoggerPanel extends JPanel {
 	 * Erase the contents of the logger.
 	 */
 	public void reset() {
-		LogController.wipe(this.LOG_TYPE.toString(), this.logsFolder);
+		FileIO.wipe(this.LOG_TYPE.toString(), this.logsFolder);
 		textArea.setText("");
 	}
 	
