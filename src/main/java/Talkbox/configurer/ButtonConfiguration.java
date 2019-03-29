@@ -46,9 +46,11 @@ public class ButtonConfiguration {
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
-			this.imageFile = image;
-			FileIO.copyFile(image,
-					new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(image)));
+			if (FileIO.getExt(image) != FileIO.getExt(this.imageFile)) {
+				this.imageFile.delete();
+			}
+			this.imageFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(image));
+			FileIO.copyFile(image,this.imageFile);
 			FileIO.editTextLine(this.buttonTxtDir, "1", 3);
 		}
 	}

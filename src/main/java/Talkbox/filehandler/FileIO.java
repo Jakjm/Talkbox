@@ -143,7 +143,6 @@ public class FileIO {
 		StringBuilder newTxt = new StringBuilder("");
 		int i = -1;
 		while (++i < content.size() - 1) {
-			System.out.println(content.get(i));
 			newTxt.append(content.get(i) + "\n");
 		}
 		newTxt.append(content.get(i));
