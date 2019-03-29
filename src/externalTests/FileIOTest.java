@@ -3,7 +3,10 @@ package externalTests;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.awt.List;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.FixMethodOrder;
@@ -63,8 +66,8 @@ public class FileIOTest {
 	public void testC() {
 		File textPath = new File(TESTING + FileIO.SEP + "create.txt");
 		FileIO.textToFile(textPath, "testing123");
-		String[] f = FileIO.readTextFile(textPath);
-		assertTrue(f[0].equals("testing123"));
+		ArrayList<String> f = FileIO.readTextFile(textPath);
+		assertTrue(f.get(0).equals("testing123"));
 	}
 	@Test
 	public void testD() {
@@ -78,7 +81,10 @@ public class FileIOTest {
 		File txtTest = new File("test" + FileIO.SEP + "testReplace.txt");
 		FileIO.textToFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' +  "habilis" + '\n' + "pan");
 		FileIO.editTextLine(txtTest, "neanderthal", 2);
-		assertTrue(FileIO.readTextFile(txtTest)[2].equals("neanderthal"));
+		assertTrue(FileIO.readTextFile(txtTest).get(2).equals("neanderthal"));
+		System.out.println(FileIO.readTextFile(txtTest));
+		FileIO.textToFile(txtTest, "");
+		assertTrue(FileIO.readTextFile(txtTest).size() == 0);
 		FileIO.deleteFolder(new File("test"));
 	}
 }

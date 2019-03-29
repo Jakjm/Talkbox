@@ -21,7 +21,7 @@ import main.java.Talkbox.configurer.Configuration;
 import main.java.Talkbox.configurer.RecordingPanel;
 import main.java.Talkbox.configurer.SetUpPanel;
 import main.java.Talkbox.filehandler.FileIO;
-import main.java.log.LogController;
+import main.java.Talkbox.log.LogController;
 
 /**
  * Main class for the Talkbox Configuration App

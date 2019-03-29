@@ -8,8 +8,8 @@ import java.io.File;
 import javax.swing.JButton;
 
 import main.java.Talkbox.configurer.ButtonConfiguration;
+import main.java.Talkbox.log.LogController;
 import main.java.Talkbox.musicplayer.MusicPlayer;
-import main.java.log.LogController;
 
 /**
  * Simulator button for the talkbox simulator app

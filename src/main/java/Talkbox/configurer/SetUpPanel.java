@@ -25,9 +25,9 @@ import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.emojiPanel.EmojiSearchPane.EmojiSearchFrame;
 import main.java.Talkbox.filehandler.FileIO;
+import main.java.Talkbox.log.LogController;
 import main.java.Talkbox.musicplayer.MusicPlayer;
 import main.java.Talkbox.recording.MusicRecorder;
-import main.java.log.LogController;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

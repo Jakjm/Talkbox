@@ -2,6 +2,7 @@ package main.java.Talkbox.configurer;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.UIManager;
 
@@ -92,19 +93,19 @@ public class ButtonConfiguration {
 	 * @return a ButtonConfiguration with the given configuration.
 	 */
 	public static ButtonConfiguration readButtonTxt(File buttonDir) {
-		String[] input = FileIO.readTextFile(new File(buttonDir + FileIO.SEP + "button.txt"));
+		List<String> input = FileIO.readTextFile(new File(buttonDir + FileIO.SEP + "button.txt"));
 		// Reading text file for button text, color, sound, and image
 		File sound = null;
 		File image = null;
-		if (Integer.parseInt(input[2]) == 1) {
+		if (Integer.parseInt(input.get(2)) == 1) {
 			sound = new File(buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 		}
-		if (Integer.parseInt(input[3]) == 1) {
+		if (Integer.parseInt(input.get(3)) == 1) {
 			File f = new File(buttonDir + FileIO.SEP + "image").listFiles()[0];
 			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + f.getName());
 		}
-		ButtonConfiguration bc = new ButtonConfiguration(input[0], buttonDir);
-		bc.addColor(new Color(Integer.parseInt(input[1])));
+		ButtonConfiguration bc = new ButtonConfiguration(input.get(0), buttonDir);
+		bc.addColor(new Color(Integer.parseInt(input.get(1))));
 		bc.addSoundFile(sound);
 		bc.addImageFile(image);
 		return bc;

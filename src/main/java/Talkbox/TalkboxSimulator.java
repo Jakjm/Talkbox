@@ -19,8 +19,8 @@ import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.configurer.Configuration;
 import main.java.Talkbox.filehandler.FileIO;
+import main.java.Talkbox.log.LogController;
 import main.java.Talkbox.simulator.SimulatorPanel;
-import main.java.log.LogController;
 
 /**
  * Talkbox simulator app for the talkbox.

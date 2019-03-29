@@ -18,8 +18,8 @@ import javax.swing.JTextField;
 import main.java.Talkbox.TalkboxConfigurer.BasePanel;
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.log.LogController;
 import main.java.Talkbox.recording.MusicRecorder;
-import main.java.log.LogController;
 
 /**
  * Recording panel for the Talkbox Configurer Application

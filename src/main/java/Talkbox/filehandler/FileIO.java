@@ -5,12 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import javax.imageio.ImageIO;
@@ -115,15 +117,14 @@ public class FileIO {
 	 * Reads the specified text file and returns an array of each line.
 	 * @param toRead The file to read.
 	 * @param lines The number of lines to read and return.
-	 * @return The array of lines.
+	 * @return An ArrayList of lines.
 	 */
-	public static String[] readTextFile(File toRead) {
-		String[] content = new String[4];
+	public static ArrayList<String> readTextFile(File toRead) {
+		ArrayList<String> content = new ArrayList<>();
 		String line;
 		try (BufferedReader br = new BufferedReader(new FileReader(toRead))) {
-			int i = 0;
-			while (((line = br.readLine()) != null) && i < 4) {
-				content[i++] = line;
+			while ((line = br.readLine()) != null) {
+				content.add(line);
 			}
 		} catch (IOException e) {
 		}
@@ -137,14 +138,16 @@ public class FileIO {
 	 * @param lineNumber The line to replace.
 	 */
 	public static void editTextLine(File toEdit, String newLine, int lineNumber) {
-		String[] content = readTextFile(toEdit);
-		content[lineNumber] = newLine;
-		String newTxt = "";
-		for (int i = 0; i < 3; i++) {
-			newTxt += content[i] + "\n";
+		List<String> content = readTextFile(toEdit);
+		content.set(lineNumber, newLine);
+		StringBuilder newTxt = new StringBuilder("");
+		int i = -1;
+		while (++i < content.size() - 1) {
+			System.out.println(content.get(i));
+			newTxt.append(content.get(i) + "\n");
 		}
-		newTxt += content[3];
-		textToFile(toEdit, newTxt);
+		newTxt.append(content.get(i));
+		textToFile(toEdit, newTxt.toString());
 	}
 	
 
@@ -184,5 +187,19 @@ public class FileIO {
 	public static String getExt(File file) {
 		String fileName = file.getName();
 		return fileName.substring(fileName.lastIndexOf("."));
+	}
+	/**
+	 * Return an ArrayList of files with the given pattern.
+	 * @param name The pattern name.
+	 * @param folder The folder to search.
+	 */
+	public static ArrayList<File> getAllFiles(String name, File folder) {
+		ArrayList<File> files = new ArrayList<>();
+		for (File f : folder.listFiles()) {
+			if (f.getName().contains(name)) {
+				files.add(f);
+			}
+		}
+		return files;
 	}
 }

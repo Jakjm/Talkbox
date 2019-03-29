@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import main.java.Talkbox.TalkboxSimulator;
 import main.java.Talkbox.configurer.Configuration;
 import main.java.Talkbox.filehandler.FileIO;
-import main.java.log.LogController;
+import main.java.Talkbox.log.LogController;
 
 /**
  * Talkbox panel for the talkbox simulator panel
