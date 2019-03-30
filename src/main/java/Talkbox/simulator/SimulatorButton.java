@@ -3,9 +3,13 @@ package main.java.Talkbox.simulator;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 import main.java.Talkbox.configurer.ButtonConfiguration;
 import main.java.Talkbox.log.LogController;
@@ -44,6 +48,21 @@ public class SimulatorButton extends JButton implements ActionListener {
 			player = new MusicPlayer(config.getSoundFile());
 		} else {
 			player = null;
+		}
+		File imageFile = config.getImageFile();
+		if(imageFile != null) {
+			try {
+				BufferedImage image = ImageIO.read(imageFile);
+				this.setIcon(new ImageIcon(image));
+				this.setVerticalTextPosition(SwingConstants.BOTTOM);
+				this.setHorizontalTextPosition(SwingConstants.CENTER);
+			}
+			catch(Exception e) {
+				setIcon(null);
+			}
+		}
+		else {
+			setIcon(null);
 		}
 		this.addActionListener(this);
 		this.simLogger.logMessage("Set configuration for " + config.getButtonText());

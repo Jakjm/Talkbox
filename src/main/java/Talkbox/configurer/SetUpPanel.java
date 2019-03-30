@@ -303,6 +303,22 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			// Adjusting the text to use html that way the body linewraps
 			String adjustedText = String.format("<html><body>%s</body></html>", config.getButtonText());
 			this.setText(adjustedText);
+			
+			if(config.getImageFile() != null) {
+				BufferedImage readImage = null;
+				try {
+					readImage = ImageIO.read(config.getImageFile());
+				}
+				catch(IOException e) {
+					return;
+				}
+				this.setIcon(new ImageIcon(readImage));
+				this.setVerticalTextPosition(SwingConstants.BOTTOM);
+				this.setHorizontalTextPosition(SwingConstants.CENTER);
+			}
+			else {
+				this.setIcon(null);
+			}
 		}
 	}
 
@@ -630,6 +646,14 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					hideAllSubFrames();
 					
 					//Opening image frame. 
+					BufferedImage currentImage = null;
+					try {
+						currentImage = ImageIO.read(currentImageFile);
+					}
+					catch(Exception e) {
+						
+					}
+					imageFrame.openFor(currentImage);
 					imageFrame.setVisible(true);
 				}else if(event.getSource() == recordSound) {
 					hideAllSubFrames();
@@ -715,11 +739,12 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					stopButton.setEnabled(false);
 					recordButton.setEnabled(true);
 					
-					File soundFile = new File(currentButton.getConfiguration().audioFilePath());
+					File soundFile = new File(currentButton.getConfiguration().tempAudioPath());
 					MusicRecorder.writeToFile(recorder.stop(),recorder.getFormat(),soundFile);
 					
 					currentAudioFile = soundFile;
 					currentSoundPath.setText("Sound Path: " + currentAudioFile.getPath());
+					if(musicPlayer != null && musicPlayer.isPlaying())musicPlayer.stop();
 					musicPlayer = new MusicPlayer(currentAudioFile);
 				}
 			}
@@ -766,7 +791,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			
 			
 			//The current icon image and the original image. 
-			private Image iconImage; 
+			private BufferedImage iconImage; 
 			private BufferedImage originalImage; 
 			
 			public ImageFrame() {
@@ -780,7 +805,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				openImage.addActionListener(this);
 				this.add(openImage,BorderLayout.NORTH);
 				
-				imageLabel = new JLabel("(Current Image)");
+				imageLabel = new JLabel("(No Image)");
 				imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 				this.add(imageLabel,BorderLayout.CENTER);
 				
@@ -812,6 +837,24 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				orientations.add(confirmImage); 
 				
 				this.add(orientations, BorderLayout.SOUTH);
+			}
+			public void openFor(BufferedImage image) {
+				this.iconImage = image;
+				this.originalImage = image;
+				if(image != null) {
+					imageLabel.setIcon(new ImageIcon(iconImage));
+					imageLabel.setText("");
+				}
+				else {
+					imageLabel.setIcon(null);
+					imageLabel.setText("(No Image)");
+				}
+				
+				//Setting buttons and orientation. 
+				this.orientation = SQUARE;
+				square.setEnabled(false);
+				horizontal.setEnabled(true);
+				vertical.setEnabled(true);
 			}
 			public void actionPerformed(ActionEvent event) {
 				if(event.getSource() == openImage){
@@ -860,15 +903,26 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					}
 				}
 				else if(event.getSource() == confirmImage) {
-					
-					
+					if(iconImage != null) {
+						try {
+							File tempFile = new File(currentButton.getConfiguration().tempImagePath());
+							ImageIO.write(iconImage,"png",tempFile);
+							currentImageFile = tempFile;
+							currentImagePath.setText("Image Path: " + currentImageFile.getPath());
+							this.setVisible(false);
+						}
+						catch(IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
-		public Image scaleImage(Image image) {
+		public BufferedImage scaleImage(Image image) {
 			if(imageFrame.orientation == ImageFrame.SQUARE) {
 				if(image.getWidth(null) > ImageFrame.MAX_WIDTH || image.getHeight(null) > ImageFrame.MAX_HEIGHT) {
 					image = image.getScaledInstance(ImageFrame.MAX_WIDTH,ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
+					
 				}
 			}
 			else if(imageFrame.orientation == ImageFrame.HORIZONTAL) {
@@ -881,7 +935,10 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					image = image.getScaledInstance((ImageFrame.MAX_WIDTH / 2),ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
 				}
 			}
-			return image;
+			BufferedImage newImage = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+			Graphics2D imageGraphics = (Graphics2D) newImage.getGraphics();
+			imageGraphics.drawImage(image,0,0,null);
+			return newImage;
 		}
 		public class OpenImageListener implements SelectionListener {
 			public void onFileSelected(File file) {

@@ -46,10 +46,7 @@ public class ButtonConfiguration {
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
-			if (FileIO.getExt(image) != FileIO.getExt(this.imageFile)) {
-				this.imageFile.delete();
-			}
-			this.imageFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(image));
+			this.imageFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image.png");
 			FileIO.copyFile(image,this.imageFile);
 			FileIO.editTextLine(this.buttonTxtDir, "1", 3);
 		}
@@ -103,8 +100,7 @@ public class ButtonConfiguration {
 			sound = new File(buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 		}
 		if (Integer.parseInt(input.get(3)) == 1) {
-			File f = new File(buttonDir + FileIO.SEP + "image").listFiles()[0];
-			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + f.getName());
+			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + "image.png");
 		}
 		ButtonConfiguration bc = new ButtonConfiguration(input.get(0), buttonDir);
 		bc.addColor(new Color(Integer.parseInt(input.get(1))));
@@ -146,9 +142,11 @@ public class ButtonConfiguration {
 				audioName, imageName, this.buttonColor.toString(), this.buttonText);
 		return format;
 	}
-
-	public String audioFilePath() {
-		return this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav";
+	public String tempImagePath() {
+		return this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "temp.png";
+	}
+	public String tempAudioPath() {
+		return this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "temp.wav";
 	}
 	/**
 	 * @return The button's color.
