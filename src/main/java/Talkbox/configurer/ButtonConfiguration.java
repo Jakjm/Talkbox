@@ -46,7 +46,7 @@ public class ButtonConfiguration {
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
-			this.imageFile = new File(this.buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "image.png");
+			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image." + FileIO.getExt(image));
 			FileIO.copyFile(image,this.imageFile);
 			FileIO.editTextLine(this.buttonTxtDir, "1", 3);
 		}
@@ -100,7 +100,7 @@ public class ButtonConfiguration {
 			sound = new File(buttonDir + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
 		}
 		if (Integer.parseInt(input.get(3)) == 1) {
-			image = new File(buttonDir + FileIO.SEP + "image" + FileIO.SEP + "image.png");
+			image = FileIO.getAllFiles("image", new File(buttonDir.getPath() + FileIO.SEP + "image")).get(0);
 		}
 		ButtonConfiguration bc = new ButtonConfiguration(input.get(0), buttonDir);
 		bc.addColor(new Color(Integer.parseInt(input.get(1))));
@@ -123,10 +123,14 @@ public class ButtonConfiguration {
 		this.buttonDir = newDir;
 		this.buttonTxtDir = new File(newDir.getPath() + FileIO.SEP + "button.txt");
 		if (this.soundFile != null) {
-			this.soundFile = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
+			File newSound = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "sound.wav");
+			FileIO.copyFile(this.soundFile, newSound);
+			this.soundFile = newSound;
 		}
 		if (this.imageFile != null) {
-			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "image." + FileIO.getExt(this.imageFile));;
+			File newImage = new File(this.buttonDir.getPath() + FileIO.SEP + "image." + FileIO.getExt(this.imageFile));
+			FileIO.copyFile(this.imageFile, newImage);
+			this.imageFile = newImage;
 		}
 	}
 
