@@ -69,7 +69,12 @@ public class MusicRecorder {
 		}
 		return stream;
 	}
-
+	
+	/**
+	 * Method for writing an audio Byte Array Stream to a file. 
+	 * @param format
+	 * @param file
+	 */
 	public static void writeToFile(ByteArrayOutputStream stream, AudioFormat format, File file) {
 		try {
 			byte[] rawData = stream.toByteArray();

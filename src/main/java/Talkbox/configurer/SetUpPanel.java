@@ -237,11 +237,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 		//Otherwise if it was one of the setup buttons
 		else if(event.getSource() instanceof SetUpButton){
-			setUpFrame.hideSetupFrame();
-			setUpFrame.setVisible(true);
+			
 			setUpFrame.openSetupFrame((SetUpButton) event.getSource(),
 					((SetUpButton) event.getSource()).getConfiguration());
-			setUpFrame.colorFrame.setVisible(false);
 			this.logger.logMessage("Setup button pressed");
 		}
 		//Up button
@@ -436,6 +434,44 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		 * @param config
 		 */
 		public void openSetupFrame(SetUpButton button, ButtonConfiguration config) {
+			if(this.currentButton == button && this.isVisible() == true) {
+				
+				//Bringing setup frame to the front. 
+				java.awt.EventQueue.invokeLater(new Runnable() {
+				    @Override
+				    public void run() {
+				        setUpFrame.toFront();
+				        
+				        //Moving up under panels.
+				        if(recordingFrame.isVisible())recordingFrame.toFront();
+				        if(emojiFrame.isVisible())emojiFrame.toFront();
+				        if(imageFrame.isVisible())imageFrame.toFront();
+				        if(colorFrame.isVisible())colorFrame.toFront();
+				        if(fileSelector.isVisible())fileSelector.toFront();
+				    }
+				});
+				return;
+			}
+			else if(this.isVisible() == true) {
+				JOptionPane.showMessageDialog(null,"Don't lose your work!\nEither cancel or confirm setup before editing a new button!");
+				
+				//Bringing setup frame to the front. 
+				java.awt.EventQueue.invokeLater(new Runnable() {
+				    @Override
+				    public void run() {
+				        setUpFrame.toFront();
+				        
+				        //Moving up under panels.
+				        if(recordingFrame.isVisible())recordingFrame.toFront();
+				        if(emojiFrame.isVisible())emojiFrame.toFront();
+				        if(imageFrame.isVisible())imageFrame.toFront();
+				        if(colorFrame.isVisible())colorFrame.toFront();
+				        if(fileSelector.isVisible())fileSelector.toFront();
+				    }
+				});
+				return;
+			}
+			setUpFrame.hideSetupFrame();
 			this.currentButton = button;
 			this.currentColor = config.getButtonColor();
 			this.currentColorPanel.setBackground(this.currentColor);
@@ -458,8 +494,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			else {
 				currentImagePath.setText("ImagePath: (none)");
 			}
-			
-			
+			setUpFrame.setVisible(true);
 		}
 		
 		
@@ -473,6 +508,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				if (FileIO.checkWaveFormat(file)) {
 					currentAudioFile = file;
 					currentSoundPath.setText("Sound Path: " + currentAudioFile.getPath());
+					if(musicPlayer != null)musicPlayer.stop();
 					musicPlayer = new MusicPlayer(currentAudioFile);
 					logger.logMessage("Sound file added.");
 				} else {
@@ -687,6 +723,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 			public JLabel flashingLabel;
 			public JButton stopButton;
 			public MusicRecorder recorder;
+			private static final String RECORDING = " ● Recording ● ";
+			private static final String NOT_RECORDING = " Not recording";
+			private volatile boolean isRecording = false;
 			public RecordingFrame() {
 				super("Record Sound");
 				this.setSize(250,200);
@@ -701,8 +740,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				this.add(recordButton);
 				
 				//Setting up recording indicator
-				flashingLabel = new JLabel("");
-				flashingLabel.setForeground(Color.red);
+				flashingLabel = new JLabel(NOT_RECORDING);
+				flashingLabel.setHorizontalAlignment(SwingConstants.CENTER);
+				flashingLabel.setForeground(Color.black);
 				this.add(flashingLabel);
 				
 				//Setting up the stop button
@@ -712,9 +752,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				this.add(stopButton);
 				this.setVisible(false);
 			}
+			/**
+			 * Method for hiding the recording panel. 
+			 */
 			public void hideRecordingFrame() {
 				this.setVisible(false);
 				if(recorder.isRecording()) {
+					isRecording = false;
 					recorder.stop();
 					
 					//Resetting the buttons. 
@@ -732,6 +776,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					recordButton.setEnabled(false);
 					stopButton.setEnabled(true);
 					recorder.record();
+					isRecording = true;
+					Thread blinkThread = new Thread(new BlinkTask());
+					blinkThread.start();
 				}
 				else if(e.getSource() == stopButton) {
 					logger.logMessage("Stopped recording.");
@@ -746,6 +793,39 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					currentSoundPath.setText("Sound Path: " + currentAudioFile.getPath());
 					if(musicPlayer != null && musicPlayer.isPlaying())musicPlayer.stop();
 					musicPlayer = new MusicPlayer(currentAudioFile);
+					isRecording = false;
+				}
+			}
+			/**
+			 * BlinkTask for the blinking recording label. 
+			 * @author jordan
+			 * @version March 30th 2019
+			 */
+			public class BlinkTask implements Runnable {
+				public void run() {
+					//Flashing label blinking 
+					flashingLabel.setText("");
+					flashingLabel.setForeground(Color.red);
+					flashingLabel.setText(RECORDING);
+					long delayTime = System.currentTimeMillis() + 500;
+					boolean blink = true;
+					while(isRecording) {
+						if(System.currentTimeMillis() < delayTime) {
+							continue;
+						}
+						else {
+							delayTime = System.currentTimeMillis() + 500;
+						}
+						blink =! blink;
+						if(!blink) {
+							flashingLabel.setText(RECORDING);
+						}
+						else{
+							flashingLabel.setText("");
+						}
+					}
+					flashingLabel.setText(NOT_RECORDING);
+					flashingLabel.setForeground(Color.black);
 				}
 			}
 			/**
@@ -838,24 +918,71 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				
 				this.add(orientations, BorderLayout.SOUTH);
 			}
+			/**
+			 * Opens the image for this button for selecting and orienting. 
+			 * @param image
+			 */
 			public void openFor(BufferedImage image) {
+				if(this.iconImage == image) {
+					return;
+				}
 				this.iconImage = image;
 				this.originalImage = image;
 				if(image != null) {
 					imageLabel.setIcon(new ImageIcon(iconImage));
 					imageLabel.setText("");
+				
+					if(this.iconImage.getWidth(null) == MAX_WIDTH && this.iconImage.getHeight(null) == MAX_HEIGHT) {
+						this.orientation = SQUARE;
+					}
+					else if(this.iconImage.getWidth(null) == MAX_WIDTH) {
+						this.orientation = HORIZONTAL;
+					}
+					else {
+						this.orientation = VERTICAL;
+					}
 				}
 				else {
 					imageLabel.setIcon(null);
 					imageLabel.setText("(No Image)");
 				}
-				
-				//Setting buttons and orientation. 
-				this.orientation = SQUARE;
-				square.setEnabled(false);
-				horizontal.setEnabled(true);
-				vertical.setEnabled(true);
 			}
+			public void setOrientation(int or) {
+				if(this.orientation == or) {
+					return;
+				}
+				orientation = or;
+				if(or == VERTICAL) {
+		
+					//Resetting buttons
+					vertical.setEnabled(false);
+					square.setEnabled(true);
+					horizontal.setEnabled(true);
+				}
+				else if(or == HORIZONTAL){
+					
+					//Resetting buttons
+					horizontal.setEnabled(false);
+					vertical.setEnabled(true);
+					square.setEnabled(true);
+				}
+				else if(or == SQUARE) {
+					
+					//Resetting buttons
+					square.setEnabled(false);
+					horizontal.setEnabled(true);
+					vertical.setEnabled(true);
+				}
+				if(originalImage != null) {
+					iconImage = scaleImage(originalImage);
+					imageLabel.setIcon(new ImageIcon(iconImage));
+				}
+				
+				
+			}
+			/**
+			 * Action Listener for the ImageFrame's buttons 
+			 */
 			public void actionPerformed(ActionEvent event) {
 				if(event.getSource() == openImage){
 					fileSelector.setMode(FileSelector.PICTURE);
@@ -863,44 +990,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 					fileSelector.setVisible(true);
 				}
 				else if(event.getSource() == vertical) {
-					orientation = VERTICAL;
-					
-					//Resetting buttons
-					vertical.setEnabled(false);
-					square.setEnabled(true);
-					horizontal.setEnabled(true);
-					
-					
-					if(originalImage != null) {
-						iconImage = scaleImage(originalImage); 
-						imageLabel.setIcon(new ImageIcon(iconImage));
-					}
+					setOrientation(VERTICAL);
 				}
 				else if(event.getSource() == horizontal) {
-					orientation = HORIZONTAL;
-					
-					//Resetting buttons
-					horizontal.setEnabled(false);
-					vertical.setEnabled(true);
-					square.setEnabled(true);
-					
-					if(originalImage != null) {
-						iconImage = scaleImage(originalImage);
-						imageLabel.setIcon(new ImageIcon(iconImage));
-					}
+					setOrientation(HORIZONTAL);
 				}
 				else if(event.getSource() == square) {
-					orientation = SQUARE;
-					
-					//Resetting buttons
-					square.setEnabled(false);
-					horizontal.setEnabled(true);
-					vertical.setEnabled(true);
-					
-					if(originalImage != null) {
-						iconImage = scaleImage(originalImage);
-						imageLabel.setIcon(new ImageIcon(iconImage));
-					}
+					setOrientation(SQUARE);
 				}
 				else if(event.getSource() == confirmImage) {
 					if(iconImage != null) {
@@ -918,20 +1014,25 @@ public class SetUpPanel extends JPanel implements ActionListener {
 				}
 			}
 		}
+		/**
+		 * Scales the image to the correct size. 
+		 * @param image - the image to be scaled.
+		 * @return the image scaled to the correct size. 
+		 */
 		public BufferedImage scaleImage(Image image) {
 			if(imageFrame.orientation == ImageFrame.SQUARE) {
-				if(image.getWidth(null) > ImageFrame.MAX_WIDTH || image.getHeight(null) > ImageFrame.MAX_HEIGHT) {
+				if(image.getWidth(null) != ImageFrame.MAX_WIDTH || image.getHeight(null) != ImageFrame.MAX_HEIGHT) {
 					image = image.getScaledInstance(ImageFrame.MAX_WIDTH,ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
 					
 				}
 			}
 			else if(imageFrame.orientation == ImageFrame.HORIZONTAL) {
-				if(image.getWidth(null) > ImageFrame.MAX_WIDTH || image.getHeight(null) > (ImageFrame.MAX_HEIGHT / 2)) {
+				if(image.getWidth(null) != ImageFrame.MAX_WIDTH || image.getHeight(null) != (ImageFrame.MAX_HEIGHT / 2)) {
 					image = image.getScaledInstance(ImageFrame.MAX_WIDTH,(ImageFrame.MAX_HEIGHT / 2),Image.SCALE_SMOOTH);
 				}
 			}
 			else if(imageFrame.orientation == ImageFrame.VERTICAL) {
-				if(image.getWidth(null) > (ImageFrame.MAX_WIDTH / 2) || image.getHeight(null) > ImageFrame.MAX_HEIGHT) {
+				if(image.getWidth(null) != (ImageFrame.MAX_WIDTH / 2) || image.getHeight(null) != ImageFrame.MAX_HEIGHT) {
 					image = image.getScaledInstance((ImageFrame.MAX_WIDTH / 2),ImageFrame.MAX_HEIGHT,Image.SCALE_SMOOTH);
 				}
 			}
