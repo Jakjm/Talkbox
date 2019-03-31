@@ -108,7 +108,7 @@ public class Configuration implements TalkBoxConfiguration {
 	 * @param j The given set.
 	 */
 	public void addSetName(int j, String newName) {
-		this.setNames.set(j, newName);
+		this.setNames.add(j, newName);
 	}
 
 	/**

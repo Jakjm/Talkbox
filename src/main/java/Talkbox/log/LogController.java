@@ -24,7 +24,8 @@ public class LogController {
 	public Handler logHandler;
 	/**
 	 * Initialize the LogController.
-	 * @param logs The folder to put the log files.
+	 * @param logType The log type (CONFIG_LOG, SIM_LOG)
+	 * @param logs The folder to put the logs.
 	 */
 	public LogController(LogType logType, File logs) {
 		if (logs == null) {

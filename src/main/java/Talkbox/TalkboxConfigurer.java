@@ -146,7 +146,7 @@ public class TalkboxConfigurer {
 						//Create the directory within the dir selected by user.
 						config = new Configuration(file.getPath());
 						panel.configureSetup();
-						configLog.addLogFolder(new File(config.getConfigDir()));
+						configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
 						configLog.logMessage("New configuration created.");
 						//Adjust enabling of buttons.
 						setUpButtons.setEnabled(true);

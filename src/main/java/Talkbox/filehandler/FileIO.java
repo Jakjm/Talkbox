@@ -182,6 +182,7 @@ public class FileIO {
 	}
 	/**
 	 * Returns the extension of the file name.
+	 * @param file The file to get the extension from.
 	 */
 	public static String getExt(File file) {
 		String fileName = file.getName();

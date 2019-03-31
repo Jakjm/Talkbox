@@ -46,7 +46,7 @@ public class ButtonConfiguration {
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
-			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image." + FileIO.getExt(image));
+			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image" + FileIO.getExt(image));
 			FileIO.copyFile(image,this.imageFile);
 			FileIO.editTextLine(this.buttonTxtDir, "1", 3);
 		}
@@ -128,7 +128,7 @@ public class ButtonConfiguration {
 			this.soundFile = newSound;
 		}
 		if (this.imageFile != null) {
-			File newImage = new File(this.buttonDir.getPath() + FileIO.SEP + "image." + FileIO.getExt(this.imageFile));
+			File newImage = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image" + FileIO.getExt(this.imageFile));
 			FileIO.copyFile(this.imageFile, newImage);
 			this.imageFile = newImage;
 		}

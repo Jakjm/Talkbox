@@ -24,7 +24,7 @@ public class LoggerPanel extends JPanel {
 	public final LogType LOG_TYPE;
 	/**
 	 * Construct a new Logger Panel with the LOG type.
-	 * @param The LogType (CONFIG_LOG or SIM_LOG).
+	 * @param lg The LogType (CONFIG_LOG or SIM_LOG).
 	 */
 	public LoggerPanel(LogType lg) {
 		this.LOG_TYPE = lg;

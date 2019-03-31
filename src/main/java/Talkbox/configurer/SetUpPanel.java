@@ -15,6 +15,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -265,7 +266,9 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		}
 		//Remove button set
 		else if(event.getSource() == removeButtons) {
+			System.out.println(Arrays.toString(this.config.buttonConfigs));
 			config.removeAudioSet(this.currentRow);
+			System.out.println(Arrays.toString(this.config.buttonConfigs));
 			updateRows();
 			if(this.currentRow == 1) {
 				switchRow(this.currentRow);
