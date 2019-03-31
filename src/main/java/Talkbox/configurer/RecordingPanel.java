@@ -52,7 +52,7 @@ public class RecordingPanel extends JPanel implements ActionListener {
 	private static final int BLINK_TIME = 500;
 	
 	/**Font for most of the panel buttons**/
-	private static final Font PANEL_FONT = new Font(Font.SERIF,Font.PLAIN,28);
+	private static final Font PANEL_FONT = new Font("Rockwell", Font.PLAIN, 28);
 	private volatile boolean isRecording = false;
 	
 	private LogController logger;
@@ -68,13 +68,13 @@ public class RecordingPanel extends JPanel implements ActionListener {
 
 		//Top panel
 		JPanel topPanel = new JPanel();
-		topPanel.setBackground(Color.blue);
+		topPanel.setBackground(Color.LIGHT_GRAY);
 		topPanel.setLayout(new GridLayout(1, 2));
 		
 		//Title label
 		JLabel TitleLabel = new JLabel(" Audio Recording ");
-		TitleLabel.setForeground(Color.orange);
-		TitleLabel.setFont(new Font(Font.SERIF,Font.BOLD,36));
+		TitleLabel.setForeground(Color.BLACK);
+		TitleLabel.setFont(new Font("Rockwell",Font.PLAIN,36));
 		topPanel.add(TitleLabel);
 
 		// Adding main menu button to top panel.

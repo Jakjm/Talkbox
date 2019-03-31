@@ -26,7 +26,7 @@ public class SimulatorButton extends JButton implements ActionListener {
 	private ButtonConfiguration config;
 	private SimulatorPanel panel;
 	private LogController simLogger;
-	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,15);
+	private static final Font BUTTON_FONT = new Font("Rockwell", Font.BOLD, 20);
 	public SimulatorButton(SimulatorPanel panel, LogController simLogger) {
 		super("");
 		this.setFont(BUTTON_FONT);

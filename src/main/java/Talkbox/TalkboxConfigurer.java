@@ -54,18 +54,18 @@ public class TalkboxConfigurer {
 		JButton selectExisting;
 		FileSelector selector;
 		private static final String TITLE = "Talkbox Configurator";
-		private final Font TITLE_FONT = new Font(Font.SANS_SERIF,Font.BOLD,42);
-		private final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,26);
+		private final Font TITLE_FONT = new Font("Rockwell",Font.BOLD,42);
+		private final Font BUTTON_FONT = new Font("Rockwell",Font.PLAIN,25);
 		public MenuPanel() {
 			this.setLayout(new BorderLayout());
 			//Adding title label
 			JLabel titleLabel = new JLabel(TITLE);
 			titleLabel.setBackground(Color.blue);
-			titleLabel.setForeground(Color.orange);
+			titleLabel.setForeground(Color.BLACK);
 			titleLabel.setFont(TITLE_FONT);
 			titleLabel.setHorizontalAlignment(JLabel.CENTER);
 			this.add(titleLabel,BorderLayout.NORTH);
-			this.setBackground(Color.blue);
+			this.setBackground(Color.LIGHT_GRAY);
 			
 			
 			//Adding buttons to the button panel
@@ -205,6 +205,9 @@ public class TalkboxConfigurer {
 		}
 	}
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static void main(String[] args) {
 		new TalkboxConfigurer();
 	}
