@@ -1,4 +1,5 @@
 package externalTests;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.io.File;
@@ -9,20 +10,22 @@ import main.java.Talkbox.browsing.SelectionListener;
 
 /**
  * JUnit test for the FileSelector class.
+ * 
  * @author jordan
  * @version February 20th 2019
  */
 public class SelectorTest {
 	public boolean selectedFile = false;
 	public File textFile = null;
+
 	@Test
 	public void test1() {
 		FileSelector selector = null;
 		File testDirectory = null;
-		
-		//Creating fileSelector and files for the test.
+
+		// Creating fileSelector and files for the test.
 		try {
-			selector = new FileSelector(null,FileSelector.TEXT);
+			selector = new FileSelector(null, FileSelector.TEXT);
 			selector.setVisible(true);
 			testDirectory = new File("selectorTest");
 			testDirectory.mkdir();
@@ -31,29 +34,28 @@ public class SelectorTest {
 		} catch (FileNotFoundException e) {
 			fail("This should not cause any errors.");
 		}
-		
-		//Testing the openDirectory method of the file selector.
+
+		// Testing the openDirectory method of the file selector.
 		try {
 			selector.openDirectory(testDirectory);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			fail("This should cause no errors");
 		}
-		
-		//Creating a selectionListener for the fileSelector.
+
+		// Creating a selectionListener for the fileSelector.
 		selector.setSelectionListener(new SelectionListener() {
 			public void onFileSelected(File file) {
-				assertEquals(file,textFile);
+				assertEquals(file, textFile);
 				selectedFile = true;
 			}
 		});
 		selector.select(textFile);
 		long delay = System.currentTimeMillis() + 100;
-		while(System.currentTimeMillis() < delay) {
+		while (System.currentTimeMillis() < delay) {
 		}
-		assertSame(selectedFile,true);
-		
-		//Removing the testing directories.
+		assertSame(selectedFile, true);
+
+		// Removing the testing directories.
 		textFile.delete();
 		testDirectory.delete();
 		selector.setVisible(false);

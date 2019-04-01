@@ -12,20 +12,24 @@ import java.util.logging.SimpleFormatter;
 import main.java.Talkbox.filehandler.FileIO;
 
 /**
- * This class controls a Logger instance. Every log is automatically written to the log file
- * in the destination folder.
+ * This class controls a Logger instance. Every log is automatically written to
+ * the log file in the destination folder.
  */
 public class LogController {
 	private File logDest;
 	private Logger customLogger;
+
 	public enum LogType {
 		CONFIG_LOG, SIM_LOG;
 	}
+
 	public Handler logHandler;
+
 	/**
 	 * Initialize the LogController.
+	 * 
 	 * @param logType The log type (CONFIG_LOG, SIM_LOG)
-	 * @param logs The folder to put the logs.
+	 * @param logs    The folder to put the logs.
 	 */
 	public LogController(LogType logType, File logs) {
 		if (logs == null) {
@@ -43,8 +47,10 @@ public class LogController {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Add logs to the specified folder.
+	 * 
 	 * @param logFolder The folder to store the logs.
 	 */
 	public void addLogFolder(File logFolder) {
@@ -63,12 +69,14 @@ public class LogController {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Log a general message.
+	 * 
 	 * @param message The string message.
 	 */
 	public void logMessage(String message) {
 		this.customLogger.log(Level.INFO, message);
-		
+
 	}
 }

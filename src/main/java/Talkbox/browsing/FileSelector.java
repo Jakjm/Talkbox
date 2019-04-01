@@ -13,13 +13,15 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 /**
  * Basic GUI class for File selection.
+ * 
  * @author jakjm
  * @version January 31st 2019
  */
 public class FileSelector extends JFrame implements ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 	/** Backmost panel of the panel. */
 	private JPanel outerPanel;
@@ -33,7 +35,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	private JButton returnHome; // Button for returning to the user's home directory.
 	private JScrollPane innerPaneScroll; // The scroll panel for the inser panel.
 
-	private int mode = -1; // Selection   for the file selector.
+	private int mode = -1; // Selection for the file selector.
 	/** The constant for storing that the file is of unknown type **/
 	public static final int UNKNOWN = -1;
 	/** The constant for storing that the file is a directory **/
@@ -44,7 +46,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	public static final int SOUND = 3;
 	/** The constant for storing that the file is a text file. **/
 	public static final int TEXT = 4;
-	
+
 	// The home directory of the user.
 	private SelectionListener listener;
 	public static final String fileSep = System.getProperty("file.separator");
@@ -52,6 +54,7 @@ public class FileSelector extends JFrame implements ActionListener {
 
 	/**
 	 * Main method for testing
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -59,25 +62,28 @@ public class FileSelector extends JFrame implements ActionListener {
 		selector.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selector.setVisible(true);
 	}
-	
+
 	/**
 	 * Allows the user to select the selection mode the file selector should be in.
 	 * See the static constants for arbitrary, picture, and directory selections.
-	 * @param listener - the file listener for defining
-	 * what should be done once a file of the mode has been clicked. null for doing nothing.
-	 * @param mode - the type of file to be opened by the FileSelector
-	 * FileSelector.DIRECTORY, FileSelector.SOUND, etc
+	 * 
+	 * @param listener - the file listener for defining what should be done once a
+	 *                 file of the mode has been clicked. null for doing nothing.
+	 * @param mode     - the type of file to be opened by the FileSelector
+	 *                 FileSelector.DIRECTORY, FileSelector.SOUND, etc
 	 */
 	public FileSelector(SelectionListener listener, int mode) {
 		this(listener);
 		setMode(mode);
 	}
+
 	/**
 	 * Sets the mode of the file selector
+	 * 
 	 * @param mode - an integer mode in the range [-1,4]
 	 */
 	public void setMode(int mode) {
-		if(mode < UNKNOWN || mode > TEXT) {
+		if (mode < UNKNOWN || mode > TEXT) {
 			throw new IllegalArgumentException("Mode invalid");
 		}
 		this.mode = mode;
@@ -114,7 +120,6 @@ public class FileSelector extends JFrame implements ActionListener {
 		backButton.setVisible(true);
 		backButton.setEnabled(true);
 		buttonsPanel.add(backButton);
-		
 
 		// Buttons for the hud
 		returnHome = new JButton("Back to Home");
@@ -130,7 +135,7 @@ public class FileSelector extends JFrame implements ActionListener {
 		// Inner Panel for Buttons
 		innerPanel = new JPanel();
 		innerPanel.setVisible(true);
-		innerPanel.setLayout(new GridLayout(-1,4));
+		innerPanel.setLayout(new GridLayout(-1, 4));
 
 		// Configuring the inner scroll pane, which traverses the inner panel.
 		innerPaneScroll = new JScrollPane();
@@ -142,14 +147,19 @@ public class FileSelector extends JFrame implements ActionListener {
 
 		openDirectory(homeFile);
 	}
+
 	public void setVisible(boolean b) {
 		super.setVisible(b);
 	}
+
 	public void reset() {
 		openDirectory(homeFile);
 	}
+
 	/**
-	 * Updates the panel with the list of files contained within the given directory.
+	 * Updates the panel with the list of files contained within the given
+	 * directory.
+	 * 
 	 * @param directory - the directory to move into, and create buttons for.
 	 */
 	public void openDirectory(File directory) {
@@ -167,7 +177,7 @@ public class FileSelector extends JFrame implements ActionListener {
 				innerPanel.add(button);
 			}
 		}
-		
+
 		currentFile = directory;
 		if (currentFile.getPath().equals(homeFile.getPath())) {
 			returnHome.setEnabled(false);
@@ -208,7 +218,7 @@ public class FileSelector extends JFrame implements ActionListener {
 	}
 
 	/**
-	 * Method for returning to the containing directory. 
+	 * Method for returning to the containing directory.
 	 */
 	private void goBack() {
 		if (currentFile.getParentFile() != null) {
@@ -263,10 +273,6 @@ public class FileSelector extends JFrame implements ActionListener {
 		/** The constant for storing that the file is a text file. **/
 		public static final int TEXT = 4;
 
-
-		
-		
-		
 		private FileSelector selector;
 
 		/**
@@ -281,29 +287,28 @@ public class FileSelector extends JFrame implements ActionListener {
 			this.setVisible(true);
 			this.setEnabled(true);
 			this.addActionListener(this);
-			
+
 			// Determines the type of file this button is for.
 			determineType();
 
 			String text = file.getName();
-			
-			//Formatting the text
+
+			// Formatting the text
 			int charsWithoutNL = 0;
-			for(int i = 1;i < text.length();i++) {
+			for (int i = 1; i < text.length(); i++) {
 				char c = text.charAt(i);
-				if(charsWithoutNL >= 14 || 
-						(charsWithoutNL >= 5 && (c == ' ' || c == '.' || c == '_' || c == '-' || Character.isUpperCase(c)))) {
-					text = text.substring(0,i) + "<br>" + text.substring(i);
+				if (charsWithoutNL >= 14 || (charsWithoutNL >= 5
+						&& (c == ' ' || c == '.' || c == '_' || c == '-' || Character.isUpperCase(c)))) {
+					text = text.substring(0, i) + "<br>" + text.substring(i);
 					charsWithoutNL = 0;
 					i = i + 4;
-				}
-				else {
+				} else {
 					++charsWithoutNL;
 				}
 			}
-			
+
 			// Adding a button to select this file/directory.
-			String buttonText = String.format("<html>%s</html>",text);
+			String buttonText = String.format("<html>%s</html>", text);
 			this.setText(buttonText);
 			this.setVerticalTextPosition(SwingConstants.BOTTOM);
 			this.setHorizontalTextPosition(SwingConstants.CENTER);

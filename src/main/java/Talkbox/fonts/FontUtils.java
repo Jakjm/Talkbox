@@ -20,7 +20,7 @@ public final class FontUtils {
 	public static Font getNotoFont(int size) {
 		Font font;
 		try {
-			
+
 			InputStream fontStream = FontUtils.class.getResourceAsStream("/main/java/Talkbox/fonts/NotoColorEmoji.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, fontStream);
 			loadFont(font);

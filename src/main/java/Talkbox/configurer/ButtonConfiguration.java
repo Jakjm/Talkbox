@@ -9,9 +9,10 @@ import javax.swing.UIManager;
 import main.java.Talkbox.filehandler.FileIO;
 
 /**
- * This class sets the configuration for each virtual button on the panel. Each virtual button
- * is linked to a button configuration folder in which a text-file holds information about
- * its text, color, sound file and image file.
+ * This class sets the configuration for each virtual button on the panel. Each
+ * virtual button is linked to a button configuration folder in which a
+ * text-file holds information about its text, color, sound file and image file.
+ * 
  * @author rtalkad
  *
  */
@@ -38,7 +39,7 @@ public class ButtonConfiguration {
 		this.buttonTxtDir = new File(this.buttonDir.getPath() + FileIO.SEP + "button.txt");
 		FileIO.textToFile(this.buttonTxtDir, this.buttonText + '\n' + this.buttonColor.getRGB() + "\n0\n0");
 	}
-	
+
 	/**
 	 * Add image file to the button configuration.
 	 * 
@@ -46,12 +47,13 @@ public class ButtonConfiguration {
 	 */
 	public void addImageFile(File image) {
 		if (image != null) {
-			this.imageFile = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image" + FileIO.getExt(image));
-			FileIO.copyFile(image,this.imageFile);
+			this.imageFile = new File(
+					this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image" + FileIO.getExt(image));
+			FileIO.copyFile(image, this.imageFile);
 			FileIO.editTextLine(this.buttonTxtDir, "1", 3);
 		}
 	}
-	
+
 	/**
 	 * Add sound file to the button configuration.
 	 * 
@@ -64,7 +66,6 @@ public class ButtonConfiguration {
 			FileIO.editTextLine(this.buttonTxtDir, "1", 2);
 		}
 	}
-
 
 	/**
 	 * Add color to button.
@@ -109,7 +110,6 @@ public class ButtonConfiguration {
 		return bc;
 	}
 
-
 	/**
 	 * Changes the directory of the button and its sound and image files.
 	 * 
@@ -128,12 +128,12 @@ public class ButtonConfiguration {
 			this.soundFile = newSound;
 		}
 		if (this.imageFile != null) {
-			File newImage = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image" + FileIO.getExt(this.imageFile));
+			File newImage = new File(this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "image"
+					+ FileIO.getExt(this.imageFile));
 			FileIO.copyFile(this.imageFile, newImage);
 			this.imageFile = newImage;
 		}
 	}
-
 
 	/**
 	 * String representation of buttons. Used in testing.
@@ -146,12 +146,15 @@ public class ButtonConfiguration {
 				audioName, imageName, this.buttonColor.toString(), this.buttonText);
 		return format;
 	}
+
 	public String tempImagePath() {
 		return this.buttonDir.getPath() + FileIO.SEP + "image" + FileIO.SEP + "temp.png";
 	}
+
 	public String tempAudioPath() {
 		return this.buttonDir.getPath() + FileIO.SEP + "sound" + FileIO.SEP + "temp.wav";
 	}
+
 	/**
 	 * @return The button's color.
 	 */
@@ -172,9 +175,11 @@ public class ButtonConfiguration {
 	public File returnDir() {
 		return this.buttonDir;
 	}
+
 	public File getImageFile() {
 		return this.imageFile;
 	}
+
 	/**
 	 * @return The sound file of the button.
 	 */
@@ -182,4 +187,3 @@ public class ButtonConfiguration {
 		return this.soundFile;
 	}
 }
-

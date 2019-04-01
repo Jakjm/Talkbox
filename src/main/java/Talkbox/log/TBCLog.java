@@ -40,7 +40,7 @@ public class TBCLog extends JFrame {
 		setBounds(100, 100, 450, 300);
 		this.loggerPanel = new LoggerPanel(lg);
 		getContentPane().add(this.loggerPanel);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		JMenu options = new JMenu("Menu");
 		options.setFont(new Font("Rockwell", Font.BOLD, 12));
@@ -49,23 +49,24 @@ public class TBCLog extends JFrame {
 		addLogsFolder.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		addLogsFolder.addActionListener(menuListener);
 		options.add(addLogsFolder);
-		
+
 		resetLog = new JMenuItem("Reset Log");
 		resetLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		resetLog.setEnabled(false);
 		resetLog.addActionListener(menuListener);
 		options.add(resetLog);
-		
+
 		exportLog = new JMenuItem("Export Log");
 		exportLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		exportLog.setEnabled(false);
 		exportLog.addActionListener(menuListener);
 		options.add(exportLog);
-		
+
 		menuBar.add(options);
 		this.setJMenuBar(menuBar);
-		
+
 	}
+
 	/**
 	 * Action listener for menu.
 	 *
@@ -77,21 +78,20 @@ public class TBCLog extends JFrame {
 			if (e.getSource() == addLogsFolder) {
 				fileSelector = new FileSelector(new ConfigListener(), 1);
 				fileSelector.setVisible(true);
-			}
-			else if (e.getSource() == resetLog) {
+			} else if (e.getSource() == resetLog) {
 				loggerPanel.reset();
 				JOptionPane.showMessageDialog(null, "Logs erased");
 				resetLog.setEnabled(false);
 				exportLog.setEnabled(false);
-			}
-			else if (e.getSource() == exportLog) {
+			} else if (e.getSource() == exportLog) {
 				exportSelector = new FileSelector(new ExportListener(), 1);
 				exportSelector.setVisible(true);
 			}
-			
+
 		}
 
 	}
+
 	/**
 	 * SelectionListener for file selector.
 	 *
@@ -110,6 +110,7 @@ public class TBCLog extends JFrame {
 			fileSelector.setVisible(false);
 		}
 	}
+
 	/**
 	 * Export listener for file selector.
 	 *
@@ -121,6 +122,7 @@ public class TBCLog extends JFrame {
 			JOptionPane.showMessageDialog(null, "Log exported.");
 		}
 	}
+
 	/**
 	 * Returns the LoggerPanel.
 	 * 

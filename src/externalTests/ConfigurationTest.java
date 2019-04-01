@@ -1,20 +1,15 @@
 package externalTests;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 
-
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
-
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-
 
 import main.java.Talkbox.configurer.ButtonConfiguration;
 import main.java.Talkbox.configurer.Configuration;
@@ -67,7 +62,7 @@ public class ConfigurationTest {
 		assertTrue(f.getTotalNumberOfButtons() == 12);
 		assertTrue(f.getRelativePathToAudioFiles().toString().equals("test" + FileIO.SEP + "TalkboxData"));
 	}
-	
+
 	@Test
 	public void testC() {
 		String newTb = "test" + FileIO.SEP + "Talkboxtest";
@@ -83,8 +78,7 @@ public class ConfigurationTest {
 			for (String name : audioSet) {
 				if (count < 2) {
 					assertTrue(name.equals("sound.wav"));
-				}
-				else {
+				} else {
 					assertTrue(name.equals("NO SOUND"));
 				}
 				count++;

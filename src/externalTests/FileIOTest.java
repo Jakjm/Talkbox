@@ -69,6 +69,7 @@ public class FileIOTest {
 		ArrayList<String> f = FileIO.readTextFile(textPath);
 		assertTrue(f.get(0).equals("testing123"));
 	}
+
 	@Test
 	public void testD() {
 		File harbin = new File("src/test/resources/harbin.jpg");
@@ -76,10 +77,11 @@ public class FileIOTest {
 		assertTrue(FileIO.checkImageFile(harbin));
 		assertFalse(FileIO.checkImageFile(notImage));
 	}
+
 	@Test
 	public void testE() {
 		File txtTest = new File("test" + FileIO.SEP + "testReplace.txt");
-		FileIO.textToFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' +  "habilis" + '\n' + "pan");
+		FileIO.textToFile(txtTest, "erectus" + '\n' + "sapiens" + '\n' + "habilis" + '\n' + "pan");
 		FileIO.editTextLine(txtTest, "neanderthal", 2);
 		assertTrue(FileIO.readTextFile(txtTest).get(2).equals("neanderthal"));
 		System.out.println(FileIO.readTextFile(txtTest));

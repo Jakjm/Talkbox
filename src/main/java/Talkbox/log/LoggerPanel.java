@@ -22,8 +22,10 @@ public class LoggerPanel extends JPanel {
 	private JTextArea textArea;
 	private File logsFolder;
 	public final LogType LOG_TYPE;
+
 	/**
 	 * Construct a new Logger Panel with the LOG type.
+	 * 
 	 * @param lg The LogType (CONFIG_LOG or SIM_LOG).
 	 */
 	public LoggerPanel(LogType lg) {
@@ -31,24 +33,27 @@ public class LoggerPanel extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		textArea = new JTextArea();
 		textArea.setBackground(SystemColor.getHSBColor(66, 46, 100));
-		// Add scrolling 
+		// Add scrolling
 		JScrollPane scrollPane = new JScrollPane();
 		this.add(scrollPane);
 		scrollPane.setViewportView(textArea);
 
 	}
+
 	/**
 	 * Adds the folder of log files.
+	 * 
 	 * @param logs The folder containing the log files.
 	 */
-	public void addLogsFolder(File logs){ 
+	public void addLogsFolder(File logs) {
 		this.logsFolder = logs;
 		writeToView();
 	}
+
 	/**
 	 * Writes the contents of the log file to the view.
 	 */
-	private void writeToView() { 
+	private void writeToView() {
 		StringBuilder output = new StringBuilder("");
 		ArrayList<File> files = FileIO.getAllFiles(this.LOG_TYPE.toString(), this.logsFolder);
 		ArrayList<String> lines;
@@ -60,6 +65,7 @@ public class LoggerPanel extends JPanel {
 		}
 		textArea.setText(output.toString());
 	}
+
 	/**
 	 * Erase the contents of the logger.
 	 */
@@ -67,5 +73,5 @@ public class LoggerPanel extends JPanel {
 		FileIO.wipe(this.LOG_TYPE.toString(), this.logsFolder);
 		textArea.setText("");
 	}
-	
+
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import main.java.Talkbox.musicplayer.MusicPlayer;
+
 /**
  * Testing the opening of a music player for errors.
  */
@@ -67,7 +68,7 @@ public class MusicTest {
 			player.play();
 			// Have the track loop for 4 seconds
 			long playTime = System.currentTimeMillis() + 1000;
-			
+
 			while (System.currentTimeMillis() < playTime) {
 				if (!player.isPlaying()) {
 					fail();
@@ -123,8 +124,8 @@ public class MusicTest {
 			// Playing - it should be starting from 2:02
 			player.play();
 			long timeDelay = System.currentTimeMillis() + 2000;
-			while(System.currentTimeMillis() < timeDelay) {
-				
+			while (System.currentTimeMillis() < timeDelay) {
+
 			}
 			player.stop();
 		} catch (Exception e) {
@@ -154,11 +155,12 @@ public class MusicTest {
 
 		// Resetting and then playing for five seconds.
 		player.reset();
-		if(player.isPlaying())fail();
+		if (player.isPlaying())
+			fail();
 		if (!player.currentTrackPosition().equals("0:00")) {
 			fail();
 		}
-		
+
 		playTime = System.currentTimeMillis() + 2000;
 		player.play();
 		while (System.currentTimeMillis() < playTime) {

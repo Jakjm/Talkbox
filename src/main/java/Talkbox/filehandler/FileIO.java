@@ -84,8 +84,8 @@ public class FileIO {
 	/**
 	 * Moves file specified by directory into a path.
 	 * 
-	 * @param file The path of the target file.
-	 * @param dest The path of the destination folder.
+	 * @param filePath The path of the target file.
+	 * @param destPath The path of the destination folder.
 	 */
 	public static void copyFile(String filePath, String destPath) {
 		try {
@@ -116,7 +116,6 @@ public class FileIO {
 	/**
 	 * Reads the specified text file and returns an array of each line.
 	 * @param toRead The file to read.
-	 * @param lines The number of lines to read and return.
 	 * @return An ArrayList of lines.
 	 */
 	public static ArrayList<String> readTextFile(File toRead) {
@@ -183,6 +182,7 @@ public class FileIO {
 	/**
 	 * Returns the extension of the file name.
 	 * @param file The file to get the extension from.
+	 * @return The extension of the file (e.g., .png)
 	 */
 	public static String getExt(File file) {
 		String fileName = file.getName();
@@ -192,6 +192,7 @@ public class FileIO {
 	 * Return an ArrayList of files with the given pattern.
 	 * @param name The pattern name.
 	 * @param folder The folder to search.
+	 * @return An ArrayList of files.
 	 */
 	public static ArrayList<File> getAllFiles(String name, File folder) {
 		ArrayList<File> files = new ArrayList<>();
@@ -220,7 +221,7 @@ public class FileIO {
 	 * Compresses the text files with the given pattern into the destination folder.
 	 * @param pattern The pattern for the file name.
 	 * @param folder The folder of text files. 
-	 * @param The destination folder.
+	 * @param destination The destination folder.
 	 */
 	public static void compressText(String pattern, File folder, File destination) {
 		ArrayList<File> files = getAllFiles(pattern, folder);

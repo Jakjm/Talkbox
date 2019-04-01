@@ -21,6 +21,7 @@ public class Emoji {
 	public String description() {
 		return description;
 	}
+
 	public String toString() {
 		return emoji;
 	}

@@ -102,9 +102,10 @@ public class Configuration implements TalkBoxConfiguration {
 			addButtonConfig(i);
 		}
 	}
-	
+
 	/**
 	 * Add set's name.
+	 * 
 	 * @param j The given set.
 	 */
 	public void addSetName(int j, String newName) {
@@ -132,6 +133,7 @@ public class Configuration implements TalkBoxConfiguration {
 	/**
 	 * Sets the number of total button configuration folders. If there are already
 	 * buttons in the directory, only the remaining ones will be added.
+	 * 
 	 * @param buttons The new number of buttons.
 	 */
 	private void setTotalButtons(int buttons) {
@@ -250,18 +252,17 @@ public class Configuration implements TalkBoxConfiguration {
 				File[] sounds = soundFolder.listFiles();
 				if (sounds.length > 0) {
 					audioFileNames[i][j] = sounds[0].getName();
-				}
-				else {
+				} else {
 					audioFileNames[i][j] = "NO SOUND";
 				}
 			}
 		}
 		return audioFileNames;
 	}
-	
+
 	/**
-	 * Removes the i-th (1 .. n) audio set's button_config_ folders. Renames the remaining
-	 * configuration folders to continue from the previous ones.
+	 * Removes the i-th (1 .. n) audio set's button_config_ folders. Renames the
+	 * remaining configuration folders to continue from the previous ones.
 	 * 
 	 * @param audioSet The audioset to remove.
 	 */
@@ -275,25 +276,25 @@ public class Configuration implements TalkBoxConfiguration {
 				File deletionFile = this.buttonConfigs[j].returnDir();
 				FileIO.deleteFolder(deletionFile);
 			}
-			//renaming button config folders and changing text files
+			// renaming button config folders and changing text files
 			else {
 				File buttonConfig = this.buttonConfigs[j].returnDir();
 				File newDir = new File(buttonConfig.getParent() + FileIO.SEP + "button_config_" + (j - 6));
-				//Resetting button directory and sound file
+				// Resetting button directory and sound file
 				this.buttonConfigs[j].changeDirectory(newDir);
 			}
 			// shifting array buttons left
 			if (j < this.totalButtons - 6) {
-				this.buttonConfigs[j] = this.buttonConfigs[j+6];
+				this.buttonConfigs[j] = this.buttonConfigs[j + 6];
 			}
 		}
 		this.totalButtons -= 6;
 		this.audioSets--;
 		this.serializeConfig();
-		
-		//Updating the array of button configs
-		ButtonConfiguration [] newArray = new ButtonConfiguration[this.totalButtons];
-		for(int i = 0;i < newArray.length;i++) {
+
+		// Updating the array of button configs
+		ButtonConfiguration[] newArray = new ButtonConfiguration[this.totalButtons];
+		for (int i = 0; i < newArray.length; i++) {
 			newArray[i] = this.buttonConfigs[i];
 		}
 		this.buttonConfigs = newArray;
