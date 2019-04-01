@@ -52,6 +52,7 @@ public class TalkboxConfigurer {
 		JButton createNew;
 		JButton editOld;
 		JButton selectExisting;
+		JButton simLog;
 		FileSelector selector;
 		private static final String TITLE = "Talkbox Configurator";
 		private final Font TITLE_FONT = new Font(Font.SANS_SERIF,Font.BOLD,42);
@@ -99,6 +100,13 @@ public class TalkboxConfigurer {
 			buttonPanel.add(selectExisting);
 			this.add(buttonPanel,BorderLayout.CENTER);
 			selector = new FileSelector(null, FileSelector.DIRECTORY);
+			
+			//Button for opening the simulator log. 
+			simLog = new JButton("View Simulator Logs");
+			simLog.addActionListener(this);
+			simLog.setFont(BUTTON_FONT);
+			simLog.setEnabled(false);
+			this.add(simLog, BorderLayout.SOUTH);
 		}
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -114,26 +122,7 @@ public class TalkboxConfigurer {
 				configLog.logMessage("Selecting existing configuration.");
 				JOptionPane.showMessageDialog(null,"Please select a TalkboxData Configuration Directory");
 				selector.setVisible(true);
-				selector.setSelectionListener(new SelectionListener() {
-					public void onFileSelected(File file) {
-						config = Configuration.readConfiguration(file);
-						// If the configuration was successfully opened
-						if (config != null) {
-							configLog.logMessage("Previous configuration opened");
-							configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
-							panel.configureSetup();
-							setUpButtons.setEnabled(true);
-						}
-						// Otherwise, show an error message.
-						else {
-							JOptionPane.showMessageDialog(null,
-									"Failed to read a Talkbox Configuration from the selected directory.\n");
-							configLog.logMessage("Configuration failed to open.");
-						}
-						//Set selector to invisible. 
-						selector.setVisible(false);
-					}
-				});
+				selector.setSelectionListener(new ExistingConfigListener());
 			}
 			//Create new configuration directory, and use it. 
 			else if (event.getSource() == createNew) {
@@ -141,22 +130,64 @@ public class TalkboxConfigurer {
 				JOptionPane.showMessageDialog(null, 
 						"Please select a directory for the TalkboxData Directory to be saved in.");
 				selector.setVisible(true);
-				selector.setSelectionListener(new SelectionListener() {
-					public void onFileSelected(File file) {
-						//Create the directory within the dir selected by user.
-						config = new Configuration(file.getPath());
-						panel.configureSetup();
-						configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
-						configLog.logMessage("New configuration created.");
-						//Adjust enabling of buttons.
-						setUpButtons.setEnabled(true);
-						//Set selector to invisible. 
-						selector.setVisible(false);
-					}
-				});
+				selector.setSelectionListener(new NewConfigListener());
+			}
+			//TODO Rohan fix sim log 
+			else if(event.getSource() == simLog) {
+				JFrame logFrame = new JFrame();
+				logFrame.setSize(600,400);
+				logFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			}
+		}
+		/**
+		 * Task for telling the FileSelector what to do once an existing Configuration is Selected.
+		 * @author jordan
+		 */
+		public class ExistingConfigListener implements SelectionListener{
+
+			@Override
+			public void onFileSelected(File file) {
+				config = Configuration.readConfiguration(file);
+				// If the configuration was successfully opened
+				if (config != null) {
+					configLog.logMessage("Previous configuration opened");
+					configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
+					panel.configureSetup();
+					setUpButtons.setEnabled(true);
+				}
+				// Otherwise, show an error message.
+				else {
+					JOptionPane.showMessageDialog(null,
+							"Failed to read a Talkbox Configuration from the selected directory.\n");
+					configLog.logMessage("Configuration failed to open.");
+				}
+				//Set selector to invisible. 
+				selector.setVisible(false);
+				
+			}
+			
+		}
+		/**
+		 * Task for telling the FileSelector what to do when a directory for the new configuration has been selected.
+		 * @author jordan
+		 *
+		 */
+		public class NewConfigListener implements SelectionListener{
+			public void onFileSelected(File file) {
+				
+				//Create the directory within the dir selected by user.
+				config = new Configuration(file.getPath());
+				panel.configureSetup();
+				configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
+				configLog.logMessage("New configuration created.");
+				//Adjust enabling of buttons.
+				setUpButtons.setEnabled(true);
+				//Set selector to invisible. 
+				selector.setVisible(false);
 			}
 		}
 	}
+	
 
 	public class BasePanel extends JPanel {
 		CardLayout layout;
