@@ -22,8 +22,8 @@ public class LogController {
 	public enum LogType {
 		CONFIG_LOG, SIM_LOG;
 	}
-
 	public Handler logHandler;
+	private final String TEMP = System.getProperty("user.home") + FileIO.SEP + "TBC_TEMP";
 
 	/**
 	 * Initialize the LogController.
@@ -59,7 +59,7 @@ public class LogController {
 		}
 		File newLog = new File(logFolder.getPath() + FileIO.SEP + this.logDest.getName());
 		FileIO.copyFile(this.logDest, newLog);
-		this.logDest.delete();
+		FileIO.deleteFolder(new File(this.TEMP));
 		this.logDest = newLog;
 		try {
 			this.logHandler = new FileHandler(this.logDest.getPath(), true);
