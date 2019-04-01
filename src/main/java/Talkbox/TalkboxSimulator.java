@@ -83,19 +83,21 @@ public class TalkboxSimulator {
 		private JButton openSimulator;
 		public MenuPanel() {
 			this.setLayout(new GridLayout(3,1));
-			this.setBackground(Color.blue);
+			this.setBackground(Color.LIGHT_GRAY);
 			
 			JLabel titleLabel = new JLabel("Talkbox Simulator");
-			titleLabel.setFont(new Font(Font.SANS_SERIF,Font.PLAIN,32));
+			titleLabel.setFont(new Font("Rockwell",Font.PLAIN,32));
 			titleLabel.setHorizontalAlignment(JLabel.CENTER);
-			titleLabel.setForeground(Color.orange);
+			titleLabel.setForeground(Color.BLACK);
 			this.add(titleLabel);
 			
 			openConfig = new JButton("Open Talkbox Configuration");
+			openConfig.setFont(new Font("Rockwell",Font.PLAIN,12));
 			openConfig.addActionListener(this);
 			this.add(openConfig);
 			
 			openSimulator = new JButton("Simulate Configuration");
+			openSimulator.setFont(new Font("Rockwell",Font.PLAIN,12));
 			openSimulator.addActionListener(this);
 			this.add(openSimulator);
 			openSimulator.setEnabled(false);

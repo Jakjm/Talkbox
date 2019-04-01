@@ -29,7 +29,7 @@ public class LogController {
 	 */
 	public LogController(LogType logType, File logs) {
 		if (logs == null) {
-			logs = new File("logs");
+			logs = new File(System.getProperty("user.home") + FileIO.SEP + "TBC_TEMP");
 			logs.mkdir();
 		}
 		this.customLogger = Logger.getLogger(logType.toString());

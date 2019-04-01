@@ -48,7 +48,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	public static final int ROWS = 1;
 	/**The number of columns of buttons**/
 	public static final int COLS = 6;
-	private static final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,15);
+	private static final Font BUTTON_FONT = new Font("Rockwell",Font.BOLD,20);
 	private JPanel buttonPanel;
 	
 	private SetUpButton[] buttons;
@@ -80,7 +80,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 	private int numRows;
 	/** The current long controller. */
 	private LogController logger;
-	private static final Font OUTER_FONT = new Font(Font.SERIF,Font.PLAIN,16);
+	private static final Font OUTER_FONT = new Font("Rockwell",Font.PLAIN,16);
 	public SetUpPanel(BasePanel panel, LogController logger) {
 		this.logger = logger;
 		this.panel = panel;
@@ -102,13 +102,13 @@ public class SetUpPanel extends JPanel implements ActionListener {
 		//Creating the top panel
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 2));
-		topPanel.setBackground(Color.blue);
+		topPanel.setBackground(Color.LIGHT_GRAY);
 		
 		//Setup label
 		JLabel setupLabel = new JLabel(" Button Setup");
-		setupLabel.setForeground(Color.orange);
-		setupLabel.setBackground(Color.blue);
-		setupLabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,25));
+		setupLabel.setForeground(Color.BLACK);
+		setupLabel.setBackground(Color.LIGHT_GRAY);
+		setupLabel.setFont(new Font("Rockwell",Font.BOLD,25));
 		topPanel.add(setupLabel);
 		
 		//Creating the back to main menu button
@@ -1084,7 +1084,7 @@ public class SetUpPanel extends JPanel implements ActionListener {
 
 				//Adding the different colors.
 				this.add(new ColorButton(Color.red, this));
-				this.add(new ColorButton(Color.blue, this));
+				this.add(new ColorButton(Color.LIGHT_GRAY, this));
 				this.add(new ColorButton(Color.orange, this));
 				this.add(new ColorButton(Color.yellow, this));
 				this.add(new ColorButton(Color.pink, this));

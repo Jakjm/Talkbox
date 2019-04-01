@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.filehandler.FileIO;
+import main.java.Talkbox.log.LogController.LogType;
+
 import java.awt.Font;
 
 public class TBCLog extends JFrame {
@@ -25,37 +27,37 @@ public class TBCLog extends JFrame {
 	private File logFolder;
 
 	public static void main(String[] args) {
-		TBCLog logFrame = new TBCLog();
+		TBCLog logFrame = new TBCLog(LogController.LogType.CONFIG_LOG);
 		logFrame.setVisible(true);
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public TBCLog() {
+	public TBCLog(LogType lg) {
 		this.setTitle("TBCLog");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		this.loggerPanel = new LoggerPanel(LogController.LogType.CONFIG_LOG);
+		this.loggerPanel = new LoggerPanel(lg);
 		getContentPane().add(this.loggerPanel);
 		
 		JMenuBar menuBar = new JMenuBar();
 		JMenu options = new JMenu("Menu");
-		options.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
+		options.setFont(new Font("Rockwell", Font.BOLD, 12));
 		TBCMenuListener menuListener = new TBCMenuListener();
-		addLogsFolder = new JMenuItem("Add Log Folder");
-		addLogsFolder.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
+		addLogsFolder = new JMenuItem("Open Log Folder");
+		addLogsFolder.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		addLogsFolder.addActionListener(menuListener);
 		options.add(addLogsFolder);
 		
 		resetLog = new JMenuItem("Reset Log");
-		resetLog.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
+		resetLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		resetLog.setEnabled(false);
 		resetLog.addActionListener(menuListener);
 		options.add(resetLog);
 		
 		exportLog = new JMenuItem("Export Log");
-		exportLog.setFont(new Font("Yu Gothic UI Semilight", Font.PLAIN, 12));
+		exportLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
 		exportLog.setEnabled(false);
 		exportLog.addActionListener(menuListener);
 		options.add(exportLog);
@@ -108,11 +110,22 @@ public class TBCLog extends JFrame {
 			fileSelector.setVisible(false);
 		}
 	}
+	/**
+	 * Export listener for file selector.
+	 *
+	 */
 	public class ExportListener implements SelectionListener {
 		public void onFileSelected(File folder) {
 			FileIO.compressText(loggerPanel.LOG_TYPE.toString(), logFolder, folder);
 			exportSelector.setVisible(false);
 			JOptionPane.showMessageDialog(null, "Log exported.");
 		}
+	}
+	/**
+	 * Returns the LoggerPanel.
+	 * 
+	 */
+	public LoggerPanel getLogPanel() {
+		return this.loggerPanel;
 	}
 }

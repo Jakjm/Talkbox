@@ -29,8 +29,8 @@ public class FileIO {
 	 * @author Jordan Malek
 	 * @author Rohan Talkad
 	 */
-	public static final String WAVFORMAT = ".wav";
-	public static final String WAVEFORMAT = ".wave";
+	public static final String WAV_FORMAT = ".wav";
+	public static final String WAVE_FORMAT = ".wave";
 	public static final String SEP = System.getProperty("file.separator");
 
 	/**
@@ -43,7 +43,7 @@ public class FileIO {
 		boolean isWave = false;
 		// if the extension is .wav we continue to check its format
 		String ext = path.substring(path.lastIndexOf("."));
-		if (ext.equals(WAVEFORMAT) || ext.equals(WAVFORMAT)) {
+		if (ext.equals(WAVE_FORMAT) || ext.equals(WAV_FORMAT)) {
 			File toCheck = new File(path);
 			isWave = checkWaveFormat(toCheck);
 		}
@@ -203,7 +203,7 @@ public class FileIO {
 		return files;
 	}
 	/**
-	 * Resets the text files in the given folder with the specified pattern.
+	 * Deletes the text files in the given folder with the specified pattern.
 	 * Example: wipe("CONFIG_LOG", new File(logs)) will reset all logs with
 	 * the name "CONFIG_LOG".
 	 * @param pattern The string pattern of the file names.
@@ -212,7 +212,7 @@ public class FileIO {
 	public static void wipe(String pattern, File folder) {
 		ArrayList<File> files = getAllFiles(pattern, folder);
 		for (File f : files) {
-			FileIO.textToFile(f, "");
+			f.delete();
 		}
 	}
 	

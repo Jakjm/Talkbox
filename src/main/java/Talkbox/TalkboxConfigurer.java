@@ -22,6 +22,7 @@ import main.java.Talkbox.configurer.RecordingPanel;
 import main.java.Talkbox.configurer.SetUpPanel;
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.log.LogController;
+import main.java.Talkbox.log.TBCLog;
 
 /**
  * Main class for the Talkbox Configuration App
@@ -55,18 +56,17 @@ public class TalkboxConfigurer {
 		JButton simLog;
 		FileSelector selector;
 		private static final String TITLE = "Talkbox Configurator";
-		private final Font TITLE_FONT = new Font(Font.SANS_SERIF,Font.BOLD,42);
-		private final Font BUTTON_FONT = new Font(Font.SANS_SERIF,Font.PLAIN,26);
+		private final Font TITLE_FONT = new Font("Rockwell", Font.BOLD, 42);
+		private final Font BUTTON_FONT = new Font("Rockwell", Font.PLAIN, 26);
 		public MenuPanel() {
 			this.setLayout(new BorderLayout());
 			//Adding title label
 			JLabel titleLabel = new JLabel(TITLE);
-			titleLabel.setBackground(Color.blue);
-			titleLabel.setForeground(Color.orange);
+			titleLabel.setForeground(Color.BLACK);
 			titleLabel.setFont(TITLE_FONT);
 			titleLabel.setHorizontalAlignment(JLabel.CENTER);
 			this.add(titleLabel,BorderLayout.NORTH);
-			this.setBackground(Color.blue);
+			this.setBackground(Color.LIGHT_GRAY);
 			
 			
 			//Adding buttons to the button panel
@@ -134,9 +134,9 @@ public class TalkboxConfigurer {
 			}
 			//TODO Rohan fix sim log 
 			else if(event.getSource() == simLog) {
-				JFrame logFrame = new JFrame();
-				logFrame.setSize(600,400);
-				logFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+				TBCLog loggerApp = new TBCLog(LogController.LogType.SIM_LOG);
+				loggerApp.getLogPanel().addLogsFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
+				loggerApp.setVisible(true);
 			}
 		}
 		/**
@@ -154,6 +154,7 @@ public class TalkboxConfigurer {
 					configLog.addLogFolder(new File(config.getConfigDir() + FileIO.SEP + "logs"));
 					panel.configureSetup();
 					setUpButtons.setEnabled(true);
+					simLog.setEnabled(true);
 				}
 				// Otherwise, show an error message.
 				else {
@@ -184,6 +185,7 @@ public class TalkboxConfigurer {
 				setUpButtons.setEnabled(true);
 				//Set selector to invisible. 
 				selector.setVisible(false);
+				simLog.setEnabled(true);
 			}
 		}
 	}
