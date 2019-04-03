@@ -1,15 +1,14 @@
 package externalTests;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.awt.List;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.junit.FixMethodOrder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 
 import main.java.Talkbox.filehandler.FileIO;
@@ -74,6 +73,7 @@ public class FileIOTest {
 	public void testD() {
 		File harbin = new File("src/test/resources/harbin.jpg");
 		File notImage = new File("src/test/resources/notwave.m4a");
+		assertTrue(FileIO.getExt(notImage).equals(".m4a"));
 		assertTrue(FileIO.checkImageFile(harbin));
 		assertFalse(FileIO.checkImageFile(notImage));
 	}

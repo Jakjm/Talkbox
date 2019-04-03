@@ -21,6 +21,9 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -33,10 +36,6 @@ import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.log.LogController;
 import main.java.Talkbox.musicplayer.MusicPlayer;
 import main.java.Talkbox.recording.MusicRecorder;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
 
 /**
  * Setup panel for the Talkbox Configurer app

@@ -1,8 +1,10 @@
 package externalTests;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
+
+import org.junit.jupiter.api.Test;
 
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.musicplayer.MusicPlayer;

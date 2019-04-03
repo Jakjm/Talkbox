@@ -1,5 +1,7 @@
 package main.java.Talkbox.filehandler;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,8 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFileFormat;

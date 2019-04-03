@@ -2,6 +2,7 @@ package main.java.Talkbox.emojiPanel;
 
 import java.awt.Color;
 import java.awt.event.KeyListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;

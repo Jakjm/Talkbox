@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,7 +11,6 @@ import javax.swing.JPanel;
 
 import main.java.Talkbox.TalkboxSimulator;
 import main.java.Talkbox.configurer.Configuration;
-import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.log.LogController;
 
 /**

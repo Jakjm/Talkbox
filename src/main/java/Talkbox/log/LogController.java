@@ -2,7 +2,6 @@ package main.java.Talkbox.log;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -33,7 +32,7 @@ public class LogController {
 	 */
 	public LogController(LogType logType, File logs) {
 		if (logs == null) {
-			logs = new File(System.getProperty("user.home") + FileIO.SEP + "TBC_TEMP");
+			logs = new File(TEMP);
 			logs.mkdir();
 		}
 		this.customLogger = Logger.getLogger(logType.toString());
@@ -59,7 +58,7 @@ public class LogController {
 		}
 		File newLog = new File(logFolder.getPath() + FileIO.SEP + this.logDest.getName());
 		FileIO.copyFile(this.logDest, newLog);
-		FileIO.deleteFolder(new File(this.TEMP));
+		FileIO.deleteFolder(new File(TEMP));
 		this.logDest = newLog;
 		try {
 			this.logHandler = new FileHandler(this.logDest.getPath(), true);

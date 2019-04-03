@@ -1,18 +1,16 @@
 package main.java.Talkbox.log;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
+import java.awt.SystemColor;
 import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.log.LogController.LogType;
-
-import java.awt.SystemColor;
 
 /**
  * Re-usable panel for user and caregiver log viewers.

@@ -1,12 +1,18 @@
 package externalTests;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+
+import org.junit.jupiter.api.Test;
+
 import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
+import main.java.Talkbox.filehandler.FileIO;
 
 /**
  * JUnit test for the FileSelector class.
@@ -57,7 +63,7 @@ public class SelectorTest {
 
 		// Removing the testing directories.
 		textFile.delete();
-		testDirectory.delete();
+		FileIO.deleteFolder(testDirectory);
 		selector.setVisible(false);
 	}
 

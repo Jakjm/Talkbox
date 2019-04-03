@@ -1,5 +1,6 @@
 package main.java.Talkbox.log;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -14,8 +15,6 @@ import main.java.Talkbox.browsing.FileSelector;
 import main.java.Talkbox.browsing.SelectionListener;
 import main.java.Talkbox.filehandler.FileIO;
 import main.java.Talkbox.log.LogController.LogType;
-
-import java.awt.Font;
 
 public class TBCLog extends JFrame {
 	private JMenuItem resetLog;
@@ -43,21 +42,21 @@ public class TBCLog extends JFrame {
 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu options = new JMenu("Menu");
-		options.setFont(new Font("Rockwell", Font.BOLD, 12));
+		options.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 12));
 		TBCMenuListener menuListener = new TBCMenuListener();
 		addLogsFolder = new JMenuItem("Open Log Folder");
-		addLogsFolder.setFont(new Font("Rockwell", Font.PLAIN, 12));
+		addLogsFolder.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		addLogsFolder.addActionListener(menuListener);
 		options.add(addLogsFolder);
 
 		resetLog = new JMenuItem("Reset Log");
-		resetLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
+		resetLog.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		resetLog.setEnabled(false);
 		resetLog.addActionListener(menuListener);
 		options.add(resetLog);
 
 		exportLog = new JMenuItem("Export Log");
-		exportLog.setFont(new Font("Rockwell", Font.PLAIN, 12));
+		exportLog.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		exportLog.setEnabled(false);
 		exportLog.addActionListener(menuListener);
 		options.add(exportLog);

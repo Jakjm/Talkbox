@@ -1,15 +1,16 @@
 package externalTests;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
-
-import org.junit.FixMethodOrder;
-import org.junit.runners.MethodSorters;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.junit.FixMethodOrder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.runners.MethodSorters;
 
 import main.java.Talkbox.configurer.ButtonConfiguration;
 import main.java.Talkbox.configurer.Configuration;
@@ -53,7 +54,7 @@ public class ConfigurationTest {
 		p.addAudioSet();
 		assertTrue(p.getTotalNumberOfButtons() == 18);
 		// adding button sounds
-		File sound = new File("src" + FileIO.SEP + "test" + FileIO.SEP + "resources" + "test.wav");
+		File sound = new File("src" + FileIO.SEP + "test" + FileIO.SEP + "resources" + FileIO.SEP + "test.wav");
 		p.getButtonConfigs()[0].addSoundFile(sound);
 		p.getButtonConfigs()[5].addSoundFile(sound);
 		assertTrue(p.getNumberOfAudioButtons() == 2);
@@ -70,8 +71,16 @@ public class ConfigurationTest {
 		Configuration p = new Configuration(newTb);
 		ButtonConfiguration[] bc = p.getButtonConfigs();
 		bc[0].addSoundFile(new File("src/test/resources/test.wav"));
+		assertEquals(bc[0].returnDir().getName(), "button_config_0");
+		bc[0].setText("button hi");
+		assertTrue("button hi".contentEquals(bc[0].getButtonText()));
+		File img = new File("src" + FileIO.SEP + "test" + FileIO.SEP + "resources" + FileIO.SEP + "harbin.jpg");
+		bc[0].addImageFile(img);
+		bc[0].getButtonColor();
+		assertTrue(FileIO.checkImageFile(bc[0].getImageFile()));
 		bc[1].addSoundFile(new File("src/test/resources/test.wav"));
 		String[][] audioSets = p.getAudioFileNames();
+		bc.toString();
 		for (String[] audioSet : audioSets) {
 			int count = 0;
 			System.out.println(Arrays.toString(audioSet));
@@ -83,11 +92,13 @@ public class ConfigurationTest {
 				}
 				count++;
 			}
+			bc[0].changeDirectory(new File("test/bcTest"));
 		}
 		ArrayList<String> arr = FileIO.readTextFile(new File(bc[2].returnDir().getPath() + "/button.txt"));
 		bc[2].addImageFile(new File("src/test/resources/harbin.jpg"));
 		arr = FileIO.readTextFile(new File(bc[2].returnDir().getPath() + "/button.txt"));
 		assertTrue(arr.get(3).equals("1"));
 		FileIO.deleteFolder(new File("test"));
+		assertTrue(!new File("text").exists());
 	}
 }
