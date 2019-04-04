@@ -5,7 +5,7 @@ Members: Alberto Mastrofrancesco, Jordan Malek, and Rohan Talkad
 
 ## About
 
-**Talkbox** is a highly customizable virtual lexigram interface that allows persons with speech disabilities to communicate. This project has two runnable applications: the **Talkbox Configurator**, the **Talkbox Simulator**, and the **TBC Log**.
+**Talkbox** is a highly customizable virtual lexigram interface that allows persons with speech disabilities to communicate. This project has three runnable applications: the **Talkbox Configurator**, the **Talkbox Simulator**, and the **TBC Log**.
 The Talkbox Configurator allows the user to add sounds to buttons and customize their individual appearances. It also supports recording if a microphone is available. The Talkbox Simulator then loads this
 configuration and provides a touch interface to play back those sounds. The TBC Log allows caregivers to optimize their button configurations to provide a useful and helpful interface. 
 
